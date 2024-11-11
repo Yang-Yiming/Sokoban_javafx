@@ -1,26 +1,13 @@
 package view.game;
 
+import javafx.scene.image.Image;
 import model.MapMatrix;
 
-public class box {
-    private int x;
-    private int y;
+public class box extends entity {
 
-    private int add_x;
-    private int add_y;
-
-    box (int x, int y) {
-        this.x = x; this.y = y;
-    }
-
-    public boolean can_move(MapMatrix matrix) {
-        return(matrix.getId(x + add_x, y + add_y) == 0);
-    }
-
-    public void move(MapMatrix matrix) {
-        if(can_move(matrix)) {
-            x += add_x; y += add_y;
-        }
+    public box(int x, int y) {
+        super(x, y, 1);
+        image = new Image("");
     }
 
 }
