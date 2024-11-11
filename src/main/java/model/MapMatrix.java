@@ -2,7 +2,7 @@ package model;
 
 public class MapMatrix {
 
-    enum GridType{
+    public enum GridType{
         EMPTY, WALL, GOAL;
     }
 
