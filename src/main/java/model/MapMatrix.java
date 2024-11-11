@@ -3,14 +3,35 @@ package model;
 import java.util.ArrayList;
 
 public class MapMatrix {
-    private ArrayList<Integer>[][] matrix;
-    private ArrayList<view.game.entity>[][] obj_matrix; // 感觉这个方法空间复杂度有点高了 但我没想到其他的
+    private int[][] matrix; // 二进制下， 第一位表示是否有墙，第二位是否有箱子，第三位是否有玩家，第四位是否有goal
 
-    public MapMatrix(ArrayList<Integer>[][] matrix) {
-        this.matrix = matrix;
+
+    public boolean isOne(int num, int n){
+        return ((num>>(n-1)&1)==1);
     }
-    public MapMatrix(int[][] matrix) {
-        //以后再写 懒了（
+
+    public boolean hasNothing(int x, int y){
+        return matrix[x][y] == 0;
+    }
+
+    public boolean hasWall(int x, int y){
+        return isOne(matrix[x][y], 0);
+    }
+    public boolean hasBox(int x, int y){
+        return isOne(matrix[x][y], 1);
+    }
+    public boolean hasPlayer(int x, int y){
+        return isOne(matrix[x][y], 2);
+    }
+    public boolean hasGoal(int x, int y){
+        return isOne(matrix[x][y], 3);
+    }
+
+    public void set(int x, int y, int num){
+        matrix[x][y] = num;
+    }
+    public void add(int x, int y, int num){
+        matrix[x][y] += num;
     }
 
     public int getWidth() {
@@ -21,13 +42,5 @@ public class MapMatrix {
         return this.matrix.length;
     }
 
-    public ArrayList<Integer> get_objects_id(int row, int col) {
-        return matrix[row][col];
-    }
 
-    public ArrayList<view.game.entity> get_objects(int row, int col) { return obj_matrix[row][col]; }
-
-    public ArrayList<Integer>[][] getMatrix() {
-        return matrix;
-    }
 }

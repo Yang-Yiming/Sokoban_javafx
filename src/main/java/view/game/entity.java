@@ -2,6 +2,7 @@ package view.game;
 
 import javafx.scene.image.Image;
 import model.MapMatrix;
+import java.lang.Math;
 
 // 所有会动的东西的父类
 public class entity {
@@ -23,13 +24,14 @@ public class entity {
 
     //methods
     public boolean can_move(MapMatrix mapMatrix) {
-        return mapMatrix.get_objects_id(x + velocity_x, y + velocity_y).isEmpty(); // 什么都没有才可以动
+        return mapMatrix.hasNothing(x + velocity_x, y + velocity_y); // 什么都没有才可以动
     }
 
     public void move(MapMatrix mapMatrix) {
         if(can_move(mapMatrix)){
             x += velocity_x;
             y += velocity_y;
+            mapMatrix.add(x,y, (int)Math.pow(2, type)); //向那一格第i位加入
         }
     }
 

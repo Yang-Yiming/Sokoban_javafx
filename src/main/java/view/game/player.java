@@ -21,11 +21,11 @@ public class player extends entity{
 
     @Override
     public void move(MapMatrix mapMatrix) {
-        ArrayList<entity> objs = mapMatrix.get_objects(x + velocity_x, y + velocity_y);
-        if(!objs.isEmpty()){
-            for(entity e: objs){
-                push(e);
-            }
+        //push()
+        if(can_move(mapMatrix)){
+            x += velocity_x;
+            y += velocity_y;
+            mapMatrix.add(x,y, (int)Math.pow(2, type)); //向那一格第i位加入
         }
     }
 
