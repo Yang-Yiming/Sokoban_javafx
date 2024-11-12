@@ -5,39 +5,38 @@ import org.model.MapMatrix;
 
 import java.util.ArrayList;
 
-public class player extends entity{
+public class player extends entity {
 
     public player(int x, int y) {
         super(x, y, 2);
-        //image = new Image("");
+        // image = new Image("");
     }
 
     public boolean push(entity obj) {
-        if(obj.can_be_moved){
+        if (obj.can_be_moved) {
             obj.velocity_x = velocity_x;
             obj.velocity_y = velocity_y;
-            return true; //成功移动
+            return true; // 成功移动
         }
         return false;
     }
 
-
     public void move(MapMatrix mapMatrix, ArrayList<box> entities) {
         boolean moving = true;
-        for(box e: entities) {
+        for (box e : entities) {
             if (e.x == x + velocity_x && e.y == y + velocity_y) {
                 moving = moving && push(e);
             }
         }
-        if(can_move(mapMatrix) && moving){
-            mapMatrix.add(x,y, -(int)Math.pow(2, type));
+        if (can_move(mapMatrix) && moving) {
+            mapMatrix.add(x, y, -(int) Math.pow(2, type));
             x += velocity_x;
             y += velocity_y;
-            mapMatrix.add(x,y, (int)Math.pow(2, type)); //向那一格第i位加入
+            mapMatrix.add(x, y, (int) Math.pow(2, type)); // 向那一格第i位加入
         }
     }
 
-    public void set_velocity(int x, int y){
+    public void set_velocity(int x, int y) {
         velocity_x = x;
         velocity_y = y;
     }

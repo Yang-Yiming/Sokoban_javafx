@@ -18,6 +18,7 @@ public class ClassicLevelManager {
         this.root = root;
         this.currentLevel = 0;
         this.map = new MapMatrix(mapdata.maps[currentLevel]);
+
     }
 
     public void loadLevel(){
@@ -26,10 +27,11 @@ public class ClassicLevelManager {
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
-            if(code == KeyCode.UP) level.player.set_velocity(-1,0);
-            if(code == KeyCode.DOWN) level.player.set_velocity(1, 0);
-            if(code == KeyCode.LEFT) level.player.set_velocity(0, -1);
-            if(code == KeyCode.RIGHT) level.player.set_velocity(0, 1);
+            level.player.set_velocity(0, 0);
+            if(code == KeyCode.UP) level.player.set_velocity(0,-1);
+            if(code == KeyCode.DOWN) level.player.set_velocity(0, 1);
+            if(code == KeyCode.LEFT) level.player.set_velocity(-1, 0);
+            if(code == KeyCode.RIGHT) level.player.set_velocity(1, 0);
             if(code == KeyCode.R){
                 level.init();
                 // System.out.println("reset");
@@ -42,7 +44,6 @@ public class ClassicLevelManager {
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
                 loadLevel();
             }
-
             level.drawMap();
         });
     }

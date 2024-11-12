@@ -18,47 +18,49 @@ public class Level {
     player player;
     ArrayList<box> boxes;
 
-    public void init(){
+    public void init() {
         boxes = new ArrayList<>();
-        for(int i = 0; i < map.getHeight(); i++){
-            for(int j = 0; j < map.getWidth(); j++){
-                if(map.hasBox(i,j)){
-                    box temp = new box(i, j);
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
+                if (map.hasBox(x, y)) {
+                    box temp = new box(x, y);
                     boxes.add(temp);
                 }
-                if(map.hasPlayer(i,j)){
-                    player = new player(i, j);
+                if (map.hasPlayer(x, y)) {
+                    player = new player(x, y);
                 }
             }
         }
+        drawMap();
     }
 
     public Level(Pane root, int id) {
         this.root = root;
         this.id = id;
         map = new MapMatrix(mapdata.maps[id]);
-        this.root = new Pane();
-
         init();
     }
 
-    public void drawMap(){
+    public void drawMap() {
         int tileSize = 50;
-        for (int x = 0; x < map.getWidth(); ++x){
-            for (int y = 0; y < map.getHeight(); ++y) {
-                Rectangle tile = new Rectangle(y * tileSize, x * tileSize, tileSize, tileSize);
-
-                if(map.hasNothing(x, y)) tile.setFill(Color.WHITE); // 空地
-                if(map.hasWall(x,y)) tile.setFill(Color.GREY); // 墙
-                if(map.hasGoal(x,y)) tile.setFill(Color.RED); // 目标
-                if(map.hasBox(x,y)){
-                    if(map.hasGoal(x,y))
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
+                Rectangle tile = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
+                // System.out.println("x : " + x + ", y : " + y);
+                if (map.hasNothing(x, y))
+                    tile.setFill(Color.WHITE); // 空地
+                if (map.hasWall(x, y))
+                    tile.setFill(Color.GREY); // 墙
+                if (map.hasGoal(x, y))
+                    tile.setFill(Color.RED); // 目标
+                if (map.hasBox(x, y)) {
+                    if (map.hasGoal(x, y))
                         tile.setFill(Color.ORANGE); // 箱子+目标
                     else
                         tile.setFill(Color.YELLOW); // 箱子
                 }
-                if(map.hasPlayer(x,y)){
-                    if(map.hasGoal(x,y))
+                if (map.hasPlayer(x, y)) {
+                    if (map.hasGoal(x, y))
                         tile.setFill(Color.PURPLE); // 人+目标
                     else
                         tile.setFill(Color.BLUE); // 人
@@ -69,13 +71,12 @@ public class Level {
 
     }
 
-    public boolean isWin(){
-        for(int x = 0; x < map.getWidth(); ++x)
-            for(int y = 0; y < map.getHeight(); ++y)
-                if(map.hasGoal(x,y) && !map.hasBox(x,y)) return false;
+    public boolean isWin() {
+        for (int y = 0; y < map.getHeight(); ++y)
+            for (int x = 0; x < map.getWidth(); ++x)
+                if (map.hasGoal(x, y) && !map.hasBox(x, y))
+                    return false;
         return true;
     }
-
-
 
 }
