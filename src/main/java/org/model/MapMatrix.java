@@ -35,9 +35,7 @@ public class MapMatrix {
     }
 
     public void set(int x, int y, int num){
-        if (matrix != null) {
-            matrix[x][y] = num;
-        }
+        matrix[x][y] = num;
     }
     public void add(int x, int y, int num){
         matrix[x][y] += num;
@@ -52,6 +50,7 @@ public class MapMatrix {
     }
 
     public MapMatrix(int[][] matrix) {
+        this.matrix = new int[matrix.length][matrix[0].length];
         for(int i=0; i<matrix.length; i++){
             for(int j=0; j<matrix[i].length; j++){
                 set(i,j,matrix[i][j]);

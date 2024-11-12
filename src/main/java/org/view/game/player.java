@@ -9,7 +9,7 @@ public class player extends entity{
 
     public player(int x, int y) {
         super(x, y, 2);
-        image = new Image("");
+        //image = new Image("");
     }
 
     public boolean push(entity obj) {
