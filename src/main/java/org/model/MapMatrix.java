@@ -35,7 +35,9 @@ public class MapMatrix {
     }
 
     public void set(int x, int y, int num){
-        matrix[x][y] = num;
+        if (matrix != null) {
+            matrix[x][y] = num;
+        }
     }
     public void add(int x, int y, int num){
         matrix[x][y] += num;
