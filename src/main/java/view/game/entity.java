@@ -24,11 +24,12 @@ public class entity {
 
     //methods
     public boolean can_move(MapMatrix mapMatrix) {
-        return mapMatrix.hasNothing(x + velocity_x, y + velocity_y); // 什么都没有才可以动
+        return mapMatrix.hasNoObstacle(x + velocity_x, y + velocity_y); // 没有障碍物的时候动
     }
 
     public void move(MapMatrix mapMatrix) {
         if(can_move(mapMatrix)){
+            mapMatrix.add(x,y, -(int)Math.pow(2, type)); //把原来第i位删掉
             x += velocity_x;
             y += velocity_y;
             mapMatrix.add(x,y, (int)Math.pow(2, type)); //向那一格第i位加入

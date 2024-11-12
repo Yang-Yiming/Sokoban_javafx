@@ -12,17 +12,25 @@ public class player extends entity{
         image = new Image("");
     }
 
-    public void push(entity obj) {
+    public boolean push(entity obj) {
         if(obj.can_be_moved){
             obj.velocity_x = velocity_x;
             obj.velocity_y = velocity_y;
+            return true; //成功移动
         }
-    } // 从这个角度来说 结算移动的时候应当先结算箱子再结算player？ 不然可能箱子润了人没润 但感觉一点也不优雅
+        return false;
+    }
 
-    @Override
-    public void move(MapMatrix mapMatrix) {
-        //push()
-        if(can_move(mapMatrix)){
+
+    public void move(MapMatrix mapMatrix, entity[] entities) {
+        boolean moving = true;
+        for(entity e: entities) {
+            if (e.x == x + velocity_x && e.y == y + velocity_y) {
+                moving = moving && push(e);
+            }
+        }
+        if(can_move(mapMatrix) && moving){
+            mapMatrix.add(x,y, -(int)Math.pow(2, type));
             x += velocity_x;
             y += velocity_y;
             mapMatrix.add(x,y, (int)Math.pow(2, type)); //向那一格第i位加入
