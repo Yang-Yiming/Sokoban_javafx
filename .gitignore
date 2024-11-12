@@ -38,4 +38,4 @@ build/
 .DS_Store
 
 # Ignore .class
-**/*.class
+src/**/*.class
