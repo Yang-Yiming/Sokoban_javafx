@@ -1,15 +1,17 @@
+package org;
+
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.view.level.ClassicLevelManager;
 
 import static javafx.application.Application.launch;
 
-public class Main {
+public class Main extends Application{
     @Override
     public void start(Stage primaryStage){
         Pane root = new Pane();
-        LevelManager levelManager = new LevelManager(root);
+        ClassicLevelManager levelManager = new ClassicLevelManager(root);
         levelManager.start(primaryStage);
     }
 

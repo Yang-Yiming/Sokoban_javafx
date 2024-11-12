@@ -1,7 +1,6 @@
-package view.game;
+package org.view.game;
 
 import javafx.scene.image.Image;
-import model.MapMatrix;
 
 public class box extends entity {
 

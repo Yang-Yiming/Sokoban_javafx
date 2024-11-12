@@ -1,4 +1,4 @@
-package view.login;
+package org.view.login;
 
 public class login {
 }

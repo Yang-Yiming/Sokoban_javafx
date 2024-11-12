@@ -1,4 +1,4 @@
-package view.level;
+package org.view.level;
 
 public class mapdata {
     public static int[][][] maps = {

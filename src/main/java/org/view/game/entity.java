@@ -1,7 +1,7 @@
-package view.game;
+package org.view.game;
 
 import javafx.scene.image.Image;
-import model.MapMatrix;
+import org.model.MapMatrix;
 import java.lang.Math;
 
 // 所有会动的东西的父类

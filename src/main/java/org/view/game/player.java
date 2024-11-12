@@ -1,7 +1,7 @@
-package view.game;
+package org.view.game;
 
 import javafx.scene.image.Image;
-import model.MapMatrix;
+import org.model.MapMatrix;
 
 import java.util.ArrayList;
 
@@ -22,9 +22,9 @@ public class player extends entity{
     }
 
 
-    public void move(MapMatrix mapMatrix, entity[] entities) {
+    public void move(MapMatrix mapMatrix, ArrayList<box> entities) {
         boolean moving = true;
-        for(entity e: entities) {
+        for(box e: entities) {
             if (e.x == x + velocity_x && e.y == y + velocity_y) {
                 moving = moving && push(e);
             }
@@ -35,6 +35,11 @@ public class player extends entity{
             y += velocity_y;
             mapMatrix.add(x,y, (int)Math.pow(2, type)); //向那一格第i位加入
         }
+    }
+
+    public void set_velocity(int x, int y){
+        velocity_x = x;
+        velocity_y = y;
     }
 
 }

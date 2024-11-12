@@ -1,4 +1,4 @@
-package view.map;
+package org.view.map;
 
 public class map {
 }

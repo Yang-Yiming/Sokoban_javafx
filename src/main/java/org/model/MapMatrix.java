@@ -1,4 +1,4 @@
-package model;
+package org.model;
 
 public class MapMatrix {
     private int[][] matrix; // 二进制下， 第一位表示是否有墙，第二位是否有箱子，第三位是否有玩家，第四位是否有goal

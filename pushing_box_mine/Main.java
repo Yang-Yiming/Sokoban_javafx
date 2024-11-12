@@ -1,4 +1,4 @@
-// src/Main.java
+// src/org.Main.java
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;

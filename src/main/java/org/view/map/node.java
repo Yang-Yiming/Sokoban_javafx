@@ -1,4 +1,4 @@
-package view.map;
+package org.view.map;
 
 import java.util.ArrayList;
 

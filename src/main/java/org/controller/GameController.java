@@ -1,4 +1,4 @@
-package controller;
+package org.controller;
 
 public class GameController {
 }

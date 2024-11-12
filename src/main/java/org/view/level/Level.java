@@ -1,4 +1,4 @@
-package view.level;
+package org.view.level;
 
 import java.util.ArrayList;
 
@@ -6,23 +6,19 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import model.MapMatrix;
-import view.game.box;
-import view.game.player;
+import org.model.MapMatrix;
+import org.view.game.box;
+import org.view.game.player;
 
-public class ClassicLevel {
+public class Level {
 
     private final int id;
     MapMatrix map;
     private Pane root;
-    private player player;
-    private ArrayList<box> boxes;
+    player player;
+    ArrayList<box> boxes;
 
-    public ClassicLevel(int id) {
-        this.id = id;
-        map = new MapMatrix(mapdata.maps[id]);
-        this.root = new Pane();
-
+    public void init(){
         boxes = new ArrayList<>();
         for(int i = 0; i < map.getHeight(); i++){
             for(int j = 0; j < map.getWidth(); j++){
@@ -35,6 +31,15 @@ public class ClassicLevel {
                 }
             }
         }
+    }
+
+    public Level(Pane root, int id) {
+        this.root = root;
+        this.id = id;
+        map = new MapMatrix(mapdata.maps[id]);
+        this.root = new Pane();
+
+        init();
     }
 
     public void drawMap(){
