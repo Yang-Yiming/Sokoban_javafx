@@ -43,7 +43,7 @@ public class Game{
                 Rectangle tile = new Rectangle(y * tileSize, x * tileSize, tileSize, tileSize);
                 int b = map[x][y];
                 if(b == 0) tile.setFill(Color.WHITE); // 空地
-                if(b == 1) tile.setFill(Color.GREY); // 墙
+                if(b == 1) tile.setFill(CoRectanglelor.GREY); // 墙
                 if(b == 2) tile.setFill(Color.YELLOW); // 箱子
                 if(b == 3) tile.setFill(Color.RED); // 目标
                 if(b == 4) tile.setFill(Color.BLUE); // 人

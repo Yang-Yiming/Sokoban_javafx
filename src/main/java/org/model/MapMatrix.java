@@ -1,10 +1,9 @@
 package org.model;
 
 public class MapMatrix {
-    private int[][] matrix; // 二进制下， 第一位表示是否有墙，第二位是否有箱子，第三位是否有玩家，第四位是否有goal
-
+    private int[][] matrix; // 二进制下， 第0位表示是否有墙，第1位是否有箱子，第2位是否有玩家，第3位是否有goal
     public boolean isOne(int num, int n) {
-        return ((num >> (n - 1) & 1) == 1);
+        return (((num >> n) & 1) == 1);
     }
 
     public boolean hasNothing(int x, int y) {
@@ -12,9 +11,17 @@ public class MapMatrix {
     }
 
     public boolean hasNoObstacle(int x, int y) {
-        int[] ObstacleTypes = { 1, 2, 3 }; // wall box player 会阻挡
+        int[] ObstacleTypes = { 0, 1, 2 }; // wall box player 会阻挡
         for (int e : ObstacleTypes) {
-            if (isOne(matrix[y][x], e)) {
+            if (isOne(this.matrix[y][x], e)) {
+                // System.out.println(x + " " + y + " " + matrix[y][x] + " "  + e);
+                // for(int i = 0; i < this.getHeight(); ++i){
+                //     for(int j = 0; j < this.getWidth(); ++j){
+                //         System.out.print(this.matrix[i][j] + " ");
+                //     }
+                //     System.out.println();
+                // }
+        
                 return false;
             }
         }
@@ -41,8 +48,12 @@ public class MapMatrix {
         matrix[y][x] = num;
     }
 
-    public void add(int x, int y, int num) {
-        matrix[y][x] += num;
+    public void add(int x, int y, int type) {
+        matrix[y][x] += (1 << type);
+    }
+
+    public void remove(int x, int y, int type) {
+        matrix[y][x] -= (1 << type);
     }
 
     public int getWidth() {
