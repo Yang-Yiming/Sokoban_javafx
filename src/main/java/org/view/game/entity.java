@@ -12,6 +12,9 @@ public class entity {
     protected int type;
     protected Image image;
 
+    protected double posx;
+    protected double posy;
+
     protected int velocity_x;
     protected int velocity_y;
 

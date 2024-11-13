@@ -8,7 +8,7 @@ public class box extends entity {
     public box(int x, int y, int id) {
         super(x, y, 1);
         this.id = id;
-        //image = new Image("");
+        //image = new Image(getClass().getResourceAsStream("images/box.png")); //找不到这个文件，不知道为什么
     }
 
     @Override
