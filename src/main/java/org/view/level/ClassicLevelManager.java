@@ -27,22 +27,24 @@ public class ClassicLevelManager {
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
             level.player.set_velocity(0, 0);
-            if(code == KeyCode.UP) level.player.set_velocity(0,-1);
-            if(code == KeyCode.DOWN) level.player.set_velocity(0, 1);
-            if(code == KeyCode.LEFT) level.player.set_velocity(-1, 0);
-            if(code == KeyCode.RIGHT) level.player.set_velocity(1, 0);
+            if(code == KeyCode.UP || code == KeyCode.W) level.player.set_velocity(0,-1);
+            if(code == KeyCode.DOWN || code == KeyCode.S) level.player.set_velocity(0, 1);
+            if(code == KeyCode.LEFT || code == KeyCode.A) level.player.set_velocity(-1, 0);
+            if(code == KeyCode.RIGHT || code == KeyCode.D) level.player.set_velocity(1, 0);
             if(code == KeyCode.R){
                 level.init();
                 // System.out.println("reset");
             }
-            level.player.move(level.map, level.boxes, level.boxMatrix);
+            level.player.move(level.map, level.boxes);
+
+            level.drawMap();
 
             if(level.isWin()){
                 ++currentLevel;
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
                 loadLevel();
             }
-            level.drawMap();
+
         });
     }
 

@@ -23,23 +23,17 @@ public class player extends entity {
         return false;
     }
 
-    public void move(MapMatrix map, ArrayList<box> entities, int[][] boxMatrix) {
+    public void move(MapMatrix map, ArrayList<box> entities) {
         int newx = x + velocity_x;
         int newy = y + velocity_y;
         if(can_move(map, velocity_x, velocity_y)){
             this.move(map);
-        }else if(map.hasBox(newx, newy)){ // 暂时先这么写
-            box e = entities.get(boxMatrix[newy][newx] - 1);
+        } else if(map.hasBox(newx, newy)) { // 暂时先这么写
+            box e = entities.get(map.getBox_matrix_id(newx, newy) - 1); // 获得那个被推的箱子
             if(push(e, map)){
-                boxMatrix[e.get_y()][e.get_x()] = 0;
+                map.setBox_matrix(e.get_x(), e.get_y(), 0);
                 e.move(map);
-                boxMatrix[e.get_y()][e.get_x()] = e.id;
-                // for(int i = 0; i < map.getHeight(); ++i){
-                //     for(int j = 0; j < map.getWidth(); ++j){
-                //         System.out.print(boxMatrix[i][j] + " ");
-                //     }
-                //     System.out.println();
-                // }
+                map.setBox_matrix(e.get_x(), e.get_y(), e.id);
                 this.move(map);
             }
         }
