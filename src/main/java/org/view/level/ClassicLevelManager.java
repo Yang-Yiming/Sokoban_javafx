@@ -23,7 +23,6 @@ public class ClassicLevelManager {
 
     public void loadLevel(){
         Level level = new Level(root, currentLevel);
-
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -36,11 +35,10 @@ public class ClassicLevelManager {
                 level.init();
                 // System.out.println("reset");
             }
-            level.player.move(level.map, level.boxes);
-            for(box box: level.boxes) box.move(level.map);
+            level.player.move(level.map, level.boxes, level.boxMatrix);
 
             if(level.isWin()){
-                currentLevel++;
+                ++currentLevel;
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
                 loadLevel();
             }

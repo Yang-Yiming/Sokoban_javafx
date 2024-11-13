@@ -17,17 +17,32 @@ public class Level {
     private Pane root;
     player player;
     ArrayList<box> boxes;
+    public int[][] boxMatrix;
+    int boxNumber;
 
     public void init() {
+        map = new MapMatrix(mapdata.maps[id]);
+                // for(int i = 0; i < map.getHeight(); ++i){
+                //     for(int j = 0; j < map.getWidth(); ++j){
+                //         System.out.print(map.matrix[i][j] + " ");
+                //     }
+                //     System.out.println();
+                // }
+
+        boxNumber = 0;
+        boxMatrix = new int[map.getHeight()][map.getWidth()];
         boxes = new ArrayList<>();
         for (int y = 0; y < map.getHeight(); ++y) {
             for (int x = 0; x < map.getWidth(); ++x) {
                 if (map.hasBox(x, y)) {
-                    box temp = new box(x, y);
+                    boxMatrix[y][x] = ++boxNumber;
+                    box temp = new box(x, y, boxNumber);
                     boxes.add(temp);
-                }
+                } else
+                    boxMatrix[y][x] = 0;
                 if (map.hasPlayer(x, y)) {
                     player = new player(x, y);
+                    // System.out.println("x : " + x + ", y : " + y);
                 }
             }
         }
@@ -37,7 +52,6 @@ public class Level {
     public Level(Pane root, int id) {
         this.root = root;
         this.id = id;
-        map = new MapMatrix(mapdata.maps[id]);
         init();
     }
 
