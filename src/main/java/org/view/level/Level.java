@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import org.model.MapMatrix;
+import org.model.config;
 import org.view.game.box;
 import org.view.game.player;
 
@@ -20,11 +21,18 @@ public class Level {
     public int[][] boxMatrix;
     int boxIndex;
 
+    // 从此处开始绘制 // 这可真是依托史山啊
+    private double anchor_posx;
+    private double anchor_posy;
+
     public void init() {
         map = new MapMatrix(mapdata.maps[id]);
 
         boxIndex = 1; // 从1开始编号
         boxes = new ArrayList<>();
+
+        setAnchor_posx((double)(config.ScreenWidth - map.getWidth() * config.tile_size)/2);
+        setAnchor_posy((double)(config.ScreenHeight - map.getHeight() * config.tile_size)/2);
 
         for (int y = 0; y < map.getHeight(); ++y) {
             for (int x = 0; x < map.getWidth(); ++x) {
@@ -48,10 +56,12 @@ public class Level {
     }
 
     public void drawMap() {
-        int tileSize = 50;
+        root.getChildren().clear(); // 先清空一下地图
+
         for (int y = 0; y < map.getHeight(); ++y) {
+            int tileSize = config.tile_size;
             for (int x = 0; x < map.getWidth(); ++x) {
-                Rectangle tile = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
+                Rectangle tile = new Rectangle(anchor_posx + x * tileSize, anchor_posy + y * tileSize, tileSize, tileSize);
                 // System.out.println("x : " + x + ", y : " + y);
                 if (map.hasNothing(x, y))
                     tile.setFill(Color.WHITE); // 空地
@@ -83,6 +93,20 @@ public class Level {
                 if (map.hasGoal(x, y) && !map.hasBox(x, y))
                     return false;
         return true;
+    }
+
+    // getter setter
+    public double getanchor_posx() {
+        return anchor_posx;
+    }
+    public double getanchor_posy() {
+        return anchor_posy;
+    }
+    public void setAnchor_posx(double anchor_posx) {
+        this.anchor_posx = anchor_posx;
+    }
+    public void setAnchor_posy(double anchor_posy) {
+        this.anchor_posy = anchor_posy;
     }
 
 }
