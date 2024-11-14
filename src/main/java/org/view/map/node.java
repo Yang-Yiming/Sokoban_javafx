@@ -12,11 +12,13 @@ public class node {
         }
         node1.NextLayerConnectedNodes.add(node2);
         node2.LastLayerConnectedNodes.add(node1);
+        node1.is_connected = true; node2.is_connected = true;
     }
 
     private final int layer;
     private int index;
     private int type;
+    private boolean is_connected;
 
     private ArrayList<node> NextLayerConnectedNodes = new ArrayList<node>();
     private ArrayList<node> LastLayerConnectedNodes = new ArrayList<node>();
@@ -26,6 +28,7 @@ public class node {
         this.layer = layer;
         this.index = index;
         this.type = type;
+        this.is_connected = false;
 
         if(layer > All_Nodes.size()){
             All_Nodes.add(new ArrayList<>());
@@ -45,6 +48,8 @@ public class node {
     public int getType() {
         return type;
     }
+
+    public boolean is_connected() {return is_connected;}
 
     public ArrayList<node> getNextLayerConnectedNodes() {
         return NextLayerConnectedNodes;
