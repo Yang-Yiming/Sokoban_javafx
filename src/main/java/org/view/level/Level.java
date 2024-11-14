@@ -8,6 +8,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
+
 import org.model.MapMatrix;
 import org.model.config;
 import org.view.game.box;
@@ -61,28 +67,66 @@ public class Level {
         int tileSize = config.tile_size;
         for (int y = 0; y < map.getHeight(); ++y) {
             for (int x = 0; x < map.getWidth(); ++x) {
-                double posx = anchor_posx + x * tileSize; double posy = anchor_posy + y * tileSize;
+                double posx = anchor_posx + x * tileSize;
+                double posy = anchor_posy + y * tileSize;
 
-                if (map.hasNothing(x, y)){
+                if (map.hasNothing(x, y)) {
                     Rectangle tile = new Rectangle(posx, posy, tileSize, tileSize);
                     tile.setFill(Color.GREY); // 空地
                     root.getChildren().add(tile);
                 }
-                if (map.hasWall(x, y)){
+                if (map.hasWall(x, y)) {
                     ImageView wall = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.bmp")));
-                    wall.setFitWidth(tileSize); wall.setFitHeight(tileSize);
-                    wall.setX(posx); wall.setY(posy);
+                    wall.setFitWidth(tileSize);
+                    wall.setFitHeight(tileSize);
+                    wall.setX(posx);
+                    wall.setY(posy);
                     root.getChildren().add(wall);
                 }
 
-                if (map.hasGoal(x, y)){
+                if (map.hasGoal(x, y)) {
                     ImageView goal = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
-                    goal.setFitWidth(tileSize); goal.setFitHeight(tileSize);
-                    goal.setX(posx); goal.setY(posy);
+                    goal.setFitWidth(tileSize);
+                    goal.setFitHeight(tileSize);
+                    goal.setX(posx);
+                    goal.setY(posy);
                     root.getChildren().add(goal);
                 }
             }
         }
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
+                if (map.hasGoal(x, y)) {
+                    double posx = anchor_posx + x * tileSize;
+                    double posy = anchor_posy + y * tileSize;
+                    createRadiatingEffect(posx, posy, tileSize);
+                }
+            }
+        }
+    }
+    private void createRadiatingEffect(double centerX, double centerY, int tileSize) {
+        double lowLimit = 0.9, highLimit = 1.2;
+        Rectangle rect = new Rectangle(centerX, centerY, tileSize * lowLimit, tileSize * lowLimit);
+        rect.setFill(Color.TRANSPARENT);
+        rect.setStroke(Color.WHITE);
+        rect.setStrokeWidth(2);
+        root.getChildren().add(rect);
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.04), e -> {
+            if(rect.getWidth() > tileSize * highLimit) {
+                rect.setWidth(tileSize * lowLimit);
+                rect.setHeight(tileSize * lowLimit);
+            }
+            //正方形逐渐放大
+            rect.setWidth(rect.getWidth() + 1);
+            rect.setHeight(rect.getHeight() + 1);
+            //正方形居中
+            rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
+            rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
+            //正方形逐渐变淡
+            rect.setStroke(Color.rgb(255, 255, 255, 1 - (rect.getWidth() - tileSize * lowLimit) / (tileSize * (highLimit - lowLimit))));
+            }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     public void drawBoxes() {
