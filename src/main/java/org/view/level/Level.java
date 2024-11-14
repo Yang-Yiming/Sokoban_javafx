@@ -2,6 +2,8 @@ package org.view.level;
 
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -55,36 +57,56 @@ public class Level {
         init();
     }
 
+    public void drawBackGround() {
+        int tileSize = config.tile_size;
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
+                double posx = anchor_posx + x * tileSize; double posy = anchor_posy + y * tileSize;
+
+                if (map.hasNothing(x, y)){
+                    Rectangle tile = new Rectangle(posx, posy, tileSize, tileSize);
+                    tile.setFill(Color.GREY); // 空地
+                    root.getChildren().add(tile);
+                }
+                if (map.hasWall(x, y)){
+                    ImageView wall = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.bmp")));
+                    wall.setFitWidth(tileSize); wall.setFitHeight(tileSize);
+                    wall.setX(posx); wall.setY(posy);
+                    root.getChildren().add(wall);
+                }
+
+                if (map.hasGoal(x, y)){
+                    ImageView goal = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
+                    goal.setFitWidth(tileSize); goal.setFitHeight(tileSize);
+                    goal.setX(posx); goal.setY(posy);
+                    root.getChildren().add(goal);
+                }
+            }
+        }
+    }
+
+    public void drawBoxes() {
+        for(box box : boxes) {
+            double posx = anchor_posx + box.get_x() * config.tile_size;
+            double posy = anchor_posy + box.get_y() * config.tile_size;
+            ImageView boxview = box.getImageView();
+            boxview.setX(posx); boxview.setY(posy);
+            root.getChildren().add(boxview);
+        }
+    }
+    public void drawPlayer() {
+        ImageView playerview = new ImageView(player.getImage());
+        playerview.setX(anchor_posx + player.get_x() * config.tile_size);
+        playerview.setY(anchor_posy + player.get_y() * config.tile_size);
+        root.getChildren().add(playerview);
+    }
+
     public void drawMap() {
         root.getChildren().clear(); // 先清空一下地图
 
-        for (int y = 0; y < map.getHeight(); ++y) {
-            int tileSize = config.tile_size;
-            for (int x = 0; x < map.getWidth(); ++x) {
-                Rectangle tile = new Rectangle(anchor_posx + x * tileSize, anchor_posy + y * tileSize, tileSize, tileSize);
-                // System.out.println("x : " + x + ", y : " + y);
-                if (map.hasNothing(x, y))
-                    tile.setFill(Color.WHITE); // 空地
-                if (map.hasWall(x, y))
-                    tile.setFill(Color.GREY); // 墙
-                if (map.hasGoal(x, y))
-                    tile.setFill(Color.RED); // 目标
-                if (map.hasBox(x, y)) {
-                    if (map.hasGoal(x, y))
-                        tile.setFill(Color.ORANGE); // 箱子+目标
-                    else
-                        tile.setFill(Color.YELLOW); // 箱子
-                }
-                if (map.hasPlayer(x, y)) {
-                    if (map.hasGoal(x, y))
-                        tile.setFill(Color.PURPLE); // 人+目标
-                    else
-                        tile.setFill(Color.BLUE); // 人
-                }
-                root.getChildren().add(tile);
-            }
-        }
-
+        drawBackGround();
+        drawBoxes();
+        drawPlayer();
     }
 
     public boolean isWin() {

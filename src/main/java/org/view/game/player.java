@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class player extends entity {
+    private Image image;
 
     public player(int x, int y) {
         super(x, y, 2);
-        // image = new Image("");
+        image = new Image(getClass().getResourceAsStream("/images/player.png"));
     }
 
     public boolean push(entity obj, MapMatrix map) {
@@ -43,6 +44,10 @@ public class player extends entity {
     public void set_velocity(int x, int y) {
         velocity_x = x;
         velocity_y = y;
+    }
+
+    public Image getImage() {
+        return image;
     }
 
 }
