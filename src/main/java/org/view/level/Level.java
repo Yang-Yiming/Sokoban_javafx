@@ -29,7 +29,7 @@ public class Level {
     public int[][] boxMatrix;
     int boxIndex;
 
-    private ArrayList<Rectangle> glowRectangles = new ArrayList<>();
+    private ArrayList<Rectangle> glowRectangles;
 
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;
@@ -37,6 +37,7 @@ public class Level {
 
     public void init() {
         map = new MapMatrix(mapdata.maps[id]);
+        glowRectangles = new ArrayList<>();
 
         boxIndex = 1; // 从1开始编号
         boxes = new ArrayList<>();
@@ -59,9 +60,7 @@ public class Level {
         for (int y = 0; y < map.getHeight(); ++y) {
             for (int x = 0; x < map.getWidth(); ++x) {
                 if (map.hasGoal(x, y)) {
-                    double posx = anchor_posx + x * config.tile_size;
-                    double posy = anchor_posy + y * config.tile_size;
-                    createRadiatingEffect(posx, posy, config.tile_size);
+                    createRadiatingEffect(x, y, config.tile_size);
                 }
             }
         }
@@ -110,11 +109,13 @@ public class Level {
             root.getChildren().add(rect);
         }
     }
-    private void createRadiatingEffect(double centerX, double centerY, int tileSize) {
+    private void createRadiatingEffect(int x, int y, int tileSize) { //需要传实时的数据。
         double lowLimit = 0.9, highLimit = 1.2;
-        Rectangle rect = new Rectangle(centerX, centerY, tileSize * lowLimit, tileSize * lowLimit);
-        rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
-        rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
+        double initialCenterX = anchor_posx + x * tileSize;
+        double initialCenterY = anchor_posy + y * tileSize;
+        Rectangle rect = new Rectangle(initialCenterX, initialCenterY, tileSize * lowLimit, tileSize * lowLimit);
+        rect.setX(initialCenterX - (rect.getWidth() - tileSize) / 2);
+        rect.setY(initialCenterY - (rect.getHeight() - tileSize) / 2);
         rect.setFill(Color.TRANSPARENT);
         rect.setStroke(Color.WHITE);
         rect.setStrokeWidth(2);
@@ -129,6 +130,8 @@ public class Level {
             rect.setWidth(rect.getWidth() + 1);
             rect.setHeight(rect.getHeight() + 1);
             //正方形居中
+            double centerX = anchor_posx + x * tileSize;
+            double centerY = anchor_posy + y * tileSize;
             rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
             rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
             //正方形逐渐变淡
