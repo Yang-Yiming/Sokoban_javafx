@@ -29,6 +29,8 @@ public class Level {
     public int[][] boxMatrix;
     int boxIndex;
 
+    private ArrayList<Rectangle> glowRectangles = new ArrayList<>();
+
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;
     private double anchor_posy;
@@ -51,6 +53,15 @@ public class Level {
                 if (map.hasPlayer(x, y)) {
                     player = new player(x, y);
                     // System.out.println("x : " + x + ", y : " + y);
+                }
+            }
+        }
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
+                if (map.hasGoal(x, y)) {
+                    double posx = anchor_posx + x * config.tile_size;
+                    double posy = anchor_posy + y * config.tile_size;
+                    createRadiatingEffect(posx, posy, config.tile_size);
                 }
             }
         }
@@ -94,23 +105,21 @@ public class Level {
                 }
             }
         }
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
-                if (map.hasGoal(x, y)) {
-                    double posx = anchor_posx + x * tileSize;
-                    double posy = anchor_posy + y * tileSize;
-                    createRadiatingEffect(posx, posy, tileSize);
-                }
-            }
+        //将所有 glowrectangles 里的成员置于图层最上方
+        for (Rectangle rect : glowRectangles) {
+            root.getChildren().add(rect);
         }
     }
     private void createRadiatingEffect(double centerX, double centerY, int tileSize) {
         double lowLimit = 0.9, highLimit = 1.2;
         Rectangle rect = new Rectangle(centerX, centerY, tileSize * lowLimit, tileSize * lowLimit);
+        rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
+        rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
         rect.setFill(Color.TRANSPARENT);
         rect.setStroke(Color.WHITE);
         rect.setStrokeWidth(2);
         root.getChildren().add(rect);
+        glowRectangles.add(rect);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.04), e -> {
             if(rect.getWidth() > tileSize * highLimit) {
                 rect.setWidth(tileSize * lowLimit);
@@ -124,7 +133,7 @@ public class Level {
             rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
             //正方形逐渐变淡
             rect.setStroke(Color.rgb(255, 255, 255, 1 - (rect.getWidth() - tileSize * lowLimit) / (tileSize * (highLimit - lowLimit))));
-            }));
+        }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
