@@ -2,6 +2,7 @@ package org.view.level;
 
 import java.util.ArrayList;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -26,8 +27,6 @@ public class Level {
     private Pane root;
     player player;
     ArrayList<box> boxes;
-    public int[][] boxMatrix;
-    int boxIndex;
 
     private ArrayList<Rectangle> glowRectangles;
 
@@ -39,7 +38,7 @@ public class Level {
         map = new MapMatrix(mapdata.maps[id]);
         glowRectangles = new ArrayList<>();
 
-        boxIndex = 1; // 从1开始编号
+        int boxIndex = 1; // 从1开始编号
         boxes = new ArrayList<>();
 
         setAnchor_posx((double)(config.ScreenWidth - map.getWidth() * config.tile_size)/2);
@@ -119,7 +118,7 @@ public class Level {
         rect.setFill(Color.TRANSPARENT);
         rect.setStroke(Color.WHITE);
         rect.setStrokeWidth(2);
-        root.getChildren().add(rect);
+        // root.getChildren().add(rect);
         glowRectangles.add(rect);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.04), e -> {
             if(rect.getWidth() > tileSize * highLimit) {
@@ -146,14 +145,17 @@ public class Level {
             double posx = anchor_posx + box.get_x() * config.tile_size;
             double posy = anchor_posy + box.get_y() * config.tile_size;
             ImageView boxview = box.getImageView();
-            boxview.setX(posx); boxview.setY(posy);
+            boxview.setX(posx);
+            boxview.setY(posy);
             root.getChildren().add(boxview);
         }
     }
     public void drawPlayer() {
-        ImageView playerview = new ImageView(player.getImage());
-        playerview.setX(anchor_posx + player.get_x() * config.tile_size);
-        playerview.setY(anchor_posy + player.get_y() * config.tile_size);
+        ImageView playerview = player.getImageView();
+        double posx = anchor_posx + player.get_x() * config.tile_size;
+        double posy = anchor_posy + player.get_y() * config.tile_size;
+        playerview.setX(posx);
+        playerview.setY(posy);
         root.getChildren().add(playerview);
     }
 
@@ -171,6 +173,20 @@ public class Level {
                 if (map.hasGoal(x, y) && !map.hasBox(x, y))
                     return false;
         return true;
+    }
+
+    public void moveBox(box box, int dx, int dy) {
+        TranslateTransition transition = new TranslateTransition(Duration.millis(200), box.getImageView());
+        transition.setByX(dx * config.tile_size);
+        transition.setByY(dy * config.tile_size);
+        transition.play();
+    }
+
+    public void movePlayer(int dx, int dy) {
+        TranslateTransition transition = new TranslateTransition(Duration.millis(200), player.getImageView());
+        transition.setByX(dx * config.tile_size);
+        transition.setByY(dy * config.tile_size);
+        transition.play();
     }
 
     // getter setter

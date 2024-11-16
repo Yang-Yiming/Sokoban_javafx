@@ -9,6 +9,7 @@ public class box extends entity {
     public int id;
     private Image image;
     private ImageView imageView;
+    private boolean isMoving = false;
     public box(int x, int y, int id) {
         super(x, y, 1);
         this.id = id;
@@ -35,6 +36,13 @@ public class box extends entity {
     }
     public ImageView getImageView() {
         return imageView;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+    public void setMoving(boolean isMoving) {
+        this.isMoving = isMoving;
     }
 
 }

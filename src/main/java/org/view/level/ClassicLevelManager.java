@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.model.MapMatrix;
 import org.model.config;
+import org.view.game.box;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -31,15 +32,26 @@ public class ClassicLevelManager {
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
             level.player.set_velocity(0, 0);
-            if(code == KeyCode.UP || code == KeyCode.W) level.player.set_velocity(0,-1);
-            if(code == KeyCode.DOWN || code == KeyCode.S) level.player.set_velocity(0, 1);
-            if(code == KeyCode.LEFT || code == KeyCode.A) level.player.set_velocity(-1, 0);
-            if(code == KeyCode.RIGHT || code == KeyCode.D) level.player.set_velocity(1, 0);
+            int dx = 0, dy = 0;
+            if(code == KeyCode.UP || code == KeyCode.W) dy = -1;
+            if(code == KeyCode.DOWN || code == KeyCode.S) dy = 1;
+            if(code == KeyCode.LEFT || code == KeyCode.A) dx = -1;
+            if(code == KeyCode.RIGHT || code == KeyCode.D) dx = 1;
             if(code == KeyCode.R){
                 level.init();
                 // System.out.println("reset");
             }
-            level.player.move(level.map, level.boxes);
+            level.player.set_velocity(dx, dy);
+
+            if(level.player.move(level.map, level.boxes)){
+                level.movePlayer(dx, dy);
+                for(box b : level.boxes){
+                    if(b.isMoving()) {
+                        level.moveBox(b, dx,dy);
+                        b.setMoving(false);
+                    }
+                }
+            };
 
             level.drawMap();
 
@@ -49,7 +61,6 @@ public class ClassicLevelManager {
                 loadLevel();
             }
         });
-
 
         // 根据鼠标拖动改变anchor_posx anchor_posy
         // 鼠标是否在拖动

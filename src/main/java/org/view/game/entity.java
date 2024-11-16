@@ -46,5 +46,17 @@ public class entity {
     public int get_y() {
         return y;
     }
+    public void set_x(int x){
+        this. x = x;
+    }
 
+    public void set_y(int y){
+        this.y = y;
+    }
+    public int getVelocity_x() {
+        return velocity_x;
+    }
+    public int getVelocity_y() {
+        return velocity_y;
+    }
 }
