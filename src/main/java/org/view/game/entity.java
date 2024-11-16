@@ -1,7 +1,11 @@
 package org.view.game;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 import org.model.MapMatrix;
+import org.model.config;
 
 import java.lang.Math;
 
@@ -11,6 +15,7 @@ public class entity {
     protected int y;
     protected int type;
     protected Image image;
+    protected ImageView imageView;
 
     protected double posx;
     protected double posy;
@@ -31,10 +36,20 @@ public class entity {
 
     public void move(MapMatrix map) {
         if (can_move(map, velocity_x, velocity_y)) {
+            // 动画
+            TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration * 1000), imageView);
+            transition.setFromX((x - 1) * config.tile_size);
+            transition.setFromY((y - 1) * config.tile_size);
+
             map.remove(x, y, type);
             x += velocity_x;
             y += velocity_y;
             map.add(x, y, type); // 向那一格第i位加入
+
+            transition.setToX((x - 1) * config.tile_size);
+            transition.setToY((y - 1) * config.tile_size);
+            transition.play();
+
         }
     }
 

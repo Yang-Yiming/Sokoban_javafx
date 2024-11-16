@@ -4,7 +4,7 @@ import java.lang.Math;
 
 public class config {
     //Constants
-    public static final double move_anim_duration = 0.2;
+    public static final double move_anim_duration = 0.1;
     public static final int tile_size = 50;
     public static final int ScreenWidth = 800;
     public static final int ScreenHeight = 600;

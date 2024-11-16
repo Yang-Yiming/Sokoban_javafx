@@ -48,10 +48,14 @@ public class Level {
             for (int x = 0; x < map.getWidth(); ++x) {
                 if (map.hasBox(x, y)) {
                     box temp = new box(x, y, boxIndex++);
+                    temp.getImageView().setX(anchor_posx + x * config.tile_size);
+                    temp.getImageView().setY(anchor_posy + y * config.tile_size);
                     boxes.add(temp);
                 }
                 if (map.hasPlayer(x, y)) {
                     player = new player(x, y);
+                    player.getImageView().setX(anchor_posx + x * config.tile_size);
+                    player.getImageView().setY(anchor_posy + y * config.tile_size);
                     // System.out.println("x : " + x + ", y : " + y);
                 }
             }
@@ -79,11 +83,10 @@ public class Level {
                 double posx = anchor_posx + x * tileSize;
                 double posy = anchor_posy + y * tileSize;
 
-                if (map.hasNothing(x, y)) {
-                    Rectangle tile = new Rectangle(posx, posy, tileSize, tileSize);
-                    tile.setFill(Color.GREY); // 空地
-                    root.getChildren().add(tile);
-                }
+//                if (map.hasNothing(x, y)) {
+//                    Rectangle tile = new Rectangle(posx, posy, tileSize, tileSize);
+//                    tile.setFill(Color.GREY); // 空地
+//                    root.getChildren().add(tile);}
                 if (map.hasWall(x, y)) {
                     ImageView wall = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.bmp")));
                     wall.setFitWidth(tileSize);
@@ -91,15 +94,17 @@ public class Level {
                     wall.setX(posx);
                     wall.setY(posy);
                     root.getChildren().add(wall);
-                }
-
-                if (map.hasGoal(x, y)) {
+                } else if (map.hasGoal(x, y)) {
                     ImageView goal = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
                     goal.setFitWidth(tileSize);
                     goal.setFitHeight(tileSize);
                     goal.setX(posx);
                     goal.setY(posy);
                     root.getChildren().add(goal);
+                } else {
+                    Rectangle tile = new Rectangle(posx, posy, tileSize, tileSize);
+                    tile.setFill(Color.GREY); // 空地
+                    root.getChildren().add(tile);
                 }
             }
         }
@@ -152,11 +157,11 @@ public class Level {
     }
     public void drawPlayer() {
         ImageView playerview = player.getImageView();
-        double posx = anchor_posx + player.get_x() * config.tile_size;
-        double posy = anchor_posy + player.get_y() * config.tile_size;
-        playerview.setX(posx);
-        playerview.setY(posy);
-        root.getChildren().add(playerview);
+        playerview.setX(playerview.getX() + anchor_posx);
+        playerview.setY(playerview.getY() + anchor_posy);
+        root.getChildren().add(player.getImageView());
+        playerview.setX(playerview.getX() - anchor_posx);
+        playerview.setY(playerview.getY() - anchor_posy);
     }
 
     public void drawMap() {
@@ -175,19 +180,23 @@ public class Level {
         return true;
     }
 
-    public void moveBox(box box, int dx, int dy) {
-        TranslateTransition transition = new TranslateTransition(Duration.millis(200), box.getImageView());
-        transition.setByX(dx * config.tile_size);
-        transition.setByY(dy * config.tile_size);
-        transition.play();
-    }
-
-    public void movePlayer(int dx, int dy) {
-        TranslateTransition transition = new TranslateTransition(Duration.millis(200), player.getImageView());
-        transition.setByX(dx * config.tile_size);
-        transition.setByY(dy * config.tile_size);
-        transition.play();
-    }
+//    public void moveBox(box box, int dx, int dy) {
+//        TranslateTransition transition = new TranslateTransition(Duration.millis(200), box.getImageView());
+//        transition.setByX(dx * config.tile_size);
+//        transition.setByY(dy * config.tile_size);
+//        transition.play();
+//    }
+//
+//    public void movePlayer(int dx, int dy) {
+//        TranslateTransition transition = new TranslateTransition(Duration.millis(200), player.getImageView());
+//
+//        transition.setFromX((player.get_x() - 2*dx) * config.tile_size);
+//        transition.setFromY((player.get_y() - 2*dy) * config.tile_size);
+//        transition.setToX((player.get_x() - 1*dx) * config.tile_size);
+//        transition.setToY((player.get_y() - 1*dy) * config.tile_size);
+//
+//        transition.play();
+//    }
 
     // getter setter
     public double getanchor_posx() {

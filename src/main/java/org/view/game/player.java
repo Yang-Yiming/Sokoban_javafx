@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class player extends entity {
-    private Image image;
-    private ImageView imageView;
+//    private Image image;
+//    private ImageView imageView;
 
     public player(int x, int y) {
         super(x, y, 2);
@@ -39,11 +39,11 @@ public class player extends entity {
         } else if(map.hasBox(newx, newy)) { // 暂时先这么写
             box e = entities.get(map.getBox_matrix_id(newx, newy) - 1); // 获得那个被推的箱子
             if(push(e, map)){
-                map.setBox_matrix(e.get_x(), e.get_y(), 0);
+                //map.setBox_matrix(e.get_x(), e.get_y(), 0);
                 e.move(map);
-                map.setBox_matrix(e.get_x(), e.get_y(), e.id);
+                //map.setBox_matrix(e.get_x(), e.get_y(), e.id);
                 this.move(map);
-                e.setMoving(true);
+//                e.setMoving(true);
                 return true;
             }
         }
