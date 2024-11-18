@@ -147,21 +147,23 @@ public class Level {
 
     public void drawBoxes() {
         for(box box : boxes) {
+            root.getChildren().add(box.getImageView());
 //            double posx = anchor_posx + box.get_x() * config.tile_size;
 //            double posy = anchor_posy + box.get_y() * config.tile_size;
-            ImageView boxview = box.getImageView();
+//            ImageView boxview = box.getImageView();
 //            boxview.setX(posx);
 //            boxview.setY(posy);
-            root.getChildren().add(boxview);
+//            root.getChildren().add(boxview);
         }
     }
     public void drawPlayer() {
-        ImageView playerview = player.getImageView();
-        playerview.setX(playerview.getX() + anchor_posx);
-        playerview.setY(playerview.getY() + anchor_posy);
         root.getChildren().add(player.getImageView());
-        playerview.setX(playerview.getX() - anchor_posx);
-        playerview.setY(playerview.getY() - anchor_posy);
+//        ImageView playerview = player.getImageView();
+//        playerview.setX(playerview.getX() + anchor_posx);
+//        playerview.setY(playerview.getY() + anchor_posy);
+//        root.getChildren().add(player.getImageView());
+//        playerview.setX(playerview.getX() - anchor_posx);
+//        playerview.setY(playerview.getY() - anchor_posy);
     }
 
     public void drawMap() {
@@ -207,9 +209,23 @@ public class Level {
     }
     public void setAnchor_posx(double anchor_posx) {
         this.anchor_posx = anchor_posx;
+        if (player == null) return;
+
+        player.getImageView().setX(anchor_posx + player.get_x() * config.tile_size);
+        for (box box : boxes) {
+            box.getImageView().setX(anchor_posx + box.get_x() * config.tile_size);
+        }
+
     }
     public void setAnchor_posy(double anchor_posy) {
         this.anchor_posy = anchor_posy;
+        if (player == null) return;
+
+        player.getImageView().setY(anchor_posy + player.get_y() * config.tile_size);
+        for (box box : boxes) {
+            box.getImageView().setY(anchor_posy + box.get_y() * config.tile_size);
+        }
+
     }
 
 }

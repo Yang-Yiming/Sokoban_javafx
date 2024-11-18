@@ -43,15 +43,6 @@ public class ClassicLevelManager {
             }
             level.player.set_velocity(dx, dy);
             level.player.move(level.map, level.boxes);
-//            if(level.player.move(level.map, level.boxes)){
-//                //level.movePlayer(dx, dy);
-//                for(box b : level.boxes){
-////                    if(b.isMoving()) {
-////                        //level.moveBox(b, dx,dy);
-////                        //b.setMoving(false);
-////                    }
-//                }
-//            };
 
             level.drawMap();
 

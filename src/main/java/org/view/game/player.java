@@ -4,10 +4,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.model.MapMatrix;
 import org.model.config;
-import org.view.map.map;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class player extends entity {
 //    private Image image;
@@ -30,12 +28,11 @@ public class player extends entity {
         return false;
     }
 
-    public boolean move(MapMatrix map, ArrayList<box> entities) {
+    public void move(MapMatrix map, ArrayList<box> entities) {
         int newx = x + velocity_x;
         int newy = y + velocity_y;
         if(can_move(map, velocity_x, velocity_y)){
             this.move(map);
-            return true;
         } else if(map.hasBox(newx, newy)) { // 暂时先这么写
             box e = entities.get(map.getBox_matrix_id(newx, newy) - 1); // 获得那个被推的箱子
             if(push(e, map)){
@@ -44,10 +41,8 @@ public class player extends entity {
                 //map.setBox_matrix(e.get_x(), e.get_y(), e.id);
                 this.move(map);
 //                e.setMoving(true);
-                return true;
             }
         }
-        return false;
     }
 
     public void set_velocity(int x, int y) {
