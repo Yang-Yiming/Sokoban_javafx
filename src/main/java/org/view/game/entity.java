@@ -13,9 +13,13 @@ import java.lang.Math;
 public class entity {
     protected int x;
     protected int y;
+
     protected int type;
     protected Image image;
     protected ImageView imageView;
+
+    protected final int ori_x;
+    protected final int ori_y; // transistion.setFromX()用的似乎是相对坐标 所以需要记录下初始值
 
     protected double posx;
     protected double posy;
@@ -26,6 +30,8 @@ public class entity {
     public entity(int x, int y, int type) {
         this.x = x;
         this.y = y;
+        this.ori_x = x;
+        this.ori_y = y;
         this.type = type;
     }
 
@@ -37,17 +43,18 @@ public class entity {
     public void move(MapMatrix map) {
         if (can_move(map, velocity_x, velocity_y)) {
             // 动画
+            int x_bias = x - ori_x, y_bias = y - ori_y;
             TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration * 1000), imageView);
-            transition.setFromX((x - 1) * config.tile_size); // 初始化的时候已经+了一次config.tile_size所以这里要-1
-            transition.setFromY((y - 1) * config.tile_size);
+            transition.setFromX(x_bias * config.tile_size);
+            transition.setFromY(y_bias * config.tile_size); // 同box.java
 
             map.remove(x, y, type);
             x += velocity_x;
             y += velocity_y;
             map.add(x, y, type); // 向那一格第i位加入
 
-            transition.setToX((x - 1) * config.tile_size);
-            transition.setToY((y - 1) * config.tile_size);
+            transition.setToX((velocity_x + x_bias) * config.tile_size);
+            transition.setToY((velocity_y + y_bias) * config.tile_size);
             transition.play();
 
         }
