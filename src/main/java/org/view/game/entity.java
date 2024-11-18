@@ -38,7 +38,7 @@ public class entity {
         if (can_move(map, velocity_x, velocity_y)) {
             // 动画
             TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration * 1000), imageView);
-            transition.setFromX((x - 1) * config.tile_size);
+            transition.setFromX((x - 1) * config.tile_size); // 初始化的时候已经+了一次config.tile_size所以这里要-1
             transition.setFromY((y - 1) * config.tile_size);
 
             map.remove(x, y, type);

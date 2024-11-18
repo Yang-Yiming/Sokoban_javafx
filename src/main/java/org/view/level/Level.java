@@ -147,11 +147,11 @@ public class Level {
 
     public void drawBoxes() {
         for(box box : boxes) {
-            double posx = anchor_posx + box.get_x() * config.tile_size;
-            double posy = anchor_posy + box.get_y() * config.tile_size;
+//            double posx = anchor_posx + box.get_x() * config.tile_size;
+//            double posy = anchor_posy + box.get_y() * config.tile_size;
             ImageView boxview = box.getImageView();
-            boxview.setX(posx);
-            boxview.setY(posy);
+//            boxview.setX(posx);
+//            boxview.setY(posy);
             root.getChildren().add(boxview);
         }
     }
