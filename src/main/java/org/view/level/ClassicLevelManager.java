@@ -12,8 +12,16 @@ import org.view.game.box;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+
+
+
 public class ClassicLevelManager {
     private int currentLevel;
+    private int totalLevel;
     private MapMatrix map;
     private Pane root;
     private Scene scene;
@@ -21,11 +29,13 @@ public class ClassicLevelManager {
     public ClassicLevelManager(Pane root){
         this.root = root;
         this.currentLevel = 0;
+        this.totalLevel = mapdata.maps.length;
         this.map = new MapMatrix(mapdata.maps[currentLevel]);
 
     }
 
-    public void loadLevel(){
+    public void loadLevel(int id){
+        currentLevel = id;
         Level level = new Level(root, currentLevel);
 
         // 添加键盘监听功能
@@ -43,13 +53,22 @@ public class ClassicLevelManager {
             }
             level.player.set_velocity(dx, dy);
             level.player.move(level.map, level.boxes);
+//            if(level.player.move(level.map, level.boxes)){
+//                //level.movePlayer(dx, dy);
+//                for(box b : level.boxes){
+////                    if(b.isMoving()) {
+////                        //level.moveBox(b, dx,dy);
+////                        //b.setMoving(false);
+////                    }
+//                }
+//            };
 
             level.drawMap();
 
             if(level.isWin()){
                 ++currentLevel;
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
-                loadLevel();
+                loadLevel(id + 1);
             }
         });
 
@@ -80,10 +99,21 @@ public class ClassicLevelManager {
     public void start(Stage primaryStage){
         this.root = new Pane();
         scene = new Scene(root, config.ScreenWidth, config.ScreenHeight);
+
+        VBox vbox = new VBox(10); // 间距为10
+        vbox.setAlignment(Pos.CENTER); // 居中对齐
+
+        // 创建按钮，每个按钮对应一个关卡
+        for (int i = 0; i < totalLevel; i++) {
+            int levelIndex = i;
+            Button btn = new Button("Level " + (levelIndex + 1));
+            btn.setOnAction(event -> loadLevel(levelIndex)); // 设置按钮的事件处理
+            vbox.getChildren().add(btn);
+        }
+        root.getChildren().add(vbox);
         primaryStage.setTitle("Sokoban Game");
         primaryStage.setScene(scene);
         primaryStage.show();
-        loadLevel();
     }
 
 }
