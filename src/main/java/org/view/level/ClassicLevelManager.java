@@ -1,4 +1,3 @@
-
 package org.view.level;
 
 import javafx.scene.Scene;
@@ -97,12 +96,16 @@ public class ClassicLevelManager {
     public void start(Stage primaryStage) {
         scene = new Scene(root, config.ScreenWidth, config.ScreenHeight);
 
+        // 加载 CSS 文件
+        scene.getStylesheets().add("file://" + new java.io.File("./target/classes/css/styles.css").getAbsolutePath());
+
         vbox = new VBox(10); // 间距为10
         vbox.setAlignment(Pos.CENTER); // 居中对齐
         // 创建按钮，每个按钮对应一个关卡
         for (int i = 0; i < totalLevel; i++) {
             int levelIndex = i;
             Button btn = new Button("Level " + (levelIndex + 1));
+            btn.getStyleClass().add("button-level"); // 应用 CSS 样式
             btn.setOnAction(event -> loadLevel(levelIndex, primaryStage)); // 设置按钮的事件处理
             vbox.getChildren().add(btn);
         }
