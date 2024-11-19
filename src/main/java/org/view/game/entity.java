@@ -44,7 +44,7 @@ public class entity {
         if (can_move(map, velocity_x, velocity_y)) {
             // 动画
             int x_bias = x - ori_x, y_bias = y - ori_y;
-            TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration * 1000), imageView);
+            TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
             transition.setFromX(x_bias * config.tile_size);
             transition.setFromY(y_bias * config.tile_size); // 同box.java
 
