@@ -1,4 +1,4 @@
-package org.view.level;
+package css;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -97,7 +97,7 @@ public class ClassicLevelManager {
         scene = new Scene(root, config.ScreenWidth, config.ScreenHeight);
 
         // 加载 CSS 文件
-        scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
+        scene.getStylesheets().add("file://" + new java.io.File("./target/classes/css/styles.css").getAbsolutePath());
 
         vbox = new VBox(10); // 间距为10
         vbox.setAlignment(Pos.CENTER); // 居中对齐

@@ -1,0 +1,15 @@
+/* styles.css */
+.button-level {
+    -fx-background-color: #4CAF50; /* 绿色背景 */
+    -fx-text-fill: white; /* 白色文字 */
+    -fx-border-color: #256029; /* 深绿色边框 */
+    -fx-border-radius: 5px; /* 边框圆角 */
+    -fx-background-radius: 5px; /* 背景圆角 */
+    -fx-padding: 8px; /* 内边距 */
+    -fx-font-size: 14px; /* 字体大小 */
+    -fx-font-weight: bold; /* 粗体 */
+}
+
+.button-level:hover {
+    -fx-background-color: #45a049; /* 鼠标悬停时的背景颜色 */
+}
