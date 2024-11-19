@@ -22,10 +22,11 @@ public class box extends entity {
     public void move(MapMatrix map) {
         if (can_move(map, velocity_x, velocity_y)) {
             // 动画
-            int x_bias = x - ori_x, y_bias = y - ori_y;
+            imageView.setX(imageView.getX() + velocity_x * config.tile_size);
+            imageView.setY(imageView.getY() + velocity_y * config.tile_size);
             TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
-            transition.setFromX(x_bias * config.tile_size);
-            transition.setFromY(y_bias * config.tile_size); // 用的似乎是相对坐标
+            transition.setFromX(-velocity_x * config.tile_size);
+            transition.setFromY(-velocity_y * config.tile_size); // 用的似乎是相对坐标
 
             map.remove(x, y, type);
             map.setBox_matrix(x, y,0); // 把原来位置的箱子干掉
@@ -34,8 +35,12 @@ public class box extends entity {
             map.add(x, y, type); // 向那一格第i位加入
             map.setBox_matrix(x, y, id); // 把新的箱子放进去
 
-            transition.setToX((velocity_x + x_bias) * config.tile_size);
-            transition.setToY((velocity_y + y_bias) * config.tile_size);
+            transition.setToX(0);
+            transition.setToY(0);
+            transition.setOnFinished(e -> {
+                imageView.setTranslateX(0); // 重置 translateX，因为动画已经结束
+                imageView.setTranslateY(0); // 重置 translateY，因为动画已经结束
+            });
             transition.play();
         }
     }

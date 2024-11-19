@@ -1,6 +1,8 @@
 package org.view.game;
 
+import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
+import javafx.css.SizeUnits;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -18,9 +20,6 @@ public class entity {
     protected Image image;
     protected ImageView imageView;
 
-    protected final int ori_x;
-    protected final int ori_y; // transistion.setFromX()用的似乎是相对坐标 所以需要记录下初始值
-
     protected double posx;
     protected double posy;
 
@@ -30,8 +29,6 @@ public class entity {
     public entity(int x, int y, int type) {
         this.x = x;
         this.y = y;
-        this.ori_x = x;
-        this.ori_y = y;
         this.type = type;
     }
 
@@ -43,20 +40,27 @@ public class entity {
     public void move(MapMatrix map) {
         if (can_move(map, velocity_x, velocity_y)) {
             // 动画
-            int x_bias = x - ori_x, y_bias = y - ori_y;
+            imageView.setX(imageView.getX() + velocity_x * config.tile_size); // 更新
+            imageView.setY(imageView.getY() + velocity_y * config.tile_size); // 更新
             TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
-            transition.setFromX(x_bias * config.tile_size);
-            transition.setFromY(y_bias * config.tile_size); // 同box.java
+            transition.setFromX(-velocity_x * config.tile_size);
+            transition.setFromY(-velocity_y * config.tile_size); // 同box.java
 
             map.remove(x, y, type);
             x += velocity_x;
             y += velocity_y;
             map.add(x, y, type); // 向那一格第i位加入
 
-            transition.setToX((velocity_x + x_bias) * config.tile_size);
-            transition.setToY((velocity_y + y_bias) * config.tile_size);
+//            transition.setToX(velocity_x * config.tile_size);
+//            transition.setToY(velocity_y * config.tile_size);
+            transition.setToX(0);
+            transition.setToY(0);
+//            System.out.println(transition.getFromX() + " " + transition.getFromX() + " " + transition.getToX() + " " + transition.getToY());
+            transition.setOnFinished(event -> {
+                imageView.setTranslateX(0); // 重置 translateX，因为动画已经结束
+                imageView.setTranslateY(0); // 重置 translateY，因为动画已经结束
+            });
             transition.play();
-
         }
     }
 
