@@ -1,4 +1,6 @@
-package org.view.map;
+package org.view.LevelSelect;
+
+import javafx.scene.Scene;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,8 @@ public class node {
     private int index;
     private int type;
     private boolean is_connected;
+
+    private Scene scene;
 
     private ArrayList<node> NextLayerConnectedNodes = new ArrayList<node>();
     private ArrayList<node> LastLayerConnectedNodes = new ArrayList<node>();

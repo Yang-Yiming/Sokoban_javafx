@@ -5,5 +5,6 @@ module Sokoban {
     requires javafx.controls;
     requires java.sql;
 
+    opens org.view.menu to javafx.fxml;
     exports org;
 }

@@ -1,6 +1,7 @@
 package org.view.level;
 
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 

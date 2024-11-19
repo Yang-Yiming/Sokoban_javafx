@@ -1,4 +1,4 @@
-package org.view.map;
+package org.view.LevelSelect;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
