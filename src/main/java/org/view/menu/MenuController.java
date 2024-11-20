@@ -46,13 +46,19 @@ public class MenuController {
     void LoginButtonClicked(MouseEvent event) throws IOException {
         try{
             // 加载登陆窗口fxml
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+            Parent root = loader.load();
+            LoginController loginController = loader.getController();
             Scene scene  = new Scene(root);
 
             // 创建一个新的stage用于显示登陆窗口
             Stage loginStage = new Stage();
             loginStage.initStyle(StageStyle.TRANSPARENT);
             loginStage.initModality(Modality.APPLICATION_MODAL);
+            // 将登陆窗口的stage传给controller
+            loginController.initialize(loginStage, primaryStage);
+            // 将背景设置为透明
+            scene.setFill(null);
             loginStage.setScene(scene);
             loginStage.show();
 
@@ -60,16 +66,14 @@ public class MenuController {
             double mainStageWidth = primaryStage.getWidth();
             double mainStageHeight = primaryStage.getHeight();
 
-            // 将背景设置为透明
-            scene.setFill(null);
-
+            int ybias = 28; // 顶部栏高度
             // 设置登录窗口的初始位置在主窗口位置
             loginStage.setX(primaryStage.getX() + mainStageWidth / 2);
-            loginStage.setY(primaryStage.getY());
+            loginStage.setY(primaryStage.getY() + ybias);
 
             // 设置登录窗口的大小为半个主窗口大小
             loginStage.setWidth(mainStageWidth / 2);
-            loginStage.setHeight(mainStageHeight );
+            loginStage.setHeight(mainStageHeight - ybias);
 
             // 使用TranslateTransition实现从右侧滑入的动画效果
             TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), loginStage.getScene().getRoot());
@@ -77,15 +81,20 @@ public class MenuController {
             translateTransition.setToX(0);
             translateTransition.play();
 
+            // 让主屏幕变淡
+            Timeline timeline = new Timeline();
+            KeyValue keyValue = new KeyValue(primaryStage.getScene().getRoot().opacityProperty(), 0.2);
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5), keyValue);
+            timeline.getKeyFrames().add(keyFrame);
+            timeline.play();
+
+            // 禁用主屏幕 不知为何似乎并不需要这句也点不了
+            // primaryStage.getScene().getRoot().setDisable(true);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-//        Pane loginroot = loader.load();
-//        LoginController controller = loader.getController(); controller.initialize(primaryStage);
-//        if(scene == null) scene = new Scene(loginroot);
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
     }
 
     @FXML
