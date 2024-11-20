@@ -9,10 +9,10 @@ public class config {
     public static final int ScreenWidth = 800;
     public static final int ScreenHeight = 600;
 
-    public static final int Map_Node_Width = 50;
+    public static final int Map_Node_Width = 60;
     public static final int Map_Node_Height = 20;
-    public static final int Map_Space_Width = 60;
-    public static final int Map_Space_Height = 200;
+    public static final int Map_VGap = 40;
+    public static final int Map_HGap = 20;
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例

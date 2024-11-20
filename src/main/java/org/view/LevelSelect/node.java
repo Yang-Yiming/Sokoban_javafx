@@ -1,6 +1,10 @@
 package org.view.LevelSelect;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import org.model.config;
 
 import java.util.ArrayList;
 
@@ -23,6 +27,7 @@ public class node {
     private boolean is_connected;
 
     private Scene scene;
+    private Button button;
 
     private ArrayList<node> NextLayerConnectedNodes = new ArrayList<node>();
     private ArrayList<node> LastLayerConnectedNodes = new ArrayList<node>();
@@ -34,9 +39,17 @@ public class node {
         this.type = type;
         this.is_connected = false;
 
-        if(layer > All_Nodes.size()){
+        this.button = new Button();
+        button.setPrefSize(config.Map_Node_Width, config.Map_Node_Height);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.GRAY);
+        dropShadow.setRadius(5); dropShadow.setOffsetX(2); dropShadow.setOffsetY(2);
+        this.button.setEffect(dropShadow); // 添加阴影效果
+
+        if(layer >= All_Nodes.size()){
             All_Nodes.add(new ArrayList<>());
         }
+
         All_Nodes.get(layer).add(this);
     }
 
@@ -53,6 +66,10 @@ public class node {
         return type;
     }
 
+    public Button getButton() {
+        return button;
+    }
+
     public boolean is_connected() {return is_connected;}
 
     public ArrayList<node> getNextLayerConnectedNodes() {
@@ -61,6 +78,20 @@ public class node {
 
     public ArrayList<node> getLastLayerConnectedNodes() {
         return LastLayerConnectedNodes;
+    }
+
+    public double get_posX() {
+        return button.getLayoutX() + (double)config.Map_Node_Width / 2;
+    }
+    public double get_posY() {
+        return button.getLayoutY() + (double)config.Map_Node_Height / 2;
+    }
+
+    public double get_up_posY(){
+        return button.getLayoutY();
+    }
+    public double get_down_posY(){
+        return button.getLayoutY() + (double)config.Map_Node_Height;
     }
 
 }

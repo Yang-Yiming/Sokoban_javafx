@@ -42,6 +42,8 @@ public class MenuController {
     @FXML
     private Button StartButton;
 
+
+
     @FXML
     void LoginButtonClicked(MouseEvent event) throws IOException {
         try{
@@ -57,39 +59,9 @@ public class MenuController {
             loginStage.initModality(Modality.APPLICATION_MODAL);
             // 将登陆窗口的stage传给controller
             loginController.initialize(loginStage, primaryStage);
-            // 将背景设置为透明
-            scene.setFill(null);
-            loginStage.setScene(scene);
-            loginStage.show();
 
-            // 获取当前主窗口的宽度和高度
-            double mainStageWidth = primaryStage.getWidth();
-            double mainStageHeight = primaryStage.getHeight();
+            ChangeStageAnim(scene, loginStage);
 
-            int ybias = 28; // 顶部栏高度
-            // 设置登录窗口的初始位置在主窗口位置
-            loginStage.setX(primaryStage.getX() + mainStageWidth / 2);
-            loginStage.setY(primaryStage.getY() + ybias);
-
-            // 设置登录窗口的大小为半个主窗口大小
-            loginStage.setWidth(mainStageWidth / 2);
-            loginStage.setHeight(mainStageHeight - ybias);
-
-            // 使用TranslateTransition实现从右侧滑入的动画效果
-            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), loginStage.getScene().getRoot());
-            translateTransition.setFromX(loginStage.getWidth());
-            translateTransition.setToX(0);
-            translateTransition.play();
-
-            // 让主屏幕变淡
-            Timeline timeline = new Timeline();
-            KeyValue keyValue = new KeyValue(primaryStage.getScene().getRoot().opacityProperty(), 0.2);
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5), keyValue);
-            timeline.getKeyFrames().add(keyFrame);
-            timeline.play();
-
-            // 禁用主屏幕 不知为何似乎并不需要这句也点不了
-            // primaryStage.getScene().getRoot().setDisable(true);
 
 
         } catch (IOException e) {
@@ -100,6 +72,39 @@ public class MenuController {
     @FXML
     void SettingButtonClicked(MouseEvent event) {
 
+    }
+
+    private void ChangeStageAnim(Scene scene, Stage newStage) { // 用于login 和 setting这两个从右侧滑过来的模块
+        // 将背景设置为透明
+        scene.setFill(null);
+        newStage.setScene(scene);
+        newStage.show();
+
+        // 获取当前主窗口的宽度和高度
+        double mainStageWidth = primaryStage.getWidth();
+        double mainStageHeight = primaryStage.getHeight();
+
+        int ybias = 28; // 顶部栏高度
+        // 设置登录窗口的初始位置在主窗口位置
+        newStage.setX(primaryStage.getX() + mainStageWidth / 2);
+        newStage.setY(primaryStage.getY() + ybias);
+
+        // 设置登录窗口的大小为半个主窗口大小
+        newStage.setWidth(mainStageWidth / 2);
+        newStage.setHeight(mainStageHeight - ybias);
+
+        // 使用TranslateTransition实现从右侧滑入的动画效果
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), newStage.getScene().getRoot());
+        translateTransition.setFromX(newStage.getWidth());
+        translateTransition.setToX(0);
+        translateTransition.play();
+
+        // 让主屏幕变淡
+        Timeline timeline = new Timeline();
+        KeyValue keyValue = new KeyValue(primaryStage.getScene().getRoot().opacityProperty(), 0.2);
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5), keyValue);
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
     }
 
     @FXML

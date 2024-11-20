@@ -1,4 +1,4 @@
-package org;
+package org.view.LevelSelect;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,17 +12,17 @@ import java.io.IOException;
 
 import static javafx.application.Application.launch;
 
-public class Main extends Application{
+public class testMain extends Application{
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
-        Pane fxmlroot = loader.load();
-        MenuController controller = loader.getController();
-
         Pane root = new Pane();
-        controller.initialize(root, primaryStage);
+        map map = new map(root);
 
-        primaryStage.setScene(new Scene(fxmlroot));
+        map.random_generate(4,5);
+
+        map.draw_map();
+        primaryStage.setTitle("test");
+        primaryStage.setScene(map.getScene());
         primaryStage.show();
     }
 

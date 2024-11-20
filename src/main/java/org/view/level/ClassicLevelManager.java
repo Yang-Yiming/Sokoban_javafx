@@ -1,10 +1,12 @@
 package org.view.level;
 
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.model.MapMatrix;
 import org.model.config;

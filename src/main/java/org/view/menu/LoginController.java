@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -57,7 +58,7 @@ public class LoginController {
     private HBox PasswordHbox;
 
     @FXML
-    private TextField PasswordInput;
+    private PasswordField PasswordInput;
 
     @FXML
     private Text PasswordText;
@@ -66,7 +67,7 @@ public class LoginController {
     private HBox ConfirmPasswordHbox;
 
     @FXML
-    private TextField ConfirmPasswordInput;
+    private PasswordField ConfirmPasswordInput;
 
     @FXML
     private Text ConfirmPasswordText;
@@ -91,6 +92,7 @@ public class LoginController {
 
     @FXML
     void HandleLogin(MouseEvent event) {
+        LoginVbox.getChildren().remove(ReminderHbox);
         if(LoginVbox.getChildren().contains(ConfirmPasswordHbox)){
             LoginVbox.getChildren().remove(ConfirmPasswordHbox);
             UsernameInput.setText(""); PasswordInput.setText("");
@@ -115,6 +117,7 @@ public class LoginController {
 
     @FXML
     void HandleRegister(MouseEvent event) {
+        LoginVbox.getChildren().remove(ReminderHbox);
         if(!LoginVbox.getChildren().contains(ConfirmPasswordHbox)){
             LoginVbox.getChildren().add(2, ConfirmPasswordHbox);
             return;
@@ -127,11 +130,11 @@ public class LoginController {
         LoginVbox.getChildren().add(3, ReminderHbox);
 
         if (!SavingManager.validString(UserName)) {
-            ReminderText.setText("Invalid username");
+            ReminderText.setText("Invalid username, should only contain letters, numbers and _");
         } else if (SavingManager.getUser(UserName, Password) != -1) {
             ReminderText.setText("User already exists");
         } else if (!SavingManager.validString(Password)) {
-            ReminderText.setText("Invalid password");
+            ReminderText.setText("Invalid password, should only contain letters, numbers and _");
         } else if (!Password.equals(ConfirmPassword)) {
             ReminderText.setText("Password not match");
         } else {
