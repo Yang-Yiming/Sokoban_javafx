@@ -11,8 +11,8 @@ public class config {
 
     public static final int Map_Node_Width = 60;
     public static final int Map_Node_Height = 20;
-    public static final int Map_VGap = 40;
-    public static final int Map_HGap = 20;
+    public static final int Map_Layer_Gap = 40;
+    public static final int Map_Node_Gap = 20;
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例

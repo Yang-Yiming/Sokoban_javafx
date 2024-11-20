@@ -3,7 +3,6 @@ package org.view.LevelSelect;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -11,11 +10,8 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import org.model.config;
-
-import java.awt.*;
 
 public class map {
 
@@ -32,16 +28,8 @@ public class map {
         this.scene = new Scene(root, config.ScreenWidth, config.ScreenHeight);
     }
 
-    public void random_generate(int layer_num, int max_nodes_per_layer) {
-        this.max_nodes_per_layer = max_nodes_per_layer;
-        for(int i = 0; i< layer_num; i++) {
-            int node_num = config.randint(1,max_nodes_per_layer);
-            for(int j = 0; j < node_num; j++) {
-                node node = new node(i, j, 0);
-            }
-        }
-
-        for(int i = 0; i < layer_num - 1; i++){
+    private static void random_connect(int layer_num) {
+        for(int i = 0; i < layer_num - 2; i++){
             for(int j = 0; j < node.All_Nodes.get(i).size(); j++){
                 node one = node.All_Nodes.get(i).get(j);
                 int connect_num = config.randint(1,node.All_Nodes.get(i).size() - j - 1);
@@ -53,7 +41,27 @@ public class map {
                     node two = node.All_Nodes.get(i+1).get(k);
                     node.connect(one, two);
                 }
+            }
+        }
+    }
 
+    public void random_generate_map(int layer_num, int max_nodes_per_layer) {
+        this.max_nodes_per_layer = max_nodes_per_layer;
+        for(int i = 0; i< layer_num - 1; i++) {
+            int node_num = config.randint(1,max_nodes_per_layer);
+            for(int j = 0; j < node_num; j++) {
+                new node(i, j, 0);
+            }
+        }
+        new node(layer_num - 1, 0, 0);
+        random_connect(layer_num);
+    }
+
+    public void linear_generate_map(int layer_num) {
+        for(int i = 0; i< layer_num; i++) {
+            new node(i, 0, 0);
+            if(i > 0){
+                node.connect(node.All_Nodes.get(i-1).get(0), node.All_Nodes.get(i).get(0));
             }
         }
     }
@@ -84,20 +92,26 @@ public class map {
         root.getChildren().add(path); // 加入曲线
     }
 
-    public void draw_map() {
-        int total_width = max_nodes_per_layer * config.Map_Node_Width + (max_nodes_per_layer - 1) * config.Map_HGap;
+    public void draw_nodes(boolean is_vertical) {
+        int total_width = max_nodes_per_layer * config.Map_Node_Width + (max_nodes_per_layer - 1) * config.Map_Node_Gap;
+        int total_height = max_nodes_per_layer * config.Map_Node_Height + (max_nodes_per_layer - 1) * config.Map_Layer_Gap;
         AnchorX = (double) (config.ScreenWidth - total_width) / 2;
-        AnchorY = 20;
+        AnchorY = (double) (config.ScreenHeight - total_height) / 2;
 
         scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
         root.setLayoutX(AnchorX); root.setLayoutY(AnchorY);
 
-        VBox vbox = new VBox(config.Map_VGap);
-        vbox.setAlignment(Pos.CENTER);
+        VBox super_vbox = new VBox(config.Map_Layer_Gap);
+        super_vbox.setAlignment(Pos.CENTER); // vertical用
+        HBox super_hbox = new HBox(config.Map_Layer_Gap);
+        super_hbox.setAlignment(Pos.CENTER); // horizontal用
 
         for(int i = 0; i < node.All_Nodes.size(); i++){
-            HBox hbox = new HBox(config.Map_HGap);
-            hbox.setAlignment(Pos.CENTER);
+            HBox hbox = new HBox(config.Map_Node_Gap);
+            hbox.setAlignment(Pos.CENTER); // 这两个vertical用
+            VBox vbox = new VBox(config.Map_Node_Gap);
+            vbox.setAlignment(Pos.CENTER); // 这两个horizontal用
+
             for(int j = 0; j < node.All_Nodes.get(i).size(); j++){
                 node one = node.All_Nodes.get(i).get(j);
                 // 设置按钮
@@ -107,17 +121,38 @@ public class map {
                 button.setOnAction(event -> {
                     System.out.println("Layer: " + one.getLayer() + " Index: " + one.getIndex());
                 });
-                hbox.getChildren().add(button);
-                // 设置连接线
-                if(i < node.All_Nodes.size() - 1  && one.is_connected()){
-                    for(node two : one.getNextLayerConnectedNodes()){
+                if(is_vertical)
+                    hbox.getChildren().add(button);
+                else
+                    vbox.getChildren().add(button);
+            }
+            if(is_vertical)
+                super_vbox.getChildren().add(hbox);
+            else
+                super_hbox.getChildren().add(vbox);
+        }
+        if(is_vertical)
+            root.getChildren().add(super_vbox);
+        else
+            root.getChildren().add(super_hbox);
+    }
+    public void draw_line(boolean is_vertical) {
+        for(int i = 0; i < node.All_Nodes.size() - 1; i++){
+            for(int j = 0; j < node.All_Nodes.get(i).size(); j++){
+                node one = node.All_Nodes.get(i).get(j);
+                for(node two: one.getNextLayerConnectedNodes()){
+                    if(is_vertical)
                         generate_cubic_curve(one.get_posX(), one.get_down_posY(), two.get_posX(), two.get_up_posY());
-                    }
+                    else
+                        generate_cubic_curve(one.get_right_posX(), one.get_posY(), two.get_left_posX(), two.get_posY());
                 }
             }
-            vbox.getChildren().add(hbox);
         }
-        root.getChildren().add(vbox);
+    }
+
+    public void draw_map(boolean is_vertical) {
+        draw_nodes(is_vertical);
+        draw_line(is_vertical);
     }
 
     public Scene getScene() {

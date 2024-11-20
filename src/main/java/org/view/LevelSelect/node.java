@@ -80,13 +80,19 @@ public class node {
         return LastLayerConnectedNodes;
     }
 
+
     public double get_posX() {
-        return button.getLayoutX() + (double)config.Map_Node_Width / 2;
+        return button.getLayoutX() + (double) config.Map_Node_Width / 2;
+    }
+    public double get_left_posX(){
+        return button.getLayoutX();
+    }
+    public double get_right_posX(){
+        return button.getLayoutX() + (double)config.Map_Node_Width;
     }
     public double get_posY() {
-        return button.getLayoutY() + (double)config.Map_Node_Height / 2;
+        return button.getLayoutY() + (double) config.Map_Node_Height / 2;
     }
-
     public double get_up_posY(){
         return button.getLayoutY();
     }
