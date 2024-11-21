@@ -78,25 +78,15 @@ public class Level {
         init();
     }
     public void drawGrass(){
-        //将能显示在窗口里的部分都用 wall 填充
+        //将能显示在窗口里的部分都用 grass 填充
         int leftNum = (int) Math.ceil(anchor_posx / config.tile_size);
         int rightNum = (int) Math.ceil((config.ScreenWidth - anchor_posx) / config.tile_size);
         int upNum = (int) Math.ceil(anchor_posy / config.tile_size);
         int downNum = (int) Math.ceil((config.ScreenHeight - anchor_posy) / config.tile_size);
-        System.out.println((leftNum + rightNum) + " " + (upNum + downNum));
-        for(int i = -leftNum; i < map.getWidth() + rightNum; ++i){
-            for(int j = -upNum; j < map.getHeight() + downNum; ++j){
-                if(i < 0 || j < 0 || i >= map.getWidth() || j >= map.getHeight()){
-//                    ImageView wall = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.bmp")));
-                    //绘制一个颜色随机的矩形
-                    Rectangle wall = new Rectangle(anchor_posx + i * config.tile_size, anchor_posy + j * config.tile_size, config.tile_size, config.tile_size);
-                    wall.setFill(Color.rgb((int)(Math.random() * 255), (int)(Math.random() * 255), (int)(Math.random() * 255)));
-//                    wall.setFitWidth(config.tile_size);
-//                    wall.setFitHeight(config.tile_size);
-//                    wall.setX(anchor_posx + i * config.tile_size);
-//                    wall.setY(anchor_posy + j * config.tile_size);
-                    root.getChildren().add(wall);
-                }
+        for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx){
+            for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy){
+                    Grass.addGrass(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
+//                    root.getChildren().add(rect);
             }
         }
     }
@@ -160,7 +150,7 @@ public class Level {
         // root.getChildren().add(rect);
         glowRectangles.add(rect);
         radiatingEffects[y][x] = rect;
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.04), e -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             if(rect.getWidth() > tileSize * highLimit) {
                 rect.setWidth(tileSize * lowLimit);
                 rect.setHeight(tileSize * lowLimit);
