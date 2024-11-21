@@ -57,7 +57,10 @@ public class ClassicLevelManager {
                 // System.out.println("reset");
             }
             if(code == KeyCode.ESCAPE){
-                //回到关卡选择界面
+                //回到关卡选择界面并移除监听和动画
+                scene.setOnKeyPressed(null);
+                scene.setOnMousePressed(null);
+                scene.setOnMouseDragged(null);
                 showLevelMenu(primaryStage);
             }
             level.player.set_velocity(dx, dy);
@@ -89,7 +92,7 @@ public class ClassicLevelManager {
         scene.setOnMouseDragged(event -> {
             level.setAnchor_posx(event.getSceneX() + del_posx.get());
             level.setAnchor_posy(event.getSceneY() + del_posy.get());
-
+            level.updateAllRadiatingEffect();
             level.drawMap();
         });
 

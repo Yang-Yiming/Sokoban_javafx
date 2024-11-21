@@ -29,6 +29,7 @@ public class Level {
     ArrayList<box> boxes;
 
     private ArrayList<Rectangle> glowRectangles;
+    private Rectangle[][] radiatingEffects;
 
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;
@@ -36,6 +37,7 @@ public class Level {
 
     public void init() {
         map = new MapMatrix(mapdata.maps[id]);
+        radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
         glowRectangles = new ArrayList<>();
 
         int boxIndex = 1; // 从1开始编号
@@ -113,8 +115,18 @@ public class Level {
             root.getChildren().add(rect);
         }
     }
+    public void updateAllRadiatingEffect() {
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
+                if (map.hasGoal(x, y)) {
+                    updateRectangle(radiatingEffects[y][x], config.tile_size, x, y);
+                }
+            }
+        }
+    }
+    private static final double lowLimit = 0.9;
+    private static final double highLimit = 1.2;
     private void createRadiatingEffect(int x, int y, int tileSize) { //需要传实时的数据。
-        double lowLimit = 0.9, highLimit = 1.2;
         double initialCenterX = anchor_posx + x * tileSize;
         double initialCenterY = anchor_posy + y * tileSize;
         Rectangle rect = new Rectangle(initialCenterX, initialCenterY, tileSize * lowLimit, tileSize * lowLimit);
@@ -125,26 +137,37 @@ public class Level {
         rect.setStrokeWidth(2);
         // root.getChildren().add(rect);
         glowRectangles.add(rect);
+        radiatingEffects[y][x] = rect;
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.04), e -> {
             if(rect.getWidth() > tileSize * highLimit) {
                 rect.setWidth(tileSize * lowLimit);
                 rect.setHeight(tileSize * lowLimit);
             }
-            //正方形逐渐放大
+            // 正方形逐渐放大
             rect.setWidth(rect.getWidth() + 1);
             rect.setHeight(rect.getHeight() + 1);
-            //正方形居中
+            // 正方形居中
             double centerX = anchor_posx + x * tileSize;
             double centerY = anchor_posy + y * tileSize;
             rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
             rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
-            //正方形逐渐变淡
+            // 正方形逐渐变淡
             rect.setStroke(Color.rgb(255, 255, 255, 1 - (rect.getWidth() - tileSize * lowLimit) / (tileSize * (highLimit - lowLimit))));
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
-
+    private void updateRectangle(Rectangle rect, int tileSize, int x, int y) {
+        double centerX = anchor_posx + x * tileSize;
+        double centerY = anchor_posy + y * tileSize;
+        rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
+        rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
+    }
+    /*
+    * 开一个数组存放所有的 glowRectangles
+    * 移动鼠标的时候，更新所有的 glowRectangles
+    * 通过 Timeline 来实现动画
+    * */
     public void drawBoxes() {
         for(box box : boxes) {
             root.getChildren().add(box.getImageView());
