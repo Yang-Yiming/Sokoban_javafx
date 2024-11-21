@@ -21,7 +21,6 @@ public class Main extends Application{
 
         Pane root = new Pane();
         controller.initialize(root, primaryStage);
-
         primaryStage.setScene(new Scene(fxmlroot));
         primaryStage.show();
     }

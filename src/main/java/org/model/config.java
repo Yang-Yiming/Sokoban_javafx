@@ -1,14 +1,22 @@
 package org.model;
 
 import java.lang.Math;
+import javafx.stage.Screen;
 
 public class config {
     //Constants
     public static final int move_anim_duration = 150;
     public static final int tile_size = 50;
-    public static final int ScreenWidth = 800;
+//    public static int getScreenWidth() {
+//        return (int) Screen.getPrimary().getBounds().getWidth();
+//    }
+//    public static final int ScreenWidth = getScreenWidth();
+//    public static int getScreenHeight() {
+//        return (int) Screen.getPrimary().getBounds().getHeight();
+//    }
+//    public static final int ScreenHeight = getScreenHeight();
     public static final int ScreenHeight = 600;
-
+    public static final int ScreenWidth = 800;
     public static final int Map_Node_Width = 60;
     public static final int Map_Node_Height = 20;
     public static final int Map_Layer_Gap = 40;
