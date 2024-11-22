@@ -69,9 +69,18 @@ public class Level {
                 }
             }
         }
+        createButterflyTimeline();
         drawMap();
     }
 
+    public void createButterflyTimeline(){
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {
+            Grass.updateTimeid();
+            drawMap();
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
     public Level(Pane root, int id) {
         this.root = root;
         this.id = id;
@@ -83,12 +92,18 @@ public class Level {
         int rightNum = (int) Math.ceil((config.ScreenWidth - anchor_posx) / config.tile_size);
         int upNum = (int) Math.ceil(anchor_posy / config.tile_size);
         int downNum = (int) Math.ceil((config.ScreenHeight - anchor_posy) / config.tile_size);
-        for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx){
-            for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy){
+        for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
+            for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
                     Grass.addGrass(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
-//                    root.getChildren().add(rect);
-            }
-        }
+    }
+    public void drawButterfly(){
+        int leftNum = (int) Math.ceil(anchor_posx / config.tile_size);
+        int rightNum = (int) Math.ceil((config.ScreenWidth - anchor_posx) / config.tile_size);
+        int upNum = (int) Math.ceil(anchor_posy / config.tile_size);
+        int downNum = (int) Math.ceil((config.ScreenHeight - anchor_posy) / config.tile_size);
+        for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
+            for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
+                Grass.addButterfly(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
     public void drawBackGround() {
         int tileSize = config.tile_size;
@@ -192,6 +207,7 @@ public class Level {
     public void drawMap() {
         root.getChildren().clear(); // 先清空一下地图
         drawGrass();
+        drawButterfly();
         drawBackGround();
         drawBoxes();
         drawPlayer();

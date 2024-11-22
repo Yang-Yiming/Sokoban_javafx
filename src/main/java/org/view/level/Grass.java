@@ -1,8 +1,13 @@
 package org.view.level;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import org.model.config;
 
 public class Grass {
@@ -54,35 +59,68 @@ public class Grass {
                 root.getChildren().add(grassPiece);
             }
         }
-//        //花片片
-            if(myRand(dx, dy, 0, 0, 5) == 0){
-                int pieceX = (int) (anchor_posx + dx * size + myRand(dx, dy, 1, 1, divide - 2) * dsize);
-                int pieceY = (int) (anchor_posy + dy * size + myRand(dx, dy, -1, 1, divide - 3) * dsize);
-                Color yellow = Color.rgb(240, 200, 100);
-                Color white = Color.rgb(255, 255, 255);
-                Color green = randColor(dx, dy);
-                //加深 green
-                green = Color.rgb((int)(green.getRed() * 0.8 * 255), (int)(green.getGreen() * 0.8 * 255), (int)(green.getBlue() * 0.8 * 255));
-                //绿色阴影
-                Rectangle f6 = new Rectangle(pieceX, pieceY + dsize * 2, dsize, dsize);
-                f6.setFill(green);
-                root.getChildren().add(f6);
-                Rectangle f8 = new Rectangle(pieceX - dsize, pieceY + dsize, dsize * 3, dsize);
-                f8.setFill(green);
-                root.getChildren().add(f8);
-                //白色花瓣
-                Rectangle f2 = new Rectangle(pieceX - dsize, pieceY, dsize * 3, dsize);
-                f2.setFill(white);
-                root.getChildren().add(f2);
-                Rectangle f4 = new Rectangle(pieceX, pieceY - dsize, dsize, dsize * 3);
-                f4.setFill(white);
-                root.getChildren().add(f4);
-                //黄色花蕊
-                Rectangle f1 = new Rectangle(pieceX, pieceY, dsize, dsize);
-                f1.setFill(yellow);
-                root.getChildren().add(f1);
-            }
 
+       //花片片
+        Color yellow = Color.rgb(240, 200, 100);
+        Color white = Color.rgb(255, 255, 255);
+        Color darkgreen = randColor(dx, dy);
+        darkgreen = Color.rgb((int)(darkgreen.getRed() * 0.8 * 255), (int)(darkgreen.getGreen() * 0.8 * 255), (int)(darkgreen.getBlue() * 0.8 * 255));
+        if(myRand(dx, dy, 0, 0, 5) == 0){
+            int pieceX = (int) (anchor_posx + dx * size + myRand(dx, dy, 1, 1, divide - 2) * dsize);
+            int pieceY = (int) (anchor_posy + dy * size + myRand(dx, dy, -1, 1, divide - 3) * dsize);
+            //加深 green
+            //绿色阴影
+            Rectangle f6 = new Rectangle(pieceX, pieceY + dsize * 2, dsize, dsize);
+            f6.setFill(darkgreen);
+            root.getChildren().add(f6);
+            Rectangle f8 = new Rectangle(pieceX - dsize, pieceY + dsize, dsize * 3, dsize);
+            f8.setFill(darkgreen);
+            root.getChildren().add(f8);
+            //白色花瓣
+            Rectangle f2 = new Rectangle(pieceX - dsize, pieceY, dsize * 3, dsize);
+            f2.setFill(white);
+            root.getChildren().add(f2);
+            Rectangle f4 = new Rectangle(pieceX, pieceY - dsize, dsize, dsize * 3);
+            f4.setFill(white);
+            root.getChildren().add(f4);
+            //黄色花蕊
+            Rectangle f1 = new Rectangle(pieceX, pieceY, dsize, dsize);
+            f1.setFill(yellow);
+            root.getChildren().add(f1);
+        }
     }
-
+    private static int ButterDX[] = {0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 2, 2, 1, 1, 0, 0};
+    private static int ButterDY[] = {1, 1, 2, 2, 2, 2, 1, 1, 0, 0, -1, -1, -1, -1, 0, 0};
+    private static int ButterHeight[] = {1, 0, 2, 2, 1, 2, 2, 2, 1, 0, 2, 2, 1, 2, 2, 2};
+    private static int ButterWidth[] = {2, 2, 1, 2, 2, 0, 1, 2, 2, 2, 1, 2, 2, 0, 1, 2};
+    private static int timeid = 0;
+    public static void updateTimeid(){
+        timeid = (timeid + 1) % ButterDX.length;
+    }
+    public static void addButterfly(Pane root, int dx, int dy, double anchor_posx, double anchor_posy, double size) {
+        int x = (int) (anchor_posx + dx * size);
+        int y = (int) (anchor_posy + dy * size);
+        int divide = 8;
+        double dsize = size / divide;
+        Color white = Color.rgb(255, 255, 255);
+        Color darkgreen = randColor(dx, dy);
+        darkgreen = Color.rgb((int) (darkgreen.getRed() * 0.8 * 255), (int) (darkgreen.getGreen() * 0.8 * 255), (int) (darkgreen.getBlue() * 0.8 * 255));
+        int butterDX, butterDY;
+        if(myRand(dx, dy, 1, 0, 1) == 0) butterDX = ButterDX[(timeid + myRand(dx, dy, 1, 0, 7)) % ButterDX.length];
+        else butterDX = ButterDX[(-timeid + myRand(dx, dy, 1, 0, 15) + 16) % ButterDX.length];
+        if(myRand(dx, dy, 1, 0, 1) == 0) butterDY = ButterDY[(timeid + myRand(dx, dy, 1, 0, 7)) % ButterDY.length];
+        else butterDY = ButterDY[(-timeid + myRand(dx, dy, 1, 0, 15) + 16) % ButterDY.length];
+        int butterHeight = ButterHeight[(timeid + myRand(dx, dy, 1, 0, 15)) % ButterHeight.length];
+        int butterWidth = ButterWidth[(timeid + myRand(dx, dy, 1, 0, 15)) % ButterWidth.length];
+        if (myRand(dx, dy, 0, 0, 30) == 0) {
+            int pieceX = (int) ((anchor_posx + dx * size + myRand(dx, dy, 1, 1, divide - 1) * dsize) + butterDX * dsize);
+            int pieceY = (int) ((anchor_posy + dy * size + myRand(dx, dy, -1, 1, divide - 1) * dsize) + butterDY * dsize);
+            Rectangle butterfly = new Rectangle(pieceX, pieceY, dsize * butterWidth, dsize * butterHeight);
+            butterfly.setFill(white);
+            Rectangle shade = new Rectangle(pieceX, pieceY + dsize * 4, dsize * 2, dsize * 2);
+            shade.setFill(darkgreen);
+            root.getChildren().add(shade);
+            root.getChildren().add(butterfly);
+        }
+    }
 }
