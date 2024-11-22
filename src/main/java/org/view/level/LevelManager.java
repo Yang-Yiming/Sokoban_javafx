@@ -1,41 +1,39 @@
 package org.view.level;
 
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.model.MapMatrix;
+import org.model.User;
 import org.model.config;
-import org.view.game.box;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 
 
-public class ClassicLevelManager {
+public class LevelManager {
     private int currentLevel;
     private int totalLevel;
     private Pane root;
     private Scene scene;
+    private Stage primaryStage; // 直接作为属性 不然函数里有一坨（
     private VBox vbox;
 
-    public ClassicLevelManager(Pane root){
+    private User user = null; // 正在游玩的user，用于存档
+
+    public LevelManager(Pane root) {
         this.root = root;
         this.currentLevel = 0;
         this.totalLevel = mapdata.maps.length;
     }
 
-    public void loadLevel(int id, Stage primaryStage){
+    public void loadLevel(int id){
         root.getChildren().clear();
         currentLevel = id;
         Pane rootLevel = new Pane();
@@ -61,7 +59,7 @@ public class ClassicLevelManager {
                 scene.setOnKeyPressed(null);
                 scene.setOnMousePressed(null);
                 scene.setOnMouseDragged(null);
-                showLevelMenu(primaryStage);
+                showLevelMenu();
             }
             level.player.set_velocity(dx, dy);
             level.player.move(level.map, level.boxes);
@@ -71,7 +69,7 @@ public class ClassicLevelManager {
             if(level.isWin()){
                 ++currentLevel;
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
-                loadLevel(id + 1, primaryStage);
+                loadLevel(id + 1);
             }
         });
 
@@ -99,7 +97,7 @@ public class ClassicLevelManager {
 
     }
 
-    public void start(Stage primaryStage) {
+    public void start() {
         scene = new Scene(root, config.ScreenWidth, config.ScreenHeight);
 
         // 加载 CSS 文件
@@ -112,17 +110,21 @@ public class ClassicLevelManager {
             int levelIndex = i;
             Button btn = new Button("Level " + (levelIndex + 1));
             btn.getStyleClass().add("button-level"); // 应用 CSS 样式
-            btn.setOnAction(event -> loadLevel(levelIndex, primaryStage)); // 设置按钮的事件处理
+            btn.setOnAction(event -> loadLevel(levelIndex)); // 设置按钮的事件处理
             vbox.getChildren().add(btn);
         }
         primaryStage.setTitle("Sokoban Game");
         primaryStage.setScene(scene);
-        showLevelMenu(primaryStage);
+        showLevelMenu();
     }
-    public void showLevelMenu(Stage primaryStage) {
+    public void showLevelMenu() {
         root.getChildren().clear();
         root.getChildren().add(vbox);
         primaryStage.show();
+    }
+
+    public void setStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
     }
 
 }

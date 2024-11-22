@@ -1,7 +1,6 @@
 package org.model;
 
 import java.lang.Math;
-import javafx.stage.Screen;
 
 public class config {
     //Constants

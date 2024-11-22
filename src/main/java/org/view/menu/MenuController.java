@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.view.level.ClassicLevelManager;
+import org.view.level.LevelManager;
 
 import java.io.IOException;
 
@@ -109,8 +109,9 @@ public class MenuController {
 
     @FXML
     void StartButtonClicked(MouseEvent event) {
-        ClassicLevelManager levelManager = new ClassicLevelManager(root);
-        levelManager.start(primaryStage);
+        LevelManager levelManager = new LevelManager(root);
+        levelManager.setStage(primaryStage);
+        levelManager.start();
     }
 
 }

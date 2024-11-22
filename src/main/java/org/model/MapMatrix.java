@@ -2,7 +2,7 @@ package org.model;
 
 public class MapMatrix {
     private int[][] matrix; // 二进制下， 第0位表示是否有墙，第1位是否有箱子，第2位是否有玩家，第3位是否有goal
-    private int[][] box_matrix; // 先暂时这样吧 比较好写 以后再管什么private setter啥的
+    private int[][] box_matrix;
 
     public boolean isOne(int num, int n) {
         return (((num >> n) & 1) == 1);
@@ -71,6 +71,10 @@ public class MapMatrix {
 
     public int getHeight() {
         return this.matrix.length;
+    }
+
+    public int[][] getMatrix() {
+        return matrix;
     }
 
     public MapMatrix(int[][] matrix) {

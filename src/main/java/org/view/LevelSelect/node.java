@@ -3,14 +3,20 @@ package org.view.LevelSelect;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.model.config;
+
+import org.view.level.LevelManager;
 
 import java.util.ArrayList;
 
 public class node {
 
     public static ArrayList<ArrayList<node>> All_Nodes = new ArrayList<>();
+    private static Pane root = new Pane();
+    private static LevelManager levelManager = new LevelManager(root);
 
     public static void connect(node node1, node node2) {
         if(node2.layer <= node1.layer || node2.layer - node1.layer > 1) {
@@ -28,19 +34,29 @@ public class node {
 
     private Scene scene;
     private Button button;
+    private int target_level;
 
     private ArrayList<node> NextLayerConnectedNodes = new ArrayList<node>();
     private ArrayList<node> LastLayerConnectedNodes = new ArrayList<node>();
 
+    private double posX, posY;
 
-    public node(int layer, int index, int type) {
+
+    public node(int layer, int index, int type, Scene scene, Pane root) {
         this.layer = layer;
         this.index = index;
         this.type = type;
         this.is_connected = false;
+        this.scene = scene;
+
+        node.root = root;
+        node.levelManager = new LevelManager(root);
 
         this.button = new Button();
         button.setPrefSize(config.Map_Node_Width, config.Map_Node_Height);
+        //button被按下时触发action()
+        button.setOnAction(e -> action());
+
         DropShadow dropShadow = new DropShadow();
         dropShadow.setColor(Color.GRAY);
         dropShadow.setRadius(5); dropShadow.setOffsetX(2); dropShadow.setOffsetY(2);
@@ -51,6 +67,13 @@ public class node {
         }
 
         All_Nodes.get(layer).add(this);
+    }
+
+    public void action(){
+        load_level();
+    }
+    public void load_level(){
+        levelManager.loadLevel(target_level);
     }
 
     //getter setter
@@ -80,24 +103,40 @@ public class node {
         return LastLayerConnectedNodes;
     }
 
+    public void set_posX(double posX){
+        this.posX = posX;
+    }
+    public void set_posY(double posY){
+        this.posY = posY;
+    }
+    public void setTarget_level(int target_level){
+        this.target_level = target_level;
+    }
 
-    public double get_posX() {
-        return button.getLayoutX() + (double) config.Map_Node_Width / 2;
-    }
+    //获得绝对坐标
     public double get_left_posX(){
-        return button.getLayoutX();
-    }
-    public double get_right_posX(){
-        return button.getLayoutX() + (double)config.Map_Node_Width;
-    }
-    public double get_posY() {
-        return button.getLayoutY() + (double) config.Map_Node_Height / 2;
+        return button.localToScene(scene.getX(),scene.getY()).getX();
     }
     public double get_up_posY(){
-        return button.getLayoutY();
+        return button.localToScene(scene.getX(),scene.getY()).getY();
+    }
+
+    public double get_posX() {
+        return get_left_posX() + (double) config.Map_Node_Width / 2;
+    }
+    public double get_right_posX(){
+        return get_left_posX() + (double)config.Map_Node_Width;
+    }
+    public double get_posY() {
+        return get_up_posY() + (double) config.Map_Node_Height / 2;
     }
     public double get_down_posY(){
-        return button.getLayoutY() + (double)config.Map_Node_Height;
+        return get_up_posY() + (double)config.Map_Node_Height;
+    }
+
+    @Override // 调试用
+    public String toString(){
+        return String.format("%d-%d, @[%.1f,%.1f]", layer, index, get_posX(), get_posY());
     }
 
 }

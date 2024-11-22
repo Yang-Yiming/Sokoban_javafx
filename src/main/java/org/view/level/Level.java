@@ -112,10 +112,6 @@ public class Level {
                 double posx = anchor_posx + x * tileSize;
                 double posy = anchor_posy + y * tileSize;
 
-//                if (map.hasNothing(x, y)) {
-//                    Rectangle tile = new Rectangle(posx, posy, tileSize, tileSize);
-//                    tile.setFill(Color.GREY); // 空地
-//                    root.getChildren().add(tile);}
                 if (map.hasWall(x, y)) {
                     ImageView wall = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.bmp")));
                     wall.setFitWidth(tileSize);
@@ -179,7 +175,8 @@ public class Level {
             rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
             rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
             // 正方形逐渐变淡
-            rect.setStroke(Color.rgb(255, 255, 255, 1 - (rect.getWidth() - tileSize * lowLimit) / (tileSize * (highLimit - lowLimit))));
+            double v = 1 - (rect.getWidth() - tileSize * lowLimit) / (tileSize * (highLimit - lowLimit));
+            rect.setStroke(Color.rgb(255, 255, 255, Math.max(v,0))); // 小于0会导致一大拖报错
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();

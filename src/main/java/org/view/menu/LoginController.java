@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.SavingManager;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class LoginController {
@@ -129,11 +128,11 @@ public class LoginController {
 
         LoginVbox.getChildren().add(3, ReminderHbox);
 
-        if (!SavingManager.validString(UserName)) {
+        if (SavingManager.NotValidString(UserName)) {
             ReminderText.setText("Invalid username, should only contain letters, numbers and _");
         } else if (SavingManager.getUser(UserName, Password) != -1) {
             ReminderText.setText("User already exists");
-        } else if (!SavingManager.validString(Password)) {
+        } else if (SavingManager.NotValidString(Password)) {
             ReminderText.setText("Invalid password, should only contain letters, numbers and _");
         } else if (!Password.equals(ConfirmPassword)) {
             ReminderText.setText("Password not match");

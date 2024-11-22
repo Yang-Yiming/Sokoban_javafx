@@ -14,14 +14,15 @@ public class testMain extends Application{
         Pane root = new Pane();
         map map = new map(root);
 
-        //map.random_generate_map(4,5);
-        map.linear_generate_map(5);
+        map.random_generate_map(6,4);
+        //map.linear_generate_map();
 
-        map.draw_nodes(false);
+        map.draw_map(false);
         primaryStage.setTitle("test");
         primaryStage.setScene(map.getScene());
         primaryStage.show();
         map.draw_line(false);
+        map.update(false);
     }
 
     public static void main(String[] args) {

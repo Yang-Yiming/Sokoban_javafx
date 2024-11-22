@@ -12,6 +12,10 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.paint.Color;
 import org.model.config;
+import org.view.level.mapdata;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class map {
 
@@ -50,28 +54,36 @@ public class map {
         for(int i = 0; i< layer_num - 1; i++) {
             int node_num = config.randint(1,max_nodes_per_layer);
             for(int j = 0; j < node_num; j++) {
-                new node(i, j, 0);
+                node n = new node(i, j, 0, scene, root);
+                n.getButton().setText(n.getLayer() + "-" + n.getIndex());
             }
         }
-        new node(layer_num - 1, 0, 0);
+        new node(layer_num - 1, 0, 0, scene, root);
         random_connect(layer_num);
     }
 
-    public void linear_generate_map(int layer_num) {
+    public void linear_generate_map() {
+        int layer_num = mapdata.maps.length;
         for(int i = 0; i< layer_num; i++) {
-            new node(i, 0, 0);
+            node n = new node(i, 0, 0, scene, root);
+            n.setTarget_level(i);
+            n.getButton().setText("Level " + (i+1));
             if(i > 0){
                 node.connect(node.All_Nodes.get(i-1).get(0), node.All_Nodes.get(i).get(0));
             }
         }
     }
 
-    public void generate_cubic_curve(double startX, double startY, double endX, double endY) {
+    public void generate_cubic_curve(double startX, double startY, double endX, double endY, boolean isVertical) {
         // 计算控制点
-        double controlX1 = (startX + endX) / 2 - (endY - startY) / 2;
-        double controlY1 = (startY + endY) / 2 - (endX - startX) / 2;
-        double controlX2 = (startX + endX) / 2 + (endY - startY) / 2;
-        double controlY2 = (startY + endY) / 2 + (endX - startX) / 2;
+        double controlX1, controlY1, controlX2, controlY2;
+        if(isVertical){
+            controlX1 = startX; controlY1 = startY + (endY - startY) / 3;
+            controlX2 = endX; controlY2 = endY - (endY - startY) / 3;
+        } else {
+            controlX1 = startX + (endX - startX) / 3; controlY1 = startY;
+            controlX2 = endX - (endX - startX) / 3; controlY2 = endY;
+        }
 
         // 创建路径
         Path path = new Path();
@@ -99,7 +111,7 @@ public class map {
         AnchorY = (double) (config.ScreenHeight - total_height) / 2;
 
         scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
-        root.setLayoutX(AnchorX); root.setLayoutY(AnchorY);
+        root.setLayoutX(AnchorX); root.setLayoutY(AnchorY); // 设置根节点的位置
 
         VBox super_vbox = new VBox(config.Map_Layer_Gap);
         super_vbox.setAlignment(Pos.CENTER); // vertical用
@@ -116,11 +128,11 @@ public class map {
                 node one = node.All_Nodes.get(i).get(j);
                 // 设置按钮
                 Button button = one.getButton();
-                button.setText(one.getLayer() + "-" + one.getIndex());
+//                button.setText(one.getLayer() + "-" + one.getIndex());
                 button.getStyleClass().add("button-level");
-                button.setOnAction(event -> {
-                    System.out.println("Layer: " + one.getLayer() + " Index: " + one.getIndex());
-                });
+//                button.setOnAction(event -> {
+//                    System.out.println("Layer: " + one.getLayer() + " Index: " + one.getIndex());
+//                });
                 if(is_vertical)
                     hbox.getChildren().add(button);
                 else
@@ -135,28 +147,52 @@ public class map {
             root.getChildren().add(super_vbox);
         else
             root.getChildren().add(super_hbox);
+
     }
+
     public void draw_line(boolean is_vertical) {
         for(int i = 0; i < node.All_Nodes.size() - 1; i++){
             for(int j = 0; j < node.All_Nodes.get(i).size(); j++){
                 node one = node.All_Nodes.get(i).get(j);
                 for(node two: one.getNextLayerConnectedNodes()){
                     if(is_vertical)
-                        generate_cubic_curve(one.get_posX(), one.get_down_posY(), two.get_posX(), two.get_up_posY());
+                        generate_cubic_curve(one.get_posX(), one.get_down_posY(), two.get_posX(), two.get_up_posY(), true);
                     else
-                        generate_cubic_curve(one.get_right_posX(), one.get_posY(), two.get_left_posX(), two.get_posY());
+                        generate_cubic_curve(one.get_right_posX(), one.get_posY(), two.get_left_posX(), two.get_posY(), false);
                 }
             }
         }
     }
 
     public void draw_map(boolean is_vertical) {
+        root.getChildren().clear();
         draw_nodes(is_vertical);
         draw_line(is_vertical);
     }
 
     public Scene getScene() {
         return scene;
+    }
+
+    public void update(boolean isVertical) {
+        // 根据鼠标拖动改变anchor_posx anchor_posy
+        // 鼠标是否在拖动根据鼠标拖动改变anchor_posx
+        AtomicBoolean isDragging = new AtomicBoolean(false);
+        AtomicReference<Double> del_posx = new AtomicReference<>((double) 0);
+        AtomicReference<Double> del_posy = new AtomicReference<>((double) 0);
+        // 添加鼠标按下事件监听器
+        scene.setOnMousePressed(event -> {
+            if (event.isPrimaryButtonDown()) {
+                del_posx.set(AnchorX - event.getSceneX());
+                del_posy.set(AnchorY - event.getSceneY());
+            }
+        });
+
+        scene.setOnMouseDragged(event -> {
+            AnchorX = event.getSceneX() + del_posx.get();
+            AnchorY = event.getSceneY() + del_posy.get();
+            draw_map(isVertical);
+        });
     }
 
 }
