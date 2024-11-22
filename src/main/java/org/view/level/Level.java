@@ -126,11 +126,12 @@ public class Level {
                     goal.setX(posx);
                     goal.setY(posy);
                     root.getChildren().add(goal);
-                } else {
-                    Rectangle tile = new Rectangle(posx, posy, tileSize, tileSize);
-                    tile.setFill(Color.GREY); // 空地
-                    root.getChildren().add(tile);
                 }
+//                else {
+//                    Rectangle tile = n.add(tile);ew Rectangle(posx, posy, tileSize, tileSize);
+////                    tile.setFill(Color.GREY); // 空地
+////                    root.getChildren()
+//                }
             }
         }
         //将所有 glowrectangles 里的成员置于图层最上方

@@ -46,10 +46,10 @@ public class entity {
             transition.setFromX(-velocity_x * config.tile_size);
             transition.setFromY(-velocity_y * config.tile_size); // 同box.java
 
-            map.remove(x, y, type);
+            if(x >= 0 && x < map.getWidth() && y >= 0 && y < map.getHeight()) map.remove(x, y, type);
             x += velocity_x;
             y += velocity_y;
-            map.add(x, y, type); // 向那一格第i位加入
+            if(x >= 0 && x < map.getWidth() && y >= 0 && y < map.getHeight()) map.add(x, y, type); // 向那一格第i位加入
 
 //            transition.setToX(velocity_x * config.tile_size);
 //            transition.setToY(velocity_y * config.tile_size);

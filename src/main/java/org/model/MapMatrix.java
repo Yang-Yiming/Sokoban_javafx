@@ -13,6 +13,9 @@ public class MapMatrix {
     }
 
     public boolean hasNoObstacle(int x, int y) {
+        if(x < 0 || x >= this.getWidth() || y < 0 || y >= this.getHeight()) {
+            return true;
+        }
         int[] ObstacleTypes = { 0, 1, 2 }; // wall box player 会阻挡
         for (int e : ObstacleTypes) {
             if (isOne(this.matrix[y][x], e)) {
