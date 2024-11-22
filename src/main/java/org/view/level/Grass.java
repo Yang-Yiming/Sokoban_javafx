@@ -39,7 +39,7 @@ public class Grass {
         int divide = 8;
         double dsize = size / divide;
         for (int i = 0; i < divide; ++i)
-            if(myRand(dx, dy, i, 0, 1) == 0){
+            if(myRand(dx, dy, i, -10, 10) < 0){
                 Rectangle smallGrass = new Rectangle(x + i * dsize, y, dsize, dsize);
                 smallGrass.setFill(randColor(dx, dy - 1));
                 root.getChildren().add(smallGrass);
@@ -63,33 +63,24 @@ public class Grass {
                 Color green = randColor(dx, dy);
                 //加深 green
                 green = Color.rgb((int)(green.getRed() * 0.8 * 255), (int)(green.getGreen() * 0.8 * 255), (int)(green.getBlue() * 0.8 * 255));
-                //黄色花蕊
-                Rectangle f1 = new Rectangle(pieceX, pieceY, dsize, dsize);
-                f1.setFill(yellow);
-                root.getChildren().add(f1);
-                //白色花瓣
-                Rectangle f2 = new Rectangle(pieceX - dsize, pieceY, dsize, dsize);
-                f2.setFill(white);
-                root.getChildren().add(f2);
-                Rectangle f3 = new Rectangle(pieceX + dsize, pieceY, dsize, dsize);
-                f3.setFill(white);
-                root.getChildren().add(f3);
-                Rectangle f4 = new Rectangle(pieceX, pieceY - dsize, dsize, dsize);
-                f4.setFill(white);
-                root.getChildren().add(f4);
-                Rectangle f5 = new Rectangle(pieceX, pieceY + dsize, dsize, dsize);
-                f5.setFill(white);
-                root.getChildren().add(f5);
                 //绿色阴影
                 Rectangle f6 = new Rectangle(pieceX, pieceY + dsize * 2, dsize, dsize);
                 f6.setFill(green);
                 root.getChildren().add(f6);
-                Rectangle f7 = new Rectangle(pieceX + dsize, pieceY + dsize, dsize, dsize);
-                f7.setFill(green);
-                root.getChildren().add(f7);
-                Rectangle f8 = new Rectangle(pieceX - dsize, pieceY + dsize, dsize, dsize);
+                Rectangle f8 = new Rectangle(pieceX - dsize, pieceY + dsize, dsize * 3, dsize);
                 f8.setFill(green);
                 root.getChildren().add(f8);
+                //白色花瓣
+                Rectangle f2 = new Rectangle(pieceX - dsize, pieceY, dsize * 3, dsize);
+                f2.setFill(white);
+                root.getChildren().add(f2);
+                Rectangle f4 = new Rectangle(pieceX, pieceY - dsize, dsize, dsize * 3);
+                f4.setFill(white);
+                root.getChildren().add(f4);
+                //黄色花蕊
+                Rectangle f1 = new Rectangle(pieceX, pieceY, dsize, dsize);
+                f1.setFill(yellow);
+                root.getChildren().add(f1);
             }
 
     }
