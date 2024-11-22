@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.SavingManager;
+import org.model.User;
 
 import java.io.IOException;
 
@@ -26,12 +27,15 @@ public class LoginController {
     private String UserName;
     private String Password;
 
+    private User user;
+
     public LoginController() {
     }
 
-    public void initialize(Stage LoginStage, Stage MenuStage) {
+    public void initialize(Stage LoginStage, Stage MenuStage, User user) {
         this.thisStage = LoginStage;
         this.MenuStage = MenuStage;
+        this.user = user;
 
         LoginVbox.getChildren().remove(ReminderHbox); // 将提醒先删去
         LoginVbox.getChildren().remove(ConfirmPasswordHbox); // 将确认密码先删去
@@ -109,7 +113,10 @@ public class LoginController {
         } else if (userid == -2) {
             ReminderText.setText("Wrong password");
         } else {
-            ReminderText.setText("Login successfully");
+            user = User.UserInfo.get(userid);
+            LoginVbox.getChildren().removeAll();
+            ReminderText.setText("Login Successfully, Welcome " + UserName);
+            LoginVbox.getChildren().add(ReminderText);
         }
         LoginVbox.getChildren().add(2, ReminderHbox);
     }

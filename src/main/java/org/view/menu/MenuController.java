@@ -15,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.model.User;
 import org.view.level.LevelManager;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class MenuController {
     private Pane root;
     private Stage primaryStage;
     private Scene scene;
+    private User user = null;
 
     public MenuController() throws IOException {
     }
@@ -58,11 +60,9 @@ public class MenuController {
             loginStage.initStyle(StageStyle.TRANSPARENT);
             loginStage.initModality(Modality.APPLICATION_MODAL);
             // 将登陆窗口的stage传给controller
-            loginController.initialize(loginStage, primaryStage);
+            loginController.initialize(loginStage, primaryStage, user);
 
             ChangeStageAnim(scene, loginStage);
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -109,7 +109,13 @@ public class MenuController {
 
     @FXML
     void StartButtonClicked(MouseEvent event) {
+        if(user == null){
+            StartButton.setText("Please Login First");//非常简陋，以后美化（）
+            return;
+        }
+
         LevelManager levelManager = new LevelManager(root);
+        levelManager.setUser(user);
         levelManager.setStage(primaryStage);
         levelManager.start();
     }

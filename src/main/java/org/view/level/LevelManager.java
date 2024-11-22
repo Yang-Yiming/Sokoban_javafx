@@ -126,5 +126,8 @@ public class LevelManager {
     public void setStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 }
