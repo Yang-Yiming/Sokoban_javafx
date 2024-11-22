@@ -34,6 +34,8 @@ public class Grass {
         int result = (x ^ y ^ z);
         return result;
     }
+    private static int grasstimeid = 0;
+    private static int[] grassMove = {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, -1, -1, -1, -1, -1};
     public static void addGrass(Pane root, int dx, int dy, double anchor_posx, double anchor_posy, double size){
         int x = (int) (anchor_posx + dx * size);
         int y = (int) (anchor_posy + dy * size);
@@ -45,14 +47,15 @@ public class Grass {
         double dsize = size / divide;
         for (int i = 0; i < divide; ++i)
             if(myRand(dx, dy, i, -10, 10) < 0){
-                Rectangle smallGrass = new Rectangle(x + i * dsize, y, dsize, dsize);
+                Rectangle smallGrass = new Rectangle(x + (i + grassMove[( grasstimeid / 2 + myRand(dx, dy, 0, 0, 3)) % butterT]) * dsize, y, dsize, dsize);
                 smallGrass.setFill(randColor(dx, dy - 1));
+
                 root.getChildren().add(smallGrass);
             }
         //草片片
         for(int i = 1; i <= 3; ++i){
             if(myRand(dx, dy, i, 0, 1) == 0){
-                int pieceX = (int) (anchor_posx + dx * size + myRand(dx, dy, i, 0, divide - 1) * dsize);
+                int pieceX = (int) (anchor_posx + dx * size + myRand(dx, dy, i, 0, divide - 2) * dsize);
                 int pieceY = (int) (anchor_posy + dy * size + myRand(dx, dy, -i, 0, divide - 1) * dsize);
                 Rectangle grassPiece = new Rectangle(pieceX, pieceY, dsize, dsize * myRand(dx, dy, i, 2, 5));
                 grassPiece.setFill(randColor(dx, dy - 1));
@@ -89,13 +92,15 @@ public class Grass {
             root.getChildren().add(f1);
         }
     }
+    private static int butterT = 16;
     private static int ButterDX[] = {0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 2, 2, 1, 1, 0, 0};
     private static int ButterDY[] = {1, 1, 2, 2, 2, 2, 1, 1, 0, 0, -1, -1, -1, -1, 0, 0};
     private static int ButterHeight[] = {1, 0, 2, 2, 1, 2, 2, 2, 1, 0, 2, 2, 1, 2, 2, 2};
     private static int ButterWidth[] = {2, 2, 1, 2, 2, 0, 1, 2, 2, 2, 1, 2, 2, 0, 1, 2};
     private static int timeid = 0;
     public static void updateTimeid(){
-        timeid = (timeid + 1) % ButterDX.length;
+        grasstimeid = (grasstimeid + 1) % (butterT * 2);
+        timeid = (timeid + 1) % butterT;
     }
     public static void addButterfly(Pane root, int dx, int dy, double anchor_posx, double anchor_posy, double size) {
         int x = (int) (anchor_posx + dx * size);
@@ -106,12 +111,12 @@ public class Grass {
         Color darkgreen = randColor(dx, dy);
         darkgreen = Color.rgb((int) (darkgreen.getRed() * 0.8 * 255), (int) (darkgreen.getGreen() * 0.8 * 255), (int) (darkgreen.getBlue() * 0.8 * 255));
         int butterDX, butterDY;
-        if(myRand(dx, dy, 1, 0, 1) == 0) butterDX = ButterDX[(timeid + myRand(dx, dy, 1, 0, 7)) % ButterDX.length];
-        else butterDX = ButterDX[(-timeid + myRand(dx, dy, 1, 0, 15) + 16) % ButterDX.length];
-        if(myRand(dx, dy, 1, 0, 1) == 0) butterDY = ButterDY[(timeid + myRand(dx, dy, 1, 0, 7)) % ButterDY.length];
-        else butterDY = ButterDY[(-timeid + myRand(dx, dy, 1, 0, 15) + 16) % ButterDY.length];
-        int butterHeight = ButterHeight[(timeid + myRand(dx, dy, 1, 0, 15)) % ButterHeight.length];
-        int butterWidth = ButterWidth[(timeid + myRand(dx, dy, 1, 0, 15)) % ButterWidth.length];
+        if(myRand(dx, dy, 1, 0, 1) == 0) butterDX = ButterDX[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
+        else butterDX = ButterDX[(-timeid + myRand(dx, dy, 1, 0, butterT - 1) + butterT) % ButterDX.length];
+        if(myRand(dx, dy, 1, 0, 1) == 0) butterDY = ButterDY[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
+        else butterDY = ButterDY[(-timeid + myRand(dx, dy, 1, 0, butterT - 1) + butterT) % butterT];
+        int butterHeight = ButterHeight[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
+        int butterWidth = ButterWidth[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
         if (myRand(dx, dy, 0, 0, 30) == 0) {
             int pieceX = (int) ((anchor_posx + dx * size + myRand(dx, dy, 1, 1, divide - 1) * dsize) + butterDX * dsize);
             int pieceY = (int) ((anchor_posy + dy * size + myRand(dx, dy, -1, 1, divide - 1) * dsize) + butterDY * dsize);
