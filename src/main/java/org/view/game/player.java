@@ -47,13 +47,13 @@ public class player extends entity {
         double playerx0 = imageView.getX() + config.tile_size / 2;
         double playery0 = imageView.getY() + config.tile_size / 2;
         double dx0 = midx0 - playerx0, dy0 = midy0 - playery0;
-        if(dx0 < -config.tile_size * 3) dx0 += -config.tile_size * 3;
-        else if(dx0 > config.tile_size * 3) dx0 -= config.tile_size * 3;
+        if(dx0 < -config.tile_size * 2) dx0 += config.tile_size * 2;
+        else if(dx0 > config.tile_size * 2) dx0 -= config.tile_size * 2;
         else dx0 = 0;
-        if(dy0 < -config.tile_size * 3) dy0 += -config.tile_size * 3;
-        else if(dy0 > config.tile_size * 3) dy0 -= config.tile_size * 3;
+        if(dy0 < -config.tile_size * 2) dy0 += config.tile_size * 2;
+        else if(dy0 > config.tile_size * 2) dy0 -= config.tile_size * 2;
         else dy0 = 0;
-        if(Math.abs(dx0) < 5 && Math.abs(dy0) < 5) return;
+        if(Math.abs(dx0) < 10 && Math.abs(dy0) < 10) return;
         // 移动画面，使人物在中间
         level.setAnchor_posx(level.getanchor_posx() + dx0 / 30);
         level.setAnchor_posy(level.getanchor_posy() + dy0 / 30);
@@ -68,13 +68,13 @@ public class player extends entity {
             double playerx = imageView.getX() + config.tile_size / 2;
             double playery = imageView.getY() + config.tile_size / 2;
             double dx = midx - playerx, dy = midy - playery;
-            if(dx < -config.tile_size * 3) dx += config.tile_size * 3;
-            else if(dx > config.tile_size * 3) dx -= config.tile_size * 3;
+            if(dx < -config.tile_size * 2) dx += config.tile_size * 2;
+            else if(dx > config.tile_size * 2) dx -= config.tile_size * 2;
             else dx = 0;
-            if(dy < -config.tile_size * 3) dy += config.tile_size * 3;
-            else if(dy > config.tile_size * 3) dy -= config.tile_size * 3;
+            if(dy < -config.tile_size * 2) dy += config.tile_size * 2;
+            else if(dy > config.tile_size * 2) dy -= config.tile_size * 2;
             else dy = 0;
-            if(Math.abs(dx) < 5 && Math.abs(dy) < 5 && cameraTimeline != null) cameraTimeline.stop();
+            if(Math.abs(dx) < 10 && Math.abs(dy) < 10 && cameraTimeline != null) cameraTimeline.stop();
             // 移动画面，使人物在中间
             level.setAnchor_posx(level.getanchor_posx() + dx / 30);
             level.setAnchor_posy(level.getanchor_posy() + dy / 30);
