@@ -1,9 +1,14 @@
 package org.view.game;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 import org.model.MapMatrix;
 import org.model.config;
+import org.view.level.Grass;
+import org.view.level.Level;
 
 import java.util.ArrayList;
 
@@ -28,7 +33,60 @@ public class player extends entity {
         return false;
     }
 
-    public void move(MapMatrix map, ArrayList<box> entities) {
+    private Timeline cameraTimeline = null;
+    public void stopCameraTimeline(){
+        if(cameraTimeline != null) cameraTimeline.stop();
+    }
+    private void updateAnchorPos(Level level){
+
+        if(cameraTimeline != null) cameraTimeline.stop();
+        // 得到画面中心的坐标
+        double midx0 = config.ScreenWidth / 2 - config.tile_size / 2;
+        double midy0 = config.ScreenHeight / 2 - config.tile_size / 2;
+        // 得到人物中心的坐标
+        double playerx0 = imageView.getX() + config.tile_size / 2;
+        double playery0 = imageView.getY() + config.tile_size / 2;
+        double dx0 = midx0 - playerx0, dy0 = midy0 - playery0;
+        if(dx0 < -config.tile_size * 3) dx0 += -config.tile_size * 3;
+        else if(dx0 > config.tile_size * 3) dx0 -= config.tile_size * 3;
+        else dx0 = 0;
+        if(dy0 < -config.tile_size * 3) dy0 += -config.tile_size * 3;
+        else if(dy0 > config.tile_size * 3) dy0 -= config.tile_size * 3;
+        else dy0 = 0;
+        if(Math.abs(dx0) < 5 && Math.abs(dy0) < 5) return;
+        // 移动画面，使人物在中间
+        level.setAnchor_posx(level.getanchor_posx() + dx0 / 30);
+        level.setAnchor_posy(level.getanchor_posy() + dy0 / 30);
+        level.drawMap();
+        level.updateAllRadiatingEffect();
+
+        cameraTimeline = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+            // 得到画面中心的坐标
+            double midx = config.ScreenWidth / 2 - config.tile_size / 2;
+            double midy = config.ScreenHeight / 2 - config.tile_size / 2;
+            // 得到人物中心的坐标
+            double playerx = imageView.getX() + config.tile_size / 2;
+            double playery = imageView.getY() + config.tile_size / 2;
+            double dx = midx - playerx, dy = midy - playery;
+            if(dx < -config.tile_size * 3) dx += config.tile_size * 3;
+            else if(dx > config.tile_size * 3) dx -= config.tile_size * 3;
+            else dx = 0;
+            if(dy < -config.tile_size * 3) dy += config.tile_size * 3;
+            else if(dy > config.tile_size * 3) dy -= config.tile_size * 3;
+            else dy = 0;
+            if(Math.abs(dx) < 5 && Math.abs(dy) < 5 && cameraTimeline != null) cameraTimeline.stop();
+            // 移动画面，使人物在中间
+            level.setAnchor_posx(level.getanchor_posx() + dx / 30);
+            level.setAnchor_posy(level.getanchor_posy() + dy / 30);
+            level.drawMap();
+            level.updateAllRadiatingEffect();
+        }));
+        cameraTimeline.setCycleCount(Timeline.INDEFINITE);
+        cameraTimeline.play();
+    }
+
+    public void move(MapMatrix map, ArrayList<box> entities, Level level) {
+        updateAnchorPos(level);
         int newx = x + velocity_x;
         int newy = y + velocity_y;
         if(can_move(map, velocity_x, velocity_y)){

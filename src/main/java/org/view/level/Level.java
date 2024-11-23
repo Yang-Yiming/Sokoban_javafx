@@ -23,7 +23,7 @@ import org.view.game.player;
 public class Level {
 
     private final int id;
-    MapMatrix map;
+    private MapMatrix map;
     private Pane root;
     player player;
     ArrayList<box> boxes;
@@ -35,7 +35,12 @@ public class Level {
     private double anchor_posx;
     private double anchor_posy;
 
+    public MapMatrix getMap() {
+        return map;
+    }
+
     public void init() {
+        glowTimelines.clear();
         map = new MapMatrix(mapdata.maps[id]);
         radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
         glowRectangles = new ArrayList<>();
@@ -72,14 +77,21 @@ public class Level {
         createButterflyTimeline();
         drawMap();
     }
-
+    private Timeline butterflyTimeline = null;
     public void createButterflyTimeline(){
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {
+        butterflyTimeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {
             Grass.updateTimeid();
             drawMap();
         }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        butterflyTimeline.setCycleCount(Animation.INDEFINITE);
+        butterflyTimeline.play();
+    }
+    public void stopTimelines(){
+        butterflyTimeline.stop();
+        for(Timeline timeline : glowTimelines){
+            timeline.stop();
+        }
+        this.player.stopCameraTimeline();
     }
     public Level(Pane root, int id) {
         this.root = root;
@@ -150,6 +162,7 @@ public class Level {
     }
     private static final double lowLimit = 0.9;
     private static final double highLimit = 1.2;
+    private ArrayList<Timeline> glowTimelines = new ArrayList<>();
     private void createRadiatingEffect(int x, int y, int tileSize) { //需要传实时的数据。
         double initialCenterX = anchor_posx + x * tileSize;
         double initialCenterY = anchor_posy + y * tileSize;
@@ -181,6 +194,7 @@ public class Level {
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+        glowTimelines.add(timeline);
     }
     private void updateRectangle(Rectangle rect, int tileSize, int x, int y) {
         double centerX = anchor_posx + x * tileSize;

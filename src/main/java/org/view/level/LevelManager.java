@@ -51,6 +51,7 @@ public class LevelManager {
             if(code == KeyCode.LEFT || code == KeyCode.A) dx = -1;
             if(code == KeyCode.RIGHT || code == KeyCode.D) dx = 1;
             if(code == KeyCode.R){
+                level.stopTimelines();
                 level.init();
                 // System.out.println("reset");
             }
@@ -62,11 +63,12 @@ public class LevelManager {
                 showLevelMenu();
             }
             level.player.set_velocity(dx, dy);
-            level.player.move(level.map, level.boxes);
+            level.player.move(level.getMap(), level.boxes, level);
 
             level.drawMap();
 
             if(level.isWin()){
+                level.stopTimelines();
                 ++currentLevel;
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
                 loadLevel(id + 1);
@@ -88,6 +90,7 @@ public class LevelManager {
         });
 
         scene.setOnMouseDragged(event -> {
+            level.player.stopCameraTimeline();
             level.setAnchor_posx(event.getSceneX() + del_posx.get());
             level.setAnchor_posy(event.getSceneY() + del_posy.get());
             level.updateAllRadiatingEffect();
