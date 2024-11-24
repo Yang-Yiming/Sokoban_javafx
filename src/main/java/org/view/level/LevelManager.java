@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.model.User;
 import org.model.config;
+import org.view.LevelSelect.map;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -14,8 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-
-
+import org.view.LevelSelect.node;
 
 public class LevelManager {
     private int currentLevel;
@@ -23,14 +23,18 @@ public class LevelManager {
     private Pane root;
     private Scene scene;
     private Stage primaryStage; // 直接作为属性 不然函数里有一坨（
-    private VBox vbox;
+    private map level_menu; // 选关界面
 
     private User user = null; // 正在游玩的user，用于存档
 
-    public LevelManager(Pane root) {
-        this.root = root;
+    public LevelManager(Stage primaryStage) {
+        this.root = new Pane(); // 直接用新的Pane 除了stage其他全部新建
         this.currentLevel = 0;
         this.totalLevel = mapdata.maps.length;
+        this.primaryStage = primaryStage; // 主舞台
+        this.level_menu = new map(primaryStage); // 选关界面
+
+        node.levelManager = this;
     }
 
     public void loadLevel(int id){
@@ -40,6 +44,7 @@ public class LevelManager {
         root.getChildren().add(rootLevel);
         Level level = new Level(rootLevel, currentLevel);
         scene = primaryStage.getScene();
+        scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
@@ -96,38 +101,24 @@ public class LevelManager {
             level.updateAllRadiatingEffect();
             level.drawMap();
         });
-
-
     }
 
     public void start() {
-        scene = new Scene(root, config.ScreenWidth, config.ScreenHeight);
-
-        // 加载 CSS 文件
-        scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
-
-        vbox = new VBox(10); // 间距为10
-        vbox.setAlignment(Pos.CENTER); // 居中对齐
-        // 创建按钮，每个按钮对应一个关卡
-        for (int i = 0; i < totalLevel; i++) {
-            int levelIndex = i;
-            Button btn = new Button("Level " + (levelIndex + 1));
-            btn.getStyleClass().add("button-level"); // 应用 CSS 样式
-            btn.setOnAction(event -> loadLevel(levelIndex)); // 设置按钮的事件处理
-            vbox.getChildren().add(btn);
-        }
-        primaryStage.setTitle("Sokoban Game");
-        primaryStage.setScene(scene);
+        level_menu.linear_generate_map();
         showLevelMenu();
+        primaryStage.setTitle("Sokoban");
+        primaryStage.show();
     }
     public void showLevelMenu() {
-        root.getChildren().clear();
-        root.getChildren().add(vbox);
-        primaryStage.show();
+        level_menu.draw_map(false);
+        primaryStage.setScene(level_menu.getScene());
     }
 
     public void setStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
     public void setUser(User user) {
         this.user = user;

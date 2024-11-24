@@ -11,6 +11,7 @@ import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.model.config;
 import org.view.level.mapdata;
 
@@ -22,14 +23,18 @@ public class map {
     private double AnchorX;
     private double AnchorY;
 
+    private Stage primaryStage;
     private Scene scene;
     private Pane root;
 
     int max_nodes_per_layer = 1;
 
-    public map(Pane root){
-        this.root = root;
+    public map(Stage primaryStage){
+        this.root = new Pane();
+        root.setStyle("-fx-background-color: #f0f0f0;"); // 设置背景颜色
+        this.primaryStage = primaryStage;
         this.scene = new Scene(root, config.ScreenWidth, config.ScreenHeight);
+        this.primaryStage.setScene(scene);
     }
 
     private static void random_connect(int layer_num) {
@@ -54,22 +59,22 @@ public class map {
         for(int i = 0; i< layer_num - 1; i++) {
             int node_num = config.randint(1,max_nodes_per_layer);
             for(int j = 0; j < node_num; j++) {
-                node n = new node(i, j, 0, scene, root);
+                node n = new node(i, j, 0, primaryStage);
                 n.getButton().setText(n.getLayer() + "-" + n.getIndex());
             }
         }
-        new node(layer_num - 1, 0, 0, scene, root);
+        new node(layer_num - 1, 0, 0, primaryStage);
         random_connect(layer_num);
     }
 
     public void linear_generate_map() {
         int layer_num = mapdata.maps.length;
         for(int i = 0; i< layer_num; i++) {
-            node n = new node(i, 0, 0, scene, root);
+            node n = new node(i, 0, 0, primaryStage);
             n.setTarget_level(i);
             n.getButton().setText("Level " + (i+1));
             if(i > 0){
-                node.connect(node.All_Nodes.get(i-1).get(0), node.All_Nodes.get(i).get(0));
+                node.connect(node.All_Nodes.get(i-1).getFirst(), node.All_Nodes.get(i).getFirst());
             }
         }
     }
@@ -105,8 +110,16 @@ public class map {
     }
 
     public void draw_nodes(boolean is_vertical) {
-        int total_width = max_nodes_per_layer * config.Map_Node_Width + (max_nodes_per_layer - 1) * config.Map_Node_Gap;
-        int total_height = max_nodes_per_layer * config.Map_Node_Height + (max_nodes_per_layer - 1) * config.Map_Layer_Gap;
+        int total_width, total_height;
+
+        if(is_vertical){
+            total_width = max_nodes_per_layer * config.Map_Node_Width + (max_nodes_per_layer - 1) * config.Map_Node_Gap;
+            total_height = node.All_Nodes.size() * config.Map_Node_Height + (node.All_Nodes.size() - 1) * config.Map_Layer_Gap;
+        } else {
+            total_width = node.All_Nodes.size() * config.Map_Node_Width + (node.All_Nodes.size() - 1) * config.Map_Layer_Gap;
+            total_height = max_nodes_per_layer * config.Map_Node_Height + (max_nodes_per_layer - 1) * config.Map_Node_Gap;
+        }
+
         AnchorX = (double) (config.ScreenWidth - total_width) / 2;
         AnchorY = (double) (config.ScreenHeight - total_height) / 2;
 
@@ -130,9 +143,7 @@ public class map {
                 Button button = one.getButton();
 //                button.setText(one.getLayer() + "-" + one.getIndex());
                 button.getStyleClass().add("button-level");
-//                button.setOnAction(event -> {
-//                    System.out.println("Layer: " + one.getLayer() + " Index: " + one.getIndex());
-//                });
+
                 if(is_vertical)
                     hbox.getChildren().add(button);
                 else
@@ -147,6 +158,8 @@ public class map {
             root.getChildren().add(super_vbox);
         else
             root.getChildren().add(super_hbox);
+
+        scene.setRoot(root);
 
     }
 

@@ -113,9 +113,8 @@ public class MenuController {
             StartButton.setText("Please Login First");//非常简陋，以后美化（）
 //            return; // 这个 return 挡住我测试的路，先注释掉
         }
-        LevelManager levelManager = new LevelManager(root);
+        LevelManager levelManager = new LevelManager(primaryStage);
         levelManager.setUser(user);
-        levelManager.setStage(primaryStage);
         levelManager.start();
     }
 

@@ -3,7 +3,6 @@ package org.view.LevelSelect;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.model.config;
@@ -15,8 +14,7 @@ import java.util.ArrayList;
 public class node {
 
     public static ArrayList<ArrayList<node>> All_Nodes = new ArrayList<>();
-    private static Pane root = new Pane();
-    private static LevelManager levelManager = new LevelManager(root);
+    public static LevelManager levelManager; // 也不知道导出是怎么个事（ 但无所谓（）
 
     public static void connect(node node1, node node2) {
         if(node2.layer <= node1.layer || node2.layer - node1.layer > 1) {
@@ -32,25 +30,28 @@ public class node {
     private int type;
     private boolean is_connected;
 
+    private Stage primaryStage;
     private Scene scene;
     private Button button;
     private int target_level;
 
-    private ArrayList<node> NextLayerConnectedNodes = new ArrayList<node>();
-    private ArrayList<node> LastLayerConnectedNodes = new ArrayList<node>();
+    private ArrayList<node> NextLayerConnectedNodes = new ArrayList<>();
+    private ArrayList<node> LastLayerConnectedNodes = new ArrayList<>();
 
     private double posX, posY;
 
-
-    public node(int layer, int index, int type, Scene scene, Pane root) {
+    public node(int layer, int index, int type, Stage primaryStage) {
         this.layer = layer;
         this.index = index;
         this.type = type;
         this.is_connected = false;
-        this.scene = scene;
 
-        node.root = root;
-        node.levelManager = new LevelManager(root);
+        if(levelManager == null)
+            node.levelManager = new LevelManager(primaryStage); // 保险用 其实要是后面能正常跑的话就删掉吧
+
+        this.primaryStage = levelManager.getPrimaryStage();
+        //this.primaryStage = primaryStage;
+        this.scene = primaryStage.getScene();
 
         this.button = new Button();
         button.setPrefSize(config.Map_Node_Width, config.Map_Node_Height);
