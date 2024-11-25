@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
-
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.view.menu.SettingController">
    <children>
@@ -21,10 +22,17 @@
             <HBox fx:id="AnimTimeHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Text fx:id="MovingAnimTimeText" strokeType="OUTSIDE" strokeWidth="0.0" text="MovingAnimTime" />
-                  <Slider fx:id="MovingAnimTimeSlider" />
+                  <Slider fx:id="MovingAnimTimeSlider" onDragDone="#DragDone" />
+               </children>
+            </HBox>
+            <HBox fx:id="IsVerticalHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text fx:id="IsVerticalText" strokeType="OUTSIDE" strokeWidth="0.0" text="显示地图的方向" />
+                  <CheckBox fx:id="VerticalCheckBox" mnemonicParsing="false" onMouseClicked="#Clicked" text="Vertical" />
                </children>
             </HBox>
          </children>
       </VBox>
+      <Button fx:id="BackButton" mnemonicParsing="false" onMouseClicked="#Back" text="Back" />
    </children>
 </AnchorPane>

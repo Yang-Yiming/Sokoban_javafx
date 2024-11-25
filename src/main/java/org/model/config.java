@@ -4,7 +4,6 @@ import java.lang.Math;
 
 public class config {
     //Constants
-    public static final int move_anim_duration = 150;
     public static final int tile_size = 50;
 //    public static int getScreenWidth() {
 //        return (int) Screen.getPrimary().getBounds().getWidth();
@@ -20,6 +19,10 @@ public class config {
     public static final int Map_Node_Height = 20;
     public static final int Map_Layer_Gap = 40;
     public static final int Map_Node_Gap = 20;
+
+    // 可以用设置改变的常量
+    public static boolean is_vertical = false;
+    public static int move_anim_duration = 150; // milliseconds
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例

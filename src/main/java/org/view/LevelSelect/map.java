@@ -190,7 +190,6 @@ public class map {
     public void update(boolean isVertical) {
         // 根据鼠标拖动改变anchor_posx anchor_posy
         // 鼠标是否在拖动根据鼠标拖动改变anchor_posx
-        AtomicBoolean isDragging = new AtomicBoolean(false);
         AtomicReference<Double> del_posx = new AtomicReference<>((double) 0);
         AtomicReference<Double> del_posy = new AtomicReference<>((double) 0);
         // 添加鼠标按下事件监听器

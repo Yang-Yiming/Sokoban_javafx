@@ -17,6 +17,8 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.model.User;
 import org.view.level.LevelManager;
+import org.view.menu.LoginController;
+import org.view.menu.SettingController;
 
 import java.io.IOException;
 
@@ -71,7 +73,25 @@ public class MenuController {
 
     @FXML
     void SettingButtonClicked(MouseEvent event) {
+        try{
+            // 加载设置窗口fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Settings.fxml"));
+            Parent root = loader.load();
+            SettingController settingController = loader.getController();
+            Scene scene = new Scene(root);
 
+            // 创建一个新的stage用于显示设置窗口
+            Stage settingStage = new Stage();
+            settingStage.initStyle(StageStyle.TRANSPARENT);
+            settingStage.initModality(Modality.APPLICATION_MODAL);
+            // 将设置窗口的stage传给controller
+            settingController.initialize(settingStage, primaryStage);
+
+            ChangeStageAnim(scene, settingStage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void ChangeStageAnim(Scene scene, Stage newStage) { // 用于login 和 setting这两个从右侧滑过来的模块
