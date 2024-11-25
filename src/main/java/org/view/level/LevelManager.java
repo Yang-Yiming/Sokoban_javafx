@@ -101,6 +101,18 @@ public class LevelManager {
             level.updateAllRadiatingEffect();
             level.drawMap();
         });
+
+        // 监听大小改变
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> {
+            // level.setAnchor_posx(level.getAnchor_posx() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
+            level.getCanvas().setWidth(newValue.doubleValue());
+            level.drawMap();
+        });
+        scene.heightProperty().addListener((observable, oldValue, newValue) -> {
+            // level.setAnchor_posy(level.getAnchor_posy() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
+            level.getCanvas().setHeight(newValue.doubleValue());
+            level.drawMap();
+        });
     }
 
     public void start() {

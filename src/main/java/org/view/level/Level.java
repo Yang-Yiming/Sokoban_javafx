@@ -283,4 +283,8 @@ public class Level {
 
     }
 
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
 }
