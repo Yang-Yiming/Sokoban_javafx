@@ -1,5 +1,7 @@
 package org.model;
 
+import javafx.stage.Screen;
+
 import java.lang.Math;
 
 public class config {
