@@ -13,9 +13,8 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.model.config;
-import org.view.level.mapdata;
+import org.data.mapdata;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class map {

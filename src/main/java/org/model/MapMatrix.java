@@ -19,14 +19,6 @@ public class MapMatrix {
         int[] ObstacleTypes = { 0, 1, 2 }; // wall box player 会阻挡
         for (int e : ObstacleTypes) {
             if (isOne(this.matrix[y][x], e)) {
-                // System.out.println(x + " " + y + " " + matrix[y][x] + " "  + e);
-                // for(int i = 0; i < this.getHeight(); ++i){
-                //     for(int j = 0; j < this.getWidth(); ++j){
-                //         System.out.print(this.matrix[i][j] + " ");
-                //     }
-                //     System.out.println();
-                // }
-        
                 return false;
             }
         }

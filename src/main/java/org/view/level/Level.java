@@ -2,7 +2,6 @@ package org.view.level;
 
 import java.util.ArrayList;
 
-import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -17,6 +16,7 @@ import javafx.util.Duration;
 import javafx.scene.canvas.Canvas;
 
 
+import org.data.mapdata;
 import org.model.MapMatrix;
 import org.model.config;
 import org.view.game.box;

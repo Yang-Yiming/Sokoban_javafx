@@ -5,6 +5,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
 import javafx.stage.Stage;
+import org.data.mapdata;
 import org.model.User;
 import org.model.config;
 import org.view.LevelSelect.map;
@@ -12,9 +13,6 @@ import org.view.LevelSelect.map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import org.view.LevelSelect.node;
 
 public class LevelManager {
