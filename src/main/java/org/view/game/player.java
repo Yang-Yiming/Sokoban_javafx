@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.MapMatrix;
 import org.model.config;
@@ -13,11 +14,13 @@ import org.view.level.Level;
 import java.util.ArrayList;
 
 public class player extends entity {
-//    private Image image;
+    //    private Image image;
 //    private ImageView imageView;
+    private Stage primaryStage;
 
-    public player(int x, int y) {
+    public player(int x, int y, Stage primaryStage) {
         super(x, y, 2);
+        this.primaryStage = primaryStage;
         image = new Image(getClass().getResourceAsStream("/images/player.png"));
         imageView = new ImageView(image);
         imageView.setFitHeight(config.tile_size);
@@ -41,8 +44,10 @@ public class player extends entity {
 
         if(cameraTimeline != null) cameraTimeline.stop();
         // 得到画面中心的坐标
-        double midx0 = config.ScreenWidth / 2 - config.tile_size / 2;
-        double midy0 = config.ScreenHeight / 2 - config.tile_size / 2;
+        double width = primaryStage.getWidth();
+        double height = primaryStage.getHeight();
+        double midx0 = width / 2 - config.tile_size / 2;
+        double midy0 = height / 2 - config.tile_size / 2;
         // 得到人物中心的坐标
         double playerx0 = imageView.getX() + config.tile_size / 2;
         double playery0 = imageView.getY() + config.tile_size / 2;
@@ -62,8 +67,9 @@ public class player extends entity {
 
         cameraTimeline = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
             // 得到画面中心的坐标
-            double midx = config.ScreenWidth / 2 - config.tile_size / 2;
-            double midy = config.ScreenHeight / 2 - config.tile_size / 2;
+
+            double midx = width / 2 - config.tile_size / 2;
+            double midy = height / 2 - config.tile_size / 2;
             // 得到人物中心的坐标
             double playerx = imageView.getX() + config.tile_size / 2;
             double playery = imageView.getY() + config.tile_size / 2;
