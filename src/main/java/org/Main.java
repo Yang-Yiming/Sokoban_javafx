@@ -18,7 +18,12 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
         Pane fxmlroot = loader.load();
-        MenuController controller = loader.getController();
+        MenuController controller = null;
+        try {
+            controller = loader.getController();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         Pane root = new Pane();
         controller.initialize(root, primaryStage);

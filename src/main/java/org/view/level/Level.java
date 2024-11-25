@@ -34,7 +34,7 @@ public class Level {
     private ArrayList<Rectangle> glowRectangles;
     private Rectangle[][] radiatingEffects;
 
-    private static Canvas canvas; // 用来放grass
+    private  Canvas canvas; // 用来放grass
 
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;

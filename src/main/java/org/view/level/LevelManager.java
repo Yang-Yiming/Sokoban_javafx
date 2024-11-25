@@ -65,6 +65,7 @@ public class LevelManager {
                 scene.setOnKeyPressed(null);
                 scene.setOnMousePressed(null);
                 scene.setOnMouseDragged(null);
+                level.stopTimelines();
                 showLevelMenu();
             }
             level.player.set_velocity(dx, dy);
@@ -122,7 +123,7 @@ public class LevelManager {
         primaryStage.show();
     }
     public void showLevelMenu() {
-        level_menu.draw_map(false);
+        level_menu.draw_map(config.is_vertical);
         primaryStage.setScene(level_menu.getScene());
     }
 
