@@ -14,6 +14,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.canvas.Canvas;
 
 
 import org.model.MapMatrix;
@@ -33,6 +34,8 @@ public class Level {
     private ArrayList<Rectangle> glowRectangles;
     private Rectangle[][] radiatingEffects;
 
+    private static Canvas canvas; // 用来放grass
+
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;
     private double anchor_posy;
@@ -46,6 +49,10 @@ public class Level {
         map = new MapMatrix(mapdata.maps[id]);
         radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
         glowRectangles = new ArrayList<>();
+        if(canvas == null)
+            canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
+
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         int boxIndex = 1; // 从1开始编号
         boxes = new ArrayList<>();
@@ -103,10 +110,14 @@ public class Level {
         this.id = id;
         this.primaryStage = primaryStage;
         init();
+        if(canvas == null)
+            canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
     }
-    public void drawGrass(){
-        //将能显示在窗口里的部分都用 grass 填充
 
+    public void drawGrass(){
+        root.getChildren().add(canvas);
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        //将能显示在窗口里的部分都用 grass 填充
         double width = primaryStage.getWidth();
         double height = primaryStage.getHeight();
         int leftNum = (int) Math.ceil(anchor_posx / config.tile_size);
@@ -115,7 +126,7 @@ public class Level {
         int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
         for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
-                    Grass.addGrass(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
+                Grass.addGrass(canvas, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
     public void drawButterfly(){
         double width = primaryStage.getWidth();

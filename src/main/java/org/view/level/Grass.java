@@ -4,9 +4,11 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.canvas.Canvas;
 import javafx.util.Duration;
 import org.model.config;
 
@@ -36,30 +38,31 @@ public class Grass {
     }
     private static int grasstimeid = 0;
     private static int[] grassMove = {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, -1, -1, -1, -1, -1};
-    public static void addGrass(Pane root, int dx, int dy, double anchor_posx, double anchor_posy, double size){
+    public static void addGrass(Canvas canvas, int dx, int dy, double anchor_posx, double anchor_posy, double size){
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
         int x = (int) (anchor_posx + dx * size);
         int y = (int) (anchor_posy + dy * size);
-        Rectangle grass = new Rectangle(x, y, size, size);
-        grass.setFill(randColor(dx, dy));
-        root.getChildren().add(grass);
+
+        gc.setFill(randColor(dx, dy));
+        gc.fillRect(x, y, size, size);
+
         //给方形的边缘添加一些小方形，使其看起来更像草地
         int divide = 8;
         double dsize = size / divide;
         for (int i = 0; i < divide; ++i)
             if(myRand(dx, dy, i, -10, 10) < 0){
-                Rectangle smallGrass = new Rectangle(x + (i + grassMove[( grasstimeid / 2 + myRand(dx, dy, 0, 0, 3)) % butterT]) * dsize, y, dsize, dsize);
-                smallGrass.setFill(randColor(dx, dy - 1));
-
-                root.getChildren().add(smallGrass);
+                gc.setFill(randColor(dx, dy - 1));
+                gc.fillRect(x + (i + grassMove[( grasstimeid / 2 + myRand(dx, dy, 0, 0, 3)) % butterT]) * dsize, y, dsize, dsize);
             }
         //草片片
         for(int i = 1; i <= 3; ++i){
             if(myRand(dx, dy, i, 0, 1) == 0){
                 int pieceX = (int) (anchor_posx + dx * size + myRand(dx, dy, i, 0, divide - 2) * dsize);
                 int pieceY = (int) (anchor_posy + dy * size + myRand(dx, dy, -i, 0, divide - 1) * dsize);
-                Rectangle grassPiece = new Rectangle(pieceX, pieceY, dsize, dsize * myRand(dx, dy, i, 2, 5));
-                grassPiece.setFill(randColor(dx, dy - 1));
-                root.getChildren().add(grassPiece);
+
+                gc.setFill(randColor(dx, dy - 1));
+                gc.fillRect(pieceX, pieceY, dsize, dsize * myRand(dx, dy, i, 2, 5));
             }
         }
 
@@ -73,23 +76,18 @@ public class Grass {
             int pieceY = (int) (anchor_posy + dy * size + myRand(dx, dy, -1, 1, divide - 3) * dsize);
             //加深 green
             //绿色阴影
-            Rectangle f6 = new Rectangle(pieceX, pieceY + dsize * 2, dsize, dsize);
-            f6.setFill(darkgreen);
-            root.getChildren().add(f6);
-            Rectangle f8 = new Rectangle(pieceX - dsize, pieceY + dsize, dsize * 3, dsize);
-            f8.setFill(darkgreen);
-            root.getChildren().add(f8);
+            gc.setFill(darkgreen);
+            gc.fillRect(pieceX, pieceY + dsize * 2, dsize, dsize);
+            gc.fillRect(pieceX - dsize, pieceY + dsize, dsize * 3, dsize);
+
             //白色花瓣
-            Rectangle f2 = new Rectangle(pieceX - dsize, pieceY, dsize * 3, dsize);
-            f2.setFill(white);
-            root.getChildren().add(f2);
-            Rectangle f4 = new Rectangle(pieceX, pieceY - dsize, dsize, dsize * 3);
-            f4.setFill(white);
-            root.getChildren().add(f4);
+            gc.setFill(white);
+            gc.fillRect(pieceX - dsize, pieceY, dsize * 3, dsize);
+            gc.fillRect(pieceX, pieceY - dsize, dsize, dsize * 3);
+
             //黄色花蕊
-            Rectangle f1 = new Rectangle(pieceX, pieceY, dsize, dsize);
-            f1.setFill(yellow);
-            root.getChildren().add(f1);
+            gc.setFill(yellow);
+            gc.fillRect(pieceX, pieceY, dsize, dsize);
         }
     }
     private static int butterT = 16;
