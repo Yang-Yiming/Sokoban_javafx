@@ -42,7 +42,7 @@ public class LevelManager {
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
-        Level level = new Level(rootLevel, currentLevel);
+        Level level = new Level(rootLevel, currentLevel, primaryStage);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 

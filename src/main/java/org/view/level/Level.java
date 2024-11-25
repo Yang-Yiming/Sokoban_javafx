@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
@@ -27,6 +28,7 @@ public class Level {
     private Pane root;
     player player;
     ArrayList<box> boxes;
+    private Stage primaryStage;
 
     private ArrayList<Rectangle> glowRectangles;
     private Rectangle[][] radiatingEffects;
@@ -48,8 +50,11 @@ public class Level {
         int boxIndex = 1; // 从1开始编号
         boxes = new ArrayList<>();
 
-        setAnchor_posx((double)(config.ScreenWidth - map.getWidth() * config.tile_size)/2);
-        setAnchor_posy((double)(config.ScreenHeight - map.getHeight() * config.tile_size)/2);
+        double width = primaryStage.getWidth();
+        double height = primaryStage.getHeight();
+
+        setAnchor_posx((width - map.getWidth() * config.tile_size)/2);
+        setAnchor_posy((height - map.getHeight() * config.tile_size)/2);
 
         for (int y = 0; y < map.getHeight(); ++y) {
             for (int x = 0; x < map.getWidth(); ++x) {
@@ -93,26 +98,32 @@ public class Level {
         }
         this.player.stopCameraTimeline();
     }
-    public Level(Pane root, int id) {
+    public Level(Pane root, int id, Stage primaryStage) {
         this.root = root;
         this.id = id;
+        this.primaryStage = primaryStage;
         init();
     }
     public void drawGrass(){
         //将能显示在窗口里的部分都用 grass 填充
+
+        double width = primaryStage.getWidth();
+        double height = primaryStage.getHeight();
         int leftNum = (int) Math.ceil(anchor_posx / config.tile_size);
-        int rightNum = (int) Math.ceil((config.ScreenWidth - anchor_posx) / config.tile_size);
+        int rightNum = (int) Math.ceil((width - anchor_posx) / config.tile_size);
         int upNum = (int) Math.ceil(anchor_posy / config.tile_size);
-        int downNum = (int) Math.ceil((config.ScreenHeight - anchor_posy) / config.tile_size);
+        int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
         for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
                     Grass.addGrass(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
     public void drawButterfly(){
+        double width = primaryStage.getWidth();
+        double height = primaryStage.getHeight();
         int leftNum = (int) Math.ceil(anchor_posx / config.tile_size);
-        int rightNum = (int) Math.ceil((config.ScreenWidth - anchor_posx) / config.tile_size);
+        int rightNum = (int) Math.ceil((width - anchor_posx) / config.tile_size);
         int upNum = (int) Math.ceil(anchor_posy / config.tile_size);
-        int downNum = (int) Math.ceil((config.ScreenHeight - anchor_posy) / config.tile_size);
+        int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
         for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
                 Grass.addButterfly(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
