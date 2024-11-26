@@ -17,6 +17,7 @@ import javafx.util.Duration;
 import org.model.SavingManager;
 import org.model.User;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class LoginController extends HalfStageController{
@@ -102,7 +103,7 @@ public class LoginController extends HalfStageController{
         UserName = UsernameInput.getText();
         Password = PasswordInput.getText();
 
-        SavingManager.readUsersInfo();
+        SavingManager.read();
         int userid = SavingManager.getUser(UserName, Password);
 
         if (userid == -1) {
@@ -119,7 +120,7 @@ public class LoginController extends HalfStageController{
     }
 
     @FXML
-    void HandleRegister(MouseEvent event) {
+    void HandleRegister(MouseEvent event) throws FileNotFoundException {
         LoginVbox.getChildren().remove(ReminderHbox);
         if(!LoginVbox.getChildren().contains(ConfirmPasswordHbox)){
             LoginVbox.getChildren().add(2, ConfirmPasswordHbox);

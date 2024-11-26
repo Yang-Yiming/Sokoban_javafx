@@ -1,29 +1,15 @@
 package org.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.MessageDigest;
 
 public class SavingManager {
 
-    public static void readUsersInfo() { //目前只有用户名和密码， 以后还要读包括关卡的各种信息 所以也许会用json改写
-        // 从文件中读取用户名和密码
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(SavingManager.class.getResourceAsStream("/savings/userinfo.txt")))) {
-            String line;
-            while (((line = reader.readLine()) != null)) {
-                new User(line.split(" ")[0], line.split(" ")[1]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public SavingManager() {
     }
 
-    public static void addUser(String username, String password) {
+    public static void addUser(String username, String password) throws FileNotFoundException {
         try {
             password = hash(password);
         } catch (NoSuchAlgorithmException e) {
@@ -33,14 +19,7 @@ public class SavingManager {
         new User(username, password); //加入到userinfo里
 
         // 将新用户写入文件
-        try {
-            // 以追加的方式写入
-            java.io.FileWriter writer = new java.io.FileWriter(SavingManager.class.getResource("/savings/userinfo.txt").getPath(), true);
-            writer.write(username + " " + password + "\n");
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();}
-
+        save();
     }
 
     public static int getUser(String username, String password) {
@@ -79,4 +58,40 @@ public class SavingManager {
         }
         return hexString.toString();
     }
+
+    private static String dir = "src/main/resources/savings/UserInfo.json";
+    private static File file = new File(dir);
+
+    public static void save() throws FileNotFoundException {
+        String str = User.UserInfotoJSON();
+        // 将str写入
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+        try {
+            bw.write(str);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void read() {
+        // 从resources/savings/UserInfo.json读取json
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            StringBuilder json = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                json.append(line);
+            }
+            br.close();
+            User.UserInfofromJSON(json.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+
+
+
