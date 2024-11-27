@@ -21,13 +21,14 @@ import org.view.menu.LoginController;
 import org.view.menu.SettingController;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MenuController {
 
     private Pane root;
     private Stage primaryStage;
     private Scene scene;
-    private User user = null;
+    private User user;
 
     public MenuController() throws IOException {
     }
@@ -35,6 +36,7 @@ public class MenuController {
     public void initialize(Pane root, Stage primaryStage) {
         this.root = root;
         this.primaryStage = primaryStage;
+        user = new User("",""); // 初始化一个空的user 不然login无法更改他
     }
 
     @FXML
@@ -45,8 +47,6 @@ public class MenuController {
 
     @FXML
     private Button StartButton;
-
-
 
     @FXML
     void LoginButtonClicked(MouseEvent event) throws IOException {
@@ -62,7 +62,7 @@ public class MenuController {
             loginStage.initStyle(StageStyle.TRANSPARENT);
             loginStage.initModality(Modality.APPLICATION_MODAL);
             // 将登陆窗口的stage传给controller
-            loginController.initialize(loginStage, primaryStage, user);
+            loginController.initialize(loginStage, primaryStage, this);
 
             ChangeStageAnim(scene, loginStage);
 
@@ -129,13 +129,20 @@ public class MenuController {
 
     @FXML
     void StartButtonClicked(MouseEvent event) {
-        if(user == null){
+        if(user == null || user.getName().isEmpty()){ // 好蠢的判断
             StartButton.setText("Please Login First");//非常简陋，以后美化（）
-//            return; // 这个 return 挡住我测试的路，先注释掉
+            return;
         }
         LevelManager levelManager = new LevelManager(primaryStage);
         levelManager.setUser(user);
         levelManager.start();
+    }
+
+    public User get_user(){
+        return user;
+    }
+    public void set_user(User user){
+        this.user = user;
     }
 
 }

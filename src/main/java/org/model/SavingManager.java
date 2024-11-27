@@ -91,6 +91,13 @@ public class SavingManager {
         }
     }
 
+    public static void copy_map(int[][] target, int[][] map) {
+        target = new int[map.length][map[0].length];
+        for (int i = 0; i < map.length; i++) {
+            System.arraycopy(map[i], 0, target[i], 0, map[i].length);
+        }
+    }
+
 }
 
 

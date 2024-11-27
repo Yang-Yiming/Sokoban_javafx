@@ -10,14 +10,14 @@ public class User {
     private String Name;
     private String Password;
     private int LevelAt;
-    private int PlayingLevel;
+    private int MoveCount;
     private int[][] PlayingMap;
 
     public User(String name, String password) {
         this.Name = name;
         this.Password = password;
-
-        UserInfo.add(this);
+        if(!name.isEmpty() && !UserInfo.contains(this))
+            UserInfo.add(this);
     }
 
     public String getName() {
@@ -27,9 +27,26 @@ public class User {
         return Password;
     }
 
-    public void update_info(int levelAt, int PlayingLevel, MapMatrix map){
+    public int getLevelAt() {
+        return LevelAt;
+    }
+    public void setLevelAt(int levelAt) {
+        LevelAt = levelAt;
+    }
+
+    public int getMoveCount() {
+        return MoveCount;
+    }
+    public void setMoveCount(int moveCount){
+        this.MoveCount = moveCount;
+    }
+    public void addMoveCount(){
+        this.MoveCount++;
+    }
+
+    public void update_info(int levelAt, int MoveCount, MapMatrix map){
         this.LevelAt = levelAt;
-        this.PlayingLevel = PlayingLevel;
+        this.MoveCount = MoveCount;
         this.PlayingMap = map.getMatrix();
     }
 
@@ -39,7 +56,7 @@ public class User {
                 "Name='" + Name + '\'' +
                 ", Password='" + Password + '\'' +
                 ", LevelAt=" + LevelAt +
-                ", PlayingLevel=" + PlayingLevel +
+                ", MoveCount=" + MoveCount +
                 '}';
     } // 调试用
 
@@ -51,7 +68,7 @@ public class User {
         json.append("\"Name\":\"").append(Name).append("\",");
         json.append("\"Password\":\"").append(Password).append("\",");
         json.append("\"LevelAt\":").append(LevelAt).append(",");
-        json.append("\"PlayingLevel\":").append(PlayingLevel).append(",");
+        json.append("\"MoveCount\":").append(MoveCount).append(",");
 
         // playing map
         json.append("\"PlayingMap\":[");
@@ -97,10 +114,10 @@ public class User {
             jsonMap.put(keyValue[0].trim().substring(1, keyValue[0].trim().length() - 1), keyValue[1].trim());
         }
 
-        String name = jsonMap.get("Name");
-        String password = jsonMap.get("Password");
+        String name = jsonMap.get("Name").substring(1, jsonMap.get("Name").length() - 1); // 删除""
+        String password = jsonMap.get("Password").substring(1, jsonMap.get("Password").length() - 1); // 删除""
         int levelAt = Integer.parseInt(jsonMap.get("LevelAt"));
-        int playingLevel = Integer.parseInt(jsonMap.get("PlayingLevel"));
+        int MoveCount = Integer.parseInt(jsonMap.get("MoveCount"));
 
         // 处理PlayingMap
         String playingMapStr = jsonMap.get("PlayingMap");
@@ -121,7 +138,7 @@ public class User {
 
         User user = new User(name, password);
         user.LevelAt = levelAt;
-        user.PlayingLevel = playingLevel;
+        user.MoveCount = MoveCount;
         user.PlayingMap = playingMap;
 
         return user;
@@ -149,8 +166,7 @@ public class User {
         String[] userStrs = json.split("},"); // 以}分割
 
         for (String userStr : userStrs) {
-            User user = User.fromJSON(userStr + "}");
-            UserInfo.add(user);
+            User user = User.fromJSON(userStr + "}"); // 自动加入到UserInfo
         }
     }
 }

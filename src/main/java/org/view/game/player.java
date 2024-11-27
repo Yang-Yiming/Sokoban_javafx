@@ -158,4 +158,12 @@ public void move(MapMatrix map) {
     public ImageView getImageView() {
         return imageView;
     }
+
+    public void setImageTowards(boolean right) {
+        if(right) {
+            imageView.setScaleX(1);
+        } else {
+            imageView.setScaleX(-1);
+        }
+    }
 }

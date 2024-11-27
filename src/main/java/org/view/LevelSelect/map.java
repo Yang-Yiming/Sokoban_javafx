@@ -12,6 +12,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.model.User;
 import org.model.config;
 import org.data.mapdata;
 
@@ -66,10 +67,13 @@ public class map {
         random_connect(layer_num);
     }
 
-    public void linear_generate_map() {
+    public void linear_generate_map(User user) {
         int layer_num = mapdata.maps.length;
         for(int i = 0; i< layer_num; i++) {
             node n = new node(i, 0, 0, primaryStage);
+            if(user.getLevelAt() < i){
+                n.set_lock(true);
+            }
             n.setTarget_level(i);
             n.getButton().setText("Level " + (i+1));
             if(i > 0){
@@ -141,7 +145,10 @@ public class map {
                 // 设置按钮
                 Button button = one.getButton();
 //                button.setText(one.getLayer() + "-" + one.getIndex());
-                button.getStyleClass().add("button-level");
+                if(one.is_locked())
+                    button.getStyleClass().add("button-level-locked");
+                else
+                    button.getStyleClass().add("button-level");
 
                 if(is_vertical)
                     hbox.getChildren().add(button);

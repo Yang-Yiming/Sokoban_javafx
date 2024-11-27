@@ -26,14 +26,16 @@ public class LoginController extends HalfStageController{
     private String Password;
 
     private User user;
+    private MenuController menu;
 
     public LoginController() {
     }
 
-    public void initialize(Stage LoginStage, Stage MenuStage, User user) {
+    public void initialize(Stage LoginStage, Stage MenuStage, MenuController menu) {
         this.thisStage = LoginStage;
         this.MenuStage = MenuStage;
-        this.user = user;
+        this.menu = menu;
+        this.user = menu.get_user();
 
         LoginVbox.getChildren().remove(ReminderHbox); // 将提醒先删去
         LoginVbox.getChildren().remove(ConfirmPasswordHbox); // 将确认密码先删去
@@ -150,6 +152,7 @@ public class LoginController extends HalfStageController{
 
     @FXML
     public void Back(MouseEvent mouseEvent) throws IOException {
+        menu.set_user(user);
         back_to_menu();
     }
 }

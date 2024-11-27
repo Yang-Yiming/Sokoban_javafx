@@ -1,15 +1,26 @@
 package org.view.level;
 
+import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import org.data.mapdata;
+import org.model.SavingManager;
 import org.model.User;
 import org.model.config;
 import org.view.LevelSelect.map;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,6 +33,7 @@ public class LevelManager {
     private Scene scene;
     private Stage primaryStage; // 直接作为属性 不然函数里有一坨（
     private map level_menu; // 选关界面
+    private int move_count;
 
     private User user = null; // 正在游玩的user，用于存档
 
@@ -49,10 +61,10 @@ public class LevelManager {
             KeyCode code = event.getCode();
             level.player.set_velocity(0, 0);
             int dx = 0, dy = 0;
-            if(code == KeyCode.UP || code == KeyCode.W) dy = -1;
-            if(code == KeyCode.DOWN || code == KeyCode.S) dy = 1;
-            if(code == KeyCode.LEFT || code == KeyCode.A) dx = -1;
-            if(code == KeyCode.RIGHT || code == KeyCode.D) dx = 1;
+            if(code == KeyCode.UP || code == KeyCode.W) {dy = -1; user.addMoveCount();}
+            if(code == KeyCode.DOWN || code == KeyCode.S && !event.isControlDown()) {dy = 1; user.addMoveCount();}
+            if(code == KeyCode.LEFT || code == KeyCode.A) { dx = -1; level.player.setImageTowards(false); user.addMoveCount();}
+            if(code == KeyCode.RIGHT || code == KeyCode.D) { dx = 1; level.player.setImageTowards(true); user.addMoveCount();}
             if(code == KeyCode.R){
                 level.stopTimelines();
                 level.init();
@@ -66,6 +78,15 @@ public class LevelManager {
                 level.stopTimelines();
                 showLevelMenu();
             }
+            if(event.isControlDown() && code == KeyCode.S){ //同时按下control s时保存
+                try {
+                    save("保存成功");
+                    System.out.println("saved");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
             level.player.set_velocity(dx, dy);
             level.player.move(level.getMap(), level.boxes, level);
 
@@ -73,9 +94,16 @@ public class LevelManager {
 
             if(level.isWin()){
                 level.stopTimelines();
-                ++currentLevel;
+                user.setLevelAt(++currentLevel);
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
+
                 loadLevel(id + 1);
+
+                try {
+                    save("自动保存成功");
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -115,12 +143,14 @@ public class LevelManager {
     }
 
     public void start() {
-        level_menu.linear_generate_map();
+        level_menu.linear_generate_map(user);
         showLevelMenu();
         primaryStage.setTitle("Sokoban");
         primaryStage.show();
     }
     public void showLevelMenu() {
+        node.clear_all_nodes();
+        level_menu.linear_generate_map(user); // 太不优雅了 但我想不到其他的方法
         level_menu.draw_map(config.is_vertical);
         primaryStage.setScene(level_menu.getScene());
     }
@@ -133,6 +163,37 @@ public class LevelManager {
     }
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void save(String s) throws FileNotFoundException {
+        SavingManager.save();
+        save_text(s);
+    }
+    public void save_text(String s) {
+        Label label = new Label(s);
+        label.setTextFill(Color.WHITE);
+        label.setTextAlignment(TextAlignment.CENTER);
+        label.setStyle("-fx-background-color: #007BFF;");
+
+        // 添加
+        VBox layout = new VBox(label);
+        root.getChildren().addLast(layout);
+
+        // 淡入淡出
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(config.fade_anim_duration), label);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        fadeIn.setOnFinished(event -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(config.fade_anim_duration), label);
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+            fadeOut.setDelay(Duration.millis(config.save_text_maintain));
+            fadeOut.setOnFinished(event2 -> root.getChildren().remove(layout));
+            fadeOut.play();
+        });
+
+        fadeIn.play();
+
     }
 
 }

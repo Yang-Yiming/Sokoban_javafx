@@ -34,6 +34,7 @@ public class node {
     private Scene scene;
     private Button button;
     private int target_level;
+    private boolean is_locked = false;
 
     private ArrayList<node> NextLayerConnectedNodes = new ArrayList<>();
     private ArrayList<node> LastLayerConnectedNodes = new ArrayList<>();
@@ -45,6 +46,7 @@ public class node {
         this.index = index;
         this.type = type;
         this.is_connected = false;
+        this.is_locked = false;
 
         if(levelManager == null)
             node.levelManager = new LevelManager(primaryStage); // 保险用 其实要是后面能正常跑的话就删掉吧
@@ -71,10 +73,15 @@ public class node {
     }
 
     public void action(){
-        load_level();
+        if(!is_locked)
+            load_level();
     }
     public void load_level(){
         levelManager.loadLevel(target_level);
+    }
+
+    public static void clear_all_nodes() {
+        All_Nodes.clear();
     }
 
     //getter setter
@@ -102,6 +109,13 @@ public class node {
 
     public ArrayList<node> getLastLayerConnectedNodes() {
         return LastLayerConnectedNodes;
+    }
+
+    public void set_lock(boolean is_locked){
+        this.is_locked = is_locked;
+    }
+    public boolean is_locked(){
+        return is_locked;
     }
 
     public void set_posX(double posX){
