@@ -23,8 +23,11 @@ public class player extends entity {
     public player(int x, int y, Stage primaryStage) {
         super(x, y, 2);
         this.primaryStage = primaryStage;
-        image = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"));
+        image = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.tile_size, config.tile_size, false, false);
         imageView = new ImageView(image);
+        //禁用平滑属性
+        imageView.setPreserveRatio(false);
+        imageView.setSmooth(false);
         imageView.setFitHeight(config.tile_size);
         imageView.setFitWidth(config.tile_size);
     }
@@ -96,7 +99,7 @@ public class player extends entity {
 public void move(MapMatrix map) {
     if (can_move(map, velocity_x, velocity_y)) {
         // 动画
-        imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif")));
+        imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
         imageView.setX(imageView.getX() + velocity_x * config.tile_size); // 更新
         imageView.setY(imageView.getY() + velocity_y * config.tile_size); // 更新
         TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
@@ -116,7 +119,9 @@ public void move(MapMatrix map) {
         transition.setOnFinished(event -> {
             imageView.setTranslateX(0); // 重置 translateX，因为动画已经结束
             imageView.setTranslateY(0); // 重置 translateY，因为动画已经结束
-            imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif")));
+            imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.tile_size, config.tile_size, false, false));
+            imageView.setPreserveRatio(false);
+            imageView.setSmooth(false);
         });
         transition.play();
     }
