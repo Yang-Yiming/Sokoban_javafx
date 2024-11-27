@@ -34,6 +34,7 @@ public class LevelManager {
     private Stage primaryStage; // 直接作为属性 不然函数里有一坨（
     private map level_menu; // 选关界面
     private int move_count;
+    private Level level;
 
     private User user = null; // 正在游玩的user，用于存档
 
@@ -52,10 +53,25 @@ public class LevelManager {
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
-        Level level = new Level(rootLevel, currentLevel, primaryStage);
+        level = new Level(rootLevel, currentLevel, primaryStage);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 
+        InLevel(id);
+    }
+    public void loadLevel(int id, int[][] mapmatrix) {
+        root.getChildren().clear();
+        currentLevel = id;
+        Pane rootLevel = new Pane();
+        root.getChildren().add(rootLevel);
+        level = new Level(rootLevel, mapmatrix, primaryStage, currentLevel);
+        scene = primaryStage.getScene();
+        scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
+
+        InLevel(id);
+    }
+
+    private void InLevel(int id) {
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -81,7 +97,6 @@ public class LevelManager {
             if(event.isControlDown() && code == KeyCode.S){ //同时按下control s时保存
                 try {
                     save("保存成功");
-                    System.out.println("saved");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -95,6 +110,7 @@ public class LevelManager {
             if(level.isWin()){
                 level.stopTimelines();
                 user.setLevelAt(++currentLevel);
+                user.setMoveCount(0);
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
 
                 loadLevel(id + 1);
@@ -144,6 +160,12 @@ public class LevelManager {
 
     public void start() {
         level_menu.linear_generate_map(user);
+
+        if(user.getMoveCount() > 0) {
+            loadLevel(user.getLevelAt(), user.getPlayingMap());
+            return;
+        }
+
         showLevelMenu();
         primaryStage.setTitle("Sokoban");
         primaryStage.show();
@@ -166,6 +188,9 @@ public class LevelManager {
     }
 
     public void save(String s) throws FileNotFoundException {
+        if(user.getMoveCount() > 0) {
+            user.setPlayingMap(level.getMap().getMatrix());
+        }
         SavingManager.save();
         save_text(s);
     }

@@ -30,6 +30,7 @@ public class Level {
     player player;
     ArrayList<box> boxes;
     private Stage primaryStage;
+    private boolean default_map = true;
 
     private ArrayList<Rectangle> glowRectangles;
     private Rectangle[][] radiatingEffects;
@@ -46,7 +47,8 @@ public class Level {
 
     public void init() {
         glowTimelines.clear();
-        map = new MapMatrix(mapdata.maps[id]);
+        if(default_map)
+            map = new MapMatrix(mapdata.maps[id]);
         radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
         glowRectangles = new ArrayList<>();
         if(canvas == null)
@@ -110,6 +112,17 @@ public class Level {
         this.id = id;
         this.primaryStage = primaryStage;
         init();
+        if(canvas == null)
+            canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
+    }
+    public Level(Pane root, int[][] map_matrix, Stage primaryStage, int id) {
+        this.root = root;
+        this.id = id;
+        this.default_map = false;
+        this.map = new MapMatrix(map_matrix);
+        this.primaryStage = primaryStage;
+        init();
+        this.default_map = true;
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
     }

@@ -44,6 +44,16 @@ public class User {
         this.MoveCount++;
     }
 
+    public void setPlayingMap(int[][] map) {
+        PlayingMap = new int[map.length][map[0].length];
+        for (int i = 0; i < map.length; i++) {
+            System.arraycopy(map[i], 0, PlayingMap[i], 0, map[i].length);
+        }
+    }
+    public int[][] getPlayingMap() {
+        return PlayingMap;
+    }
+
     public void update_info(int levelAt, int MoveCount, MapMatrix map){
         this.LevelAt = levelAt;
         this.MoveCount = MoveCount;
@@ -103,7 +113,13 @@ public class User {
         json = json.replaceAll("\n", "");
 
         // 去除首尾的大括号
-        json = json.substring(1, json.length() - 1);
+        json = json.substring(1, json.length() - 2);
+
+        // 单独提取playingmap 防止逗号分割时出错
+        int playingMapStart = json.indexOf("\"PlayingMap\":[");
+        int playingMapEnd = json.lastIndexOf("]");
+        String playingMapStr = json.substring(playingMapStart, playingMapEnd + 1);
+        json = json.substring(0, playingMapStart) + json.substring(playingMapEnd + 1);
 
         // 以逗号分割字符串，得到各个属性的键值对
         String[] keyValuePairs = json.split(",");
@@ -120,11 +136,12 @@ public class User {
         int MoveCount = Integer.parseInt(jsonMap.get("MoveCount"));
 
         // 处理PlayingMap
-        String playingMapStr = jsonMap.get("PlayingMap");
+        playingMapStr = playingMapStr.substring(playingMapStr.indexOf("["));
         int[][] playingMap = null;
         if (!playingMapStr.equals("[]") && !playingMapStr.equals("[]}")) {
             playingMapStr = playingMapStr.substring(1, playingMapStr.length() - 1);
             String[] rows = playingMapStr.split("],");
+            rows[rows.length - 1] = rows[rows.length - 1].substring(0, rows[rows.length - 1].length() - 1);
             playingMap = new int[rows.length][];
             for (int i = 0; i < rows.length; i++) {
                 String rowStr = rows[i].substring(1);
