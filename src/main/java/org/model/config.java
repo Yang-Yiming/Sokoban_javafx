@@ -24,7 +24,7 @@ public class config {
 
     // 可以用设置改变的常量
     public static boolean is_vertical = false;
-    public static int move_anim_duration = 150; // milliseconds
+    public static int move_anim_duration = 300; // milliseconds
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例
