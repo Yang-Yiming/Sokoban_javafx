@@ -72,7 +72,7 @@ public class Level {
                     boxes.add(temp);
                 }
                 if (map.hasPlayer(x, y)) {
-                    player = new player(x, y, primaryStage, root);
+                    player = new player(x, y, primaryStage);
                     player.getImageView().setX(anchor_posx + x * config.tile_size);
                     player.getImageView().setY(anchor_posy + y * config.tile_size);
                     // System.out.println("x : " + x + ", y : " + y);

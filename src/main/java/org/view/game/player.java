@@ -19,12 +19,10 @@ public class player extends entity {
     //    private Image image;
 //    private ImageView imageView;
     private Stage primaryStage;
-    private Pane root;
 
-    public player(int x, int y, Stage primaryStage, Pane root) {
+    public player(int x, int y, Stage primaryStage) {
         super(x, y, 2);
         this.primaryStage = primaryStage;
-        this.root = root;
         image = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"));
         imageView = new ImageView(image);
         imageView.setFitHeight(config.tile_size);
