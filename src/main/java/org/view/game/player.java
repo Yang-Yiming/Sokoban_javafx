@@ -20,6 +20,7 @@ public class player extends entity {
 //    private ImageView imageView;
     private Stage primaryStage;
     public static boolean is_moving = false;
+    private int orientation = 4;
 
     public player(int x, int y, Stage primaryStage) {
         super(x, y, 2);
@@ -103,6 +104,7 @@ public class player extends entity {
         imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
         imageView.setX(imageView.getX() + velocity_x * config.tile_size); // 更新
         imageView.setY(imageView.getY() + velocity_y * config.tile_size); // 更新
+        is_moving = true;
         TranslateTransition transition = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
         transition.setFromX(-velocity_x * config.tile_size);
         transition.setFromY(-velocity_y * config.tile_size); // 同box.java
@@ -116,15 +118,14 @@ public class player extends entity {
 //            transition.setToY(velocity_y * config.tile_size);
         transition.setToX(0);
         transition.setToY(0);
-        is_moving = true;
 //            System.out.println(transition.getFromX() + " " + transition.getFromX() + " " + transition.getToX() + " " + transition.getToY());
         transition.setOnFinished(event -> {
             imageView.setTranslateX(0); // 重置 translateX，因为动画已经结束
             imageView.setTranslateY(0); // 重置 translateY，因为动画已经结束
-            imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.tile_size, config.tile_size, false, false));
+            is_moving = false;
+            setImageTowards(orientation);
             imageView.setPreserveRatio(false);
             imageView.setSmooth(false);
-            is_moving = false;
         });
         transition.play();
     }
@@ -158,15 +159,45 @@ public class player extends entity {
         return image;
     }
 
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+    public int getOrientation() {
+        return orientation;
+    }
     public ImageView getImageView() {
         return imageView;
     }
-
-    public void setImageTowards(boolean right) {
-        if(right) {
-            imageView.setScaleX(1);
-        } else {
-            imageView.setScaleX(-1);
+    public void setImageTowards(int orientation) { //1 上 2 下 3 左 4 右
+        this.orientation = orientation;
+        if(is_moving){
+            if(orientation == 1) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(1);
+            } else if(orientation == 2) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(1);
+            } else if(orientation == 3) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(-1);
+            } else if(orientation == 4) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(1);
+            }
+        }else{
+            if(orientation == 1) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_back.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(1);
+            } else if(orientation == 2) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_front.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(1);
+            } else if(orientation == 3) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(-1);
+            } else if(orientation == 4) {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setScaleX(1);
+            }
         }
     }
 }

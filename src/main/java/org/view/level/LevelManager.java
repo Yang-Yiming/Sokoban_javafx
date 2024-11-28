@@ -77,10 +77,10 @@ public class LevelManager {
             KeyCode code = event.getCode();
             level.player.set_velocity(0, 0);
             int dx = 0, dy = 0;
-            if(code == KeyCode.UP || code == KeyCode.W) {dy = -1; user.addMoveCount();}
-            if(code == KeyCode.DOWN || code == KeyCode.S && !event.isControlDown()) {dy = 1; user.addMoveCount();}
-            if(code == KeyCode.LEFT || code == KeyCode.A) { dx = -1; level.player.setImageTowards(false); user.addMoveCount();}
-            if(code == KeyCode.RIGHT || code == KeyCode.D) { dx = 1; level.player.setImageTowards(true); user.addMoveCount();}
+            if(code == KeyCode.UP || code == KeyCode.W) {dy = -1; level.player.setOrientation(1); user.addMoveCount();}
+            if(code == KeyCode.DOWN || code == KeyCode.S && !event.isControlDown()) {dy = 1; level.player.setOrientation(2); user.addMoveCount();}
+            if(code == KeyCode.LEFT || code == KeyCode.A) { dx = -1; level.player.setOrientation(3); user.addMoveCount();}
+            if(code == KeyCode.RIGHT || code == KeyCode.D) { dx = 1; level.player.setOrientation(4); user.addMoveCount();}
             if(code == KeyCode.R){
                 level.stopTimelines();
                 level.init();
@@ -103,7 +103,10 @@ public class LevelManager {
             }
 
             level.player.set_velocity(dx, dy);
-            if(!level.player.is_moving) level.player.move(level.getMap(), level.boxes, level);
+            if(!level.player.is_moving){
+                level.player.move(level.getMap(), level.boxes, level);
+                level.player.setImageTowards(level.player.getOrientation());
+            }
 
             level.drawMap();
 

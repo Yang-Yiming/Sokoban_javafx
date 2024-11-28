@@ -6,7 +6,7 @@ import java.lang.Math;
 
 public class config {
     //Constants
-    public static final int tile_size = 50;
+    public static final int tile_size = 55;
     public static final int ScreenHeight = 600;
     public static final int ScreenWidth = 800;
     public static final int Map_Node_Width = 60;
@@ -16,7 +16,7 @@ public class config {
 
     // 可以用设置改变的常量
     public static boolean is_vertical = false;
-    public static int move_anim_duration = 250; // milliseconds
+    public static int move_anim_duration = 300; // milliseconds
     public static int fade_anim_duration = 250;
     public static int save_text_maintain = 1000;
 
