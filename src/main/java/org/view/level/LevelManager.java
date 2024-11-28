@@ -103,7 +103,7 @@ public class LevelManager {
             }
 
             level.player.set_velocity(dx, dy);
-            level.player.move(level.getMap(), level.boxes, level);
+            if(!level.player.is_moving) level.player.move(level.getMap(), level.boxes, level);
 
             level.drawMap();
 

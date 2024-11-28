@@ -19,6 +19,7 @@ public class player extends entity {
     //    private Image image;
 //    private ImageView imageView;
     private Stage primaryStage;
+    public static boolean is_moving = false;
 
     public player(int x, int y, Stage primaryStage) {
         super(x, y, 2);
@@ -96,7 +97,7 @@ public class player extends entity {
         cameraTimeline.play();
     }
 
-public void move(MapMatrix map) {
+    public void move(MapMatrix map) {
     if (can_move(map, velocity_x, velocity_y)) {
         // 动画
         imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
@@ -115,6 +116,7 @@ public void move(MapMatrix map) {
 //            transition.setToY(velocity_y * config.tile_size);
         transition.setToX(0);
         transition.setToY(0);
+        is_moving = true;
 //            System.out.println(transition.getFromX() + " " + transition.getFromX() + " " + transition.getToX() + " " + transition.getToY());
         transition.setOnFinished(event -> {
             imageView.setTranslateX(0); // 重置 translateX，因为动画已经结束
@@ -122,6 +124,7 @@ public void move(MapMatrix map) {
             imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.tile_size, config.tile_size, false, false));
             imageView.setPreserveRatio(false);
             imageView.setSmooth(false);
+            is_moving = false;
         });
         transition.play();
     }
