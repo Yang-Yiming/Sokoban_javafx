@@ -105,7 +105,7 @@ public class User {
     }
 
     public static User fromJSON(String json) {
-        if(json == null || json.isEmpty()) {
+        if(json == null || json.isEmpty() || json.equals("[]")) {
             return null;
         }
         // 去除所有空格和\n
@@ -175,7 +175,7 @@ public class User {
     }
 
     public static void UserInfofromJSON(String json) {
-        if(json == null || json.isEmpty()) {
+        if(json == null || json.isEmpty() || json.equals("[]")) {
             return;
         }
 

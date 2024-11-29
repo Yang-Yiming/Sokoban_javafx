@@ -1,5 +1,8 @@
 package org.model;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.MessageDigest;
@@ -86,8 +89,29 @@ public class SavingManager {
             }
             br.close();
             User.UserInfofromJSON(json.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("错误");
+            alert.setHeaderText("读取文件失败");
+            alert.setContentText("请检查文件是否损坏或缺失");
+            alert.showAndWait();
+
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("错误");
+            alert.setHeaderText("是否重置存档？");
+            alert.setContentText("选择\"是\"将会将存档文件清空");
+            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+            if (result == ButtonType.OK) {
+                try {
+                    save();
+                } catch (IOException e1) {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("错误");
+                    alert.setHeaderText("读取文件失败");
+                    alert.setContentText("请检查文件是否损坏或缺失");
+                    alert.showAndWait();
+                }
+            }
         }
     }
 
