@@ -5,5 +5,6 @@ module Sokoban {
     requires javafx.controls;
 
     opens org.view.menu to javafx.fxml;
+    opens org.view.level to javafx.fxml;
     exports org;
 }

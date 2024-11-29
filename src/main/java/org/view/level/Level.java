@@ -1,7 +1,9 @@
 package org.view.level;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -18,6 +20,7 @@ import javafx.scene.canvas.Canvas;
 
 import org.data.mapdata;
 import org.model.MapMatrix;
+import org.model.User;
 import org.model.config;
 import org.view.game.box;
 import org.view.game.player;
@@ -36,6 +39,10 @@ public class Level {
     private Rectangle[][] radiatingEffects;
 
     private  Canvas canvas; // 用来放grass
+
+    private GUIController guiController; // 显示gui
+    private Pane gui_root; // gui的root
+    private User user; // 史山
 
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;
@@ -107,15 +114,17 @@ public class Level {
         }
         this.player.stopCameraTimeline();
     }
-    public Level(Pane root, int id, Stage primaryStage) {
+
+    public Level(Pane root, int id, Stage primaryStage, User user) {
         this.root = root;
         this.id = id;
         this.primaryStage = primaryStage;
         init();
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
+        load_gui(user);
     }
-    public Level(Pane root, int[][] map_matrix, Stage primaryStage, int id) {
+    public Level(Pane root, int[][] map_matrix, Stage primaryStage, int id, User user) {
         this.root = root;
         this.id = id;
         this.default_map = false;
@@ -125,6 +134,19 @@ public class Level {
         this.default_map = true;
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
+        load_gui(user);
+    }
+
+    private void load_gui(User user) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
+        try {
+            gui_root = loader.load();
+            guiController = loader.getController();
+        } catch (IOException e) {
+            System.out.println("Failed to load FXML file: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+        this.user = user;
     }
 
     public void drawGrass(){
@@ -262,6 +284,12 @@ public class Level {
         root.getChildren().add(player.getImageView());
     }
 
+    public void drawGUI() {
+        if(user == null) return;
+        guiController.update(user.getMoveCount());
+        root.getChildren().addAll(gui_root);
+    }
+
     public void drawMap() {
         root.getChildren().clear(); // 先清空一下地图
         drawGrass();
@@ -270,6 +298,7 @@ public class Level {
         drawBoxes();
         drawPlayer();
         drawButterfly();
+        drawGUI();
     }
 
     public boolean isWin() {

@@ -63,7 +63,7 @@ public class SettingController extends HalfStageController{
 
     @FXML
     void DragDone(DragEvent event) {
-        config.move_anim_duration = (int) (100 + 200 * MovingAnimTimeSlider.getValue());
+        config.move_anim_duration = (int) (10 + 600 * MovingAnimTimeSlider.getValue());
     }
 
     @FXML

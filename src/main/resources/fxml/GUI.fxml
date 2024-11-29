@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.view.level.GUIController">
+   <children>
+      <VBox fx:id="Stats" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox fx:id="MoveCount" alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="200.0" spacing="15.0">
+               <children>
+                  <Text fx:id="movecount_text" strokeType="OUTSIDE" strokeWidth="0.0" text="移动步数" />
+                  <Text fx:id="movecount_num" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="15.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+      <Button fx:id="Settings" layoutX="739.0" layoutY="1.0" mnemonicParsing="false" text="Button" />
+   </children>
+</AnchorPane>

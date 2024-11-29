@@ -2,6 +2,9 @@ package org.view.level;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
@@ -53,7 +56,7 @@ public class LevelManager {
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
-        level = new Level(rootLevel, currentLevel, primaryStage);
+        level = new Level(rootLevel, currentLevel, primaryStage, user);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 
@@ -64,7 +67,7 @@ public class LevelManager {
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
-        level = new Level(rootLevel, mapmatrix, primaryStage, currentLevel);
+        level = new Level(rootLevel, mapmatrix, primaryStage, currentLevel, user);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 
@@ -162,17 +165,26 @@ public class LevelManager {
     }
 
     public void start() {
-        level_menu.linear_generate_map(user);
-
         if(user.getMoveCount() > 0) {
-            loadLevel(user.getLevelAt(), user.getPlayingMap());
-            return;
+            Alert alert  = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("提示");
+            alert.setHeaderText("检测到上次游戏未结束，是否继续？");
+            alert.setContentText("选择\"是\"继续游戏，选择\"否\"从选关界面开始");
+            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+            if(result == ButtonType.OK) {
+                loadLevel(user.getLevelAt(), user.getPlayingMap());
+                return;
+            } else {
+                user.setMoveCount(0);
+            }
         }
 
+        level_menu.linear_generate_map(user);
         showLevelMenu();
         primaryStage.setTitle("Sokoban");
         primaryStage.show();
     }
+
     public void showLevelMenu() {
         node.clear_all_nodes();
         level_menu.linear_generate_map(user); // 太不优雅了 但我想不到其他的方法

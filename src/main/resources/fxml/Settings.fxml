@@ -19,13 +19,13 @@
                   <Text fx:id="SettingText" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" />
                </children>
             </HBox>
-            <HBox fx:id="AnimTimeHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox fx:id="AnimTimeHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                <children>
                   <Text fx:id="MovingAnimTimeText" strokeType="OUTSIDE" strokeWidth="0.0" text="MovingAnimTime" />
-                  <Slider fx:id="MovingAnimTimeSlider" onDragDone="#DragDone" />
+                  <Slider fx:id="MovingAnimTimeSlider" max="1.0" onDragDone="#DragDone" value="0.5" />
                </children>
             </HBox>
-            <HBox fx:id="IsVerticalHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox fx:id="IsVerticalHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                <children>
                   <Text fx:id="IsVerticalText" strokeType="OUTSIDE" strokeWidth="0.0" text="显示地图的方向" />
                   <CheckBox fx:id="VerticalCheckBox" mnemonicParsing="false" onMouseClicked="#Clicked" text="Vertical" />

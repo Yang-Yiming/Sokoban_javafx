@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -130,8 +132,17 @@ public class MenuController {
     @FXML
     void StartButtonClicked(MouseEvent event) {
         if(user == null || user.getName().isEmpty()){ // 好蠢的判断
-            StartButton.setText("Please Login First");//非常简陋，以后美化（）
-//            return;
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("请先登陆");
+            alert.setHeaderText("请先登陆，或以游客模式继续。游客模式下存档功能将会失效。");
+            alert.setContentText("是否以游客模式继续？");
+            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+            if(result == ButtonType.OK) {
+                // user = new User("guest", "");
+            } else {
+                return;
+            }
         }
         LevelManager levelManager = new LevelManager(primaryStage);
         levelManager.setUser(user);
