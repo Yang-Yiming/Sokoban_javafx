@@ -37,4 +37,9 @@ public class config {
         return (int)(Math.random() * (b - a)) + a;
     }
 
+    public static double is_linear(int x1, int y1, int x2, int y2, int x, int y) {
+        return (x - x1) * (y2 - y1) - (y - y1) * (x2 - x1);
+    }
+    public static final double EPS = 2.0;
+
 }
