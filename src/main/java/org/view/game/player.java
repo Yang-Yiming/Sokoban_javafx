@@ -172,7 +172,7 @@ public class player extends entity {
         this.orientation = orientation;
         if(is_moving){
             if(orientation == 1) {
-                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
+                imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run_back.gif"), config.tile_size, config.tile_size, false, false));
                 imageView.setScaleX(1);
             } else if(orientation == 2) {
                 imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run_front.gif"), config.tile_size, config.tile_size, false, false));
