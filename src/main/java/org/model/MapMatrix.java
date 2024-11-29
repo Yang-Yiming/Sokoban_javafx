@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class MapMatrix {
 
-    HashMap<Vector, Integer> matrix = new HashMap<>(); // 二进制下， 第0位表示是否有墙，第1位是否有箱子，第2位是否有玩家，第3位是否有goal
-    HashMap<Vector, Integer> box_matrix = new HashMap<>();
+    HashMap<Coordinate, Integer> matrix = new HashMap<>(); // 二进制下， 第0位表示是否有墙，第1位是否有箱子，第2位是否有玩家，第3位是否有goal
+    HashMap<Coordinate, Integer> box_matrix = new HashMap<>();
 
     private int left_boundary=0, right_boundary=0, up_boundary=0, down_boundary=0;
 
@@ -13,17 +13,17 @@ public class MapMatrix {
 
     public void set(int x, int y, int value) {
         if(value == 0){
-            matrix.remove(new Vector(x, y));
+            matrix.remove(new Coordinate(x, y));
             return;
         }
-        matrix.put(new Vector(x, y), value);
+        matrix.put(new Coordinate(x, y), value);
         if(x < left_boundary) left_boundary = x;
         if(x > right_boundary) right_boundary = x;
         if(y < up_boundary) up_boundary = y;
         if(y > down_boundary) down_boundary = y;
     }
     public int get(int x, int y) {
-        return matrix.getOrDefault(new Vector(x, y), DEFAULT_VALUE);
+        return matrix.getOrDefault(new Coordinate(x, y), DEFAULT_VALUE);
     }
 
     public void set_data(int begin_x, int begin_y, int[][] data) {
@@ -45,7 +45,7 @@ public class MapMatrix {
     }
 
     public void delete(int x, int y) {
-        matrix.remove(new Vector(x, y));
+        matrix.remove(new Coordinate(x, y));
     }
 
     public void clear(int begin_x, int begin_y, int end_x, int end_y) {
@@ -125,10 +125,10 @@ public class MapMatrix {
     }
 
     public void setBox_matrix(int x, int y, int num) {
-        box_matrix.put(new Vector(x, y), num);
+        box_matrix.put(new Coordinate(x, y), num);
     }
     public int getBox_matrix_id(int x, int y) {
-        return box_matrix.getOrDefault(new Vector(x, y), 0);
+        return box_matrix.getOrDefault(new Coordinate(x, y), 0);
     }
 
     public int[][] getMatrix() {
@@ -142,12 +142,12 @@ public class MapMatrix {
     }
 
     public int getWidth() {
-        int width = right_boundary - left_boundary;
+        int width = right_boundary - left_boundary + 1;
         return (int) Math.min(width, (double) config.ScreenWidth / config.tile_size * 1.2);
     }
 
     public int getHeight() {
-        int height = down_boundary - up_boundary;
+        int height = down_boundary - up_boundary + 1;
         return (int) Math.min(height, (double) config.ScreenHeight / config.tile_size * 1.2);
     }
 
