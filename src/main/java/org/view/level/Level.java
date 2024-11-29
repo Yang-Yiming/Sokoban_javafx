@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public abstract class Level {
 
-    protected GameMap map;
+    protected MapMatrix map;
     
     private Pane root;
     org.view.game.player player;

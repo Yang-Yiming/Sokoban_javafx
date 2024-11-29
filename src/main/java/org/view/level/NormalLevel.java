@@ -16,7 +16,7 @@ public class NormalLevel extends Level {
     private boolean default_map = true;
 
     public MapMatrix getMap() {
-        return (MapMatrix) map;
+        return map;
     }
 
     public void init() {
