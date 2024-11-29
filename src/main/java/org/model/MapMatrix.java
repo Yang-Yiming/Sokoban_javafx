@@ -85,7 +85,7 @@ public class MapMatrix {
     public boolean isOne(int num, int n) {
         return (((num >> n) & 1) == 1);
     }
-
+  
     public boolean hasNothing(int x, int y) {
         return this.get(x, y) == 0;
     }
@@ -168,7 +168,6 @@ public class MapMatrix {
         set_data(0,0,matrix);
 
         box_matrix = new HashMap<>();
-
         int box_index = 1; // 编号从1开始
 
         for (int y = 0; y < matrix.length; ++y) {
