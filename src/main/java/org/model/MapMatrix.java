@@ -151,6 +151,19 @@ public class MapMatrix {
         return (int) Math.min(height, (double) config.ScreenHeight / config.tile_size * 1.2);
     }
 
+    public void add_line(int x1, int y1, int x2, int y2, int type) {
+        for(int x = x1; x <= x2; x++) {
+            for(int y = y1; y<=y2; y++) {
+                set(x,y,type);
+                if(config.is_linear(x1,y1,x2,y2,x,y) < config.EPS) {
+                    break;
+                }
+            }
+        }
+    }
+
+
+
     public MapMatrix(int[][] matrix) {
         set_data(0,0,matrix);
 
@@ -169,7 +182,6 @@ public class MapMatrix {
             }
         }
     }
-
     public MapMatrix() {
         matrix = new HashMap<>();
         box_matrix = new HashMap<>();
