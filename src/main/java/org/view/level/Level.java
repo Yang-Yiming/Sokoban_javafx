@@ -38,7 +38,7 @@ public class Level {
     private ArrayList<Rectangle> glowRectangles;
     private Rectangle[][] radiatingEffects;
 
-    private  Canvas canvas; // 用来放grass
+    private Canvas canvas; // 用来放grass
 
     private GUIController guiController; // 显示gui
     private Pane gui_root; // gui的root

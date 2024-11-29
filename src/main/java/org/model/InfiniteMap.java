@@ -1,6 +1,7 @@
 package org.model;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class InfiniteMap {
 
@@ -12,23 +13,26 @@ public class InfiniteMap {
         }
     }
 
-    HashMap<vector, Integer> map = new HashMap<>();
+    HashMap<vector, Integer> matrix = new HashMap<>();
+    HashMap<vector, Integer> box_matrix = new HashMap<>();
     private int DEFAULT_VALUE;
 
     public InfiniteMap() {
-        map = new HashMap<>();
+        matrix = new HashMap<>();
+        box_matrix = new HashMap<>();
         DEFAULT_VALUE = 0;
     }
     public InfiniteMap(int DEFAULT_VALUE) {
-        map = new HashMap<>();
+        matrix = new HashMap<>();
+        box_matrix = new HashMap<>();
         this.DEFAULT_VALUE = DEFAULT_VALUE;
     }
 
     public void set(int x, int y, int value) {
-        map.put(new vector(x, y), value);
+        matrix.put(new vector(x, y), value);
     }
-    public void get(int x, int y) {
-        map.getOrDefault(new vector(x, y), DEFAULT_VALUE);
+    public int get(int x, int y) {
+        return matrix.getOrDefault(new vector(x, y), DEFAULT_VALUE);
     }
 
     public void set_data(int begin_x, int begin_y, int[][] data) {
@@ -50,7 +54,7 @@ public class InfiniteMap {
     }
 
     public void delete(int x, int y) {
-        map.remove(new vector(x, y));
+        matrix.remove(new vector(x, y));
     }
 
     public void clear(int begin_x, int begin_y, int end_x, int end_y) {
@@ -62,7 +66,7 @@ public class InfiniteMap {
     }
 
     public void clearAll() {
-        map.clear();
+        matrix.clear();
     }
 
     // 加入一条道路
@@ -84,6 +88,61 @@ public class InfiniteMap {
                 set(begin_x, i, 1); set(begin_x + width - 1, i, 1);
             }
         }
+    }
+
+
+    // 与正常map一样的部分
+    public boolean isOne(int num, int n) {
+        return (((num >> n) & 1) == 1);
+    }
+
+    public boolean hasNothing(int x, int y) {
+        return this.get(x, y) == 0;
+    }
+
+    public boolean hasNoObstacle(int x, int y) {
+        int[] ObstacleTypes = { 0, 1, 2 }; // wall box player 会阻挡
+        for (int e : ObstacleTypes) {
+            if (isOne(this.get(x,y), e)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean hasWall(int x, int y) {
+        return isOne(this.get(x,y), 0);
+    }
+
+    public boolean hasBox(int x, int y) {
+        return isOne(get(x,y), 1);
+    }
+
+    public boolean hasPlayer(int x, int y) {
+        return isOne(get(x,y), 2);
+    }
+
+    public boolean hasGoal(int x, int y) {
+        return isOne(get(x,y), 3);
+    }
+
+    public void add(int x, int y, int type) {
+        set(x,y,get(x,y) + (1 << type));
+    }
+
+    public void remove(int x, int y, int type) {
+        set(x,y,get(x,y)- (1 << type));
+    }
+
+    public void setBox_matrix(int x, int y, int num) {
+        box_matrix.put(new vector(x, y), num);
+    }
+    public int getBox_matrix_id(int x, int y) {
+        return box_matrix.getOrDefault(new vector(x, y), 0);
+    }
+
+    public HashMap<vector, Integer> getMatrix() {
+        return matrix;
     }
 
 }
