@@ -131,7 +131,7 @@ public class MenuController {
     void StartButtonClicked(MouseEvent event) {
         if(user == null || user.getName().isEmpty()){ // 好蠢的判断
             StartButton.setText("Please Login First");//非常简陋，以后美化（）
-//            return;
+            return;
         }
         LevelManager levelManager = new LevelManager(primaryStage);
         levelManager.setUser(user);

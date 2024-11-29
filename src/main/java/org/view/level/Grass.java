@@ -107,7 +107,6 @@ public class Grass {
         double dsize = size / divide;
         Color white = Color.rgb(255, 255, 255);
         Color darkgreen = randColor(dx, dy);
-        darkgreen = Color.rgb((int) (darkgreen.getRed() * 0.8 * 255), (int) (darkgreen.getGreen() * 0.8 * 255), (int) (darkgreen.getBlue() * 0.8 * 255));
         int butterDX, butterDY;
         if(myRand(dx, dy, 1, 0, 1) == 0) butterDX = ButterDX[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
         else butterDX = ButterDX[(-timeid + myRand(dx, dy, 1, 0, butterT - 1) + butterT) % ButterDX.length];
@@ -120,10 +119,26 @@ public class Grass {
             int pieceY = (int) ((anchor_posy + dy * size + myRand(dx, dy, -1, 1, divide - 1) * dsize) + butterDY * dsize);
             Rectangle butterfly = new Rectangle(pieceX, pieceY, dsize * butterWidth, dsize * butterHeight);
             butterfly.setFill(white);
+            root.getChildren().add(butterfly);
+        }
+    }
+
+    public static void addButterflyShadow(Pane root, int dx, int dy, double anchor_posx, double anchor_posy, double size) {
+        int divide = 8;
+        double dsize = size / divide;
+        Color darkgreen = randColor(dx, dy);
+        darkgreen = Color.rgb((int) (darkgreen.getRed() * 0.8 * 255), (int) (darkgreen.getGreen() * 0.8 * 255), (int) (darkgreen.getBlue() * 0.8 * 255));
+        int butterDX, butterDY;
+        if(myRand(dx, dy, 1, 0, 1) == 0) butterDX = ButterDX[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
+        else butterDX = ButterDX[(-timeid + myRand(dx, dy, 1, 0, butterT - 1) + butterT) % ButterDX.length];
+        if(myRand(dx, dy, 1, 0, 1) == 0) butterDY = ButterDY[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
+        else butterDY = ButterDY[(-timeid + myRand(dx, dy, 1, 0, butterT - 1) + butterT) % butterT];
+        if (myRand(dx, dy, 0, 0, 30) == 0) {
+            int pieceX = (int) ((anchor_posx + dx * size + myRand(dx, dy, 1, 1, divide - 1) * dsize) + butterDX * dsize);
+            int pieceY = (int) ((anchor_posy + dy * size + myRand(dx, dy, -1, 1, divide - 1) * dsize) + butterDY * dsize);
             Rectangle shade = new Rectangle(pieceX, pieceY + dsize * 4, dsize * 2, dsize * 2);
             shade.setFill(darkgreen);
             root.getChildren().add(shade);
-            root.getChildren().add(butterfly);
         }
     }
 }

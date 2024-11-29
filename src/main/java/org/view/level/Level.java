@@ -152,6 +152,17 @@ public class Level {
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
                 Grass.addButterfly(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
+    public void drawButterflyShadow(){
+        double width = primaryStage.getWidth();
+        double height = primaryStage.getHeight();
+        int leftNum = (int) Math.ceil(anchor_posx / config.tile_size);
+        int rightNum = (int) Math.ceil((width - anchor_posx) / config.tile_size);
+        int upNum = (int) Math.ceil(anchor_posy / config.tile_size);
+        int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
+        for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
+            for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
+                Grass.addButterflyShadow(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
+    }
     public void drawBackGround() {
         int tileSize = config.tile_size;
         for (int y = 0; y < map.getHeight(); ++y) {
@@ -254,10 +265,11 @@ public class Level {
     public void drawMap() {
         root.getChildren().clear(); // 先清空一下地图
         drawGrass();
-        drawButterfly();
+        drawButterflyShadow();
         drawBackGround();
         drawBoxes();
         drawPlayer();
+        drawButterfly();
     }
 
     public boolean isWin() {
