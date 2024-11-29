@@ -1,12 +1,8 @@
 package org.model;
 
-public class MapMatrix {
+public class MapMatrix extends GameMap {
     private int[][] matrix; // 二进制下， 第0位表示是否有墙，第1位是否有箱子，第2位是否有玩家，第3位是否有goal
     private int[][] box_matrix;
-
-    public boolean isOne(int num, int n) {
-        return (((num >> n) & 1) == 1);
-    }
 
     public boolean hasNothing(int x, int y) {
         return matrix[y][x] == 0;
@@ -73,6 +69,7 @@ public class MapMatrix {
     }
 
     public MapMatrix(int[][] matrix) {
+        super();
         this.matrix = new int[matrix.length][matrix[0].length];
         this.box_matrix = new int[matrix.length][matrix[0].length];
         int box_index = 1; // 编号从1开始

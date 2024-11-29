@@ -5,13 +5,11 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.MapMatrix;
 import org.model.config;
-import org.view.level.Grass;
-import org.view.level.Level;
+import org.view.level.NormalLevel;
 
 import java.util.ArrayList;
 
@@ -47,7 +45,7 @@ public class player extends entity {
     public void stopCameraTimeline(){
         if(cameraTimeline != null) cameraTimeline.stop();
     }
-    private void updateAnchorPos(Level level){
+    private void updateAnchorPos(NormalLevel level){
 
         if(cameraTimeline != null) cameraTimeline.stop();
         // 得到画面中心的坐标
@@ -130,7 +128,7 @@ public class player extends entity {
 }
 
 
-    public boolean move(MapMatrix map, ArrayList<box> entities, Level level) {
+    public boolean move(MapMatrix map, ArrayList<box> entities, NormalLevel level) {
         updateAnchorPos(level);
         int newx = x + velocity_x;
         int newy = y + velocity_y;
