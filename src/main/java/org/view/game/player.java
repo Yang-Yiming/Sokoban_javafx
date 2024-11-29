@@ -99,7 +99,6 @@ public class player extends entity {
     }
 
     public void move(MapMatrix map) {
-    if (can_move(map, velocity_x, velocity_y)) {
         // 动画
         imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
         imageView.setX(imageView.getX() + velocity_x * config.tile_size); // 更新
@@ -128,16 +127,16 @@ public class player extends entity {
             imageView.setSmooth(false);
         });
         transition.play();
-    }
 }
 
 
-    public void move(MapMatrix map, ArrayList<box> entities, Level level) {
+    public boolean move(MapMatrix map, ArrayList<box> entities, Level level) {
         updateAnchorPos(level);
         int newx = x + velocity_x;
         int newy = y + velocity_y;
         if(can_move(map, velocity_x, velocity_y)){
             this.move(map);
+            return true;
         } else if(map.hasBox(newx, newy)) { // 暂时先这么写
             box e = entities.get(map.getBox_matrix_id(newx, newy) - 1); // 获得那个被推的箱子
             if(push(e, map)){
@@ -146,8 +145,10 @@ public class player extends entity {
                 //map.setBox_matrix(e.get_x(), e.get_y(), e.id);
                 this.move(map);
 //                e.setMoving(true);
+                return true;
             }
         }
+        return false;
     }
 
     public void set_velocity(int x, int y) {

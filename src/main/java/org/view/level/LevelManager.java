@@ -78,18 +78,20 @@ public class LevelManager {
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
+//             System.out.println(code);
             level.player.set_velocity(0, 0);
             int dx = 0, dy = 0;
-            if(code == KeyCode.UP || code == KeyCode.W) {dy = -1; level.player.setOrientation(1); user.addMoveCount();}
-            if(code == KeyCode.DOWN || code == KeyCode.S && !event.isControlDown()) {dy = 1; level.player.setOrientation(2); user.addMoveCount();}
-            if(code == KeyCode.LEFT || code == KeyCode.A) { dx = -1; level.player.setOrientation(3); user.addMoveCount();}
-            if(code == KeyCode.RIGHT || code == KeyCode.D) { dx = 1; level.player.setOrientation(4); user.addMoveCount();}
-            if(code == KeyCode.R){
+            if(code == KeyCode.UP || code == KeyCode.W) {dy = -1; level.player.setOrientation(1);}
+            else if(code == KeyCode.DOWN || code == KeyCode.S && !event.isControlDown()) {dy = 1; level.player.setOrientation(2);}
+            else if(code == KeyCode.LEFT || code == KeyCode.A) { dx = -1; level.player.setOrientation(3);}
+            else if(code == KeyCode.RIGHT || code == KeyCode.D) { dx = 1; level.player.setOrientation(4);}
+            else if(code == KeyCode.R){
                 level.stopTimelines();
+                user.setMoveCount(0);
                 level.init();
                 // System.out.println("reset");
             }
-            if(code == KeyCode.ESCAPE){
+            else if(code == KeyCode.ESCAPE){
                 //回到关卡选择界面并移除监听和动画
                 scene.setOnKeyPressed(null);
                 scene.setOnMousePressed(null);
@@ -97,17 +99,18 @@ public class LevelManager {
                 level.stopTimelines();
                 showLevelMenu();
             }
-            if(event.isControlDown() && code == KeyCode.S){ //同时按下control s时保存
+            else if(event.isControlDown() && code == KeyCode.S){ //同时按下control s时保存
                 try {
                     save("保存成功");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
+            else return;
 
             level.player.set_velocity(dx, dy);
             if(!level.player.is_moving){
-                level.player.move(level.getMap(), level.boxes, level);
+                if(level.player.move(level.getMap(), level.boxes, level)) user.addMoveCount();
                 level.player.setImageTowards(level.player.getOrientation());
             }
 
