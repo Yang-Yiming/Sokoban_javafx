@@ -64,7 +64,7 @@ public abstract class Level {
                 if (map.hasBox(x, y)) {
                     box temp = new box(x, y, boxIndex++);
                     temp.getImageView().setX(anchor_posx + x * config.tile_size);
-                    temp.getImageView().setY(anchor_posy + y * config.tile_size);
+                    temp.getImageView().setY(anchor_posy + (y - config.box_angle_amount) * config.tile_size);
                     boxes.add(temp);
                 }
                 if (map.hasPlayer(x, y)) {
@@ -185,7 +185,7 @@ public abstract class Level {
         }
     }
 
-    public void drawWall(int begin_x, int begin_y) {
+    public void drawBoxesAndWall(int begin_x, int begin_y) {
         int tileSize = config.tile_size;
         for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
             for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
@@ -196,10 +196,13 @@ public abstract class Level {
                     Image wallImage = map.getWallImage(x, y);
                     ImageView wall = new ImageView(wallImage);
                     wall.setFitWidth(tileSize);
-                    wall.setFitHeight(tileSize * (1.0 + config.viewing_angle_amount));
+                    wall.setFitHeight(tileSize * (1.0 + config.wall_angle_amount));
                     wall.setX(posx);
-                    wall.setY(posy - tileSize * (1.0 - config.viewing_angle_amount));
+                    wall.setY(posy - tileSize * config.wall_angle_amount);
                     root.getChildren().add(wall);
+                } else if (map.hasBox(x, y)) { // 暂时先这么写
+                     box e = boxes.get(map.getBox_matrix_id(x, y) - 1);
+                     root.getChildren().add(e.getImageView());
                 }
             }
         }
@@ -280,9 +283,9 @@ public abstract class Level {
         drawGrass();
         drawButterflyShadow();
         drawBackGround(0,0);
-        drawBoxes();
+//        drawBoxes();
         drawPlayer();
-        drawWall(0,0);
+        drawBoxesAndWall(0,0);
         drawButterfly();
         drawGUI();
     }
@@ -318,7 +321,7 @@ public abstract class Level {
 
         player.getImageView().setY(anchor_posy + player.get_y() * config.tile_size);
         for (box box : boxes) {
-            box.getImageView().setY(anchor_posy + box.get_y() * config.tile_size);
+            box.getImageView().setY(anchor_posy + (box.get_y() - config.box_angle_amount) * config.tile_size);
         }
 
     }

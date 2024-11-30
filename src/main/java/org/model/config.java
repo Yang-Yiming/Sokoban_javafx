@@ -19,7 +19,8 @@ public class config {
     public static int move_anim_duration = 300; // milliseconds
     public static int fade_anim_duration = 250;
     public static int save_text_maintain = 1000;
-    public static double viewing_angle_amount = 0.5;
+    public static double wall_angle_amount = 0.5;
+    public static double box_angle_amount = 0.3;
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例

@@ -14,7 +14,7 @@ public class box extends entity {
         this.id = id;
         image = new Image(getClass().getResourceAsStream("/images/box.png"), config.tile_size, config.tile_size, false, false);
         imageView = new ImageView(image);
-        imageView.setFitHeight(config.tile_size);
+        imageView.setFitHeight(config.tile_size * (1 + config.box_angle_amount));
         imageView.setFitWidth(config.tile_size);
     }
 
