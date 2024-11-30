@@ -12,7 +12,7 @@ public class box extends entity {
     public box(int x, int y, int id) {
         super(x, y, 1);
         this.id = id;
-        image = new Image(getClass().getResourceAsStream("/images/box.png"));
+        image = new Image(getClass().getResourceAsStream("/images/box.png"), config.tile_size, config.tile_size, false, false);
         imageView = new ImageView(image);
         imageView.setFitHeight(config.tile_size);
         imageView.setFitWidth(config.tile_size);

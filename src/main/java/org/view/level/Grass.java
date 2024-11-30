@@ -21,7 +21,7 @@ public class Grass {
     public static Color randColor(int dx, int dy){
         // 没学号可用了，就用这个吧
         int R = 124 + myRand(dx, dy, 1, -10, 10);
-        int G = 113 + myRand(dx, dy, 2, -10, 10);
+        int G = 153 + myRand(dx, dy, 2, -10, 10);
         int B = 32 + myRand(dx, dy, 3, -10, 10);
         return Color.rgb(R, G, B);
     }

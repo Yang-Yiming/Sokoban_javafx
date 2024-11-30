@@ -161,6 +161,7 @@ public abstract class Level {
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
                 Grass.addButterflyShadow(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
+
     public void drawBackGround(int begin_x, int begin_y) {
         int tileSize = config.tile_size;
         for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
@@ -168,15 +169,8 @@ public abstract class Level {
                 double posx = anchor_posx + x * tileSize;
                 double posy = anchor_posy + y * tileSize;
 
-                if (map.hasWall(x, y)) {
-                    ImageView wall = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.bmp")));
-                    wall.setFitWidth(tileSize);
-                    wall.setFitHeight(tileSize);
-                    wall.setX(posx);
-                    wall.setY(posy);
-                    root.getChildren().add(wall);
-                } else if (map.hasGoal(x, y)) {
-                    ImageView goal = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
+                if (map.hasGoal(x, y)) {
+                    ImageView goal = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png"), config.tile_size, config.tile_size, false, false));
                     goal.setFitWidth(tileSize);
                     goal.setFitHeight(tileSize);
                     goal.setX(posx);
@@ -193,6 +187,26 @@ public abstract class Level {
         //将所有 glowrectangles 里的成员置于图层最上方
         for (Rectangle rect : glowRectangles) {
             root.getChildren().add(rect);
+        }
+    }
+
+    public void drawWall(int begin_x, int begin_y) {
+        int tileSize = config.tile_size;
+        for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
+            for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
+                double posx = anchor_posx + x * tileSize;
+                double posy = anchor_posy + y * tileSize;
+
+                if (map.hasWall(x, y)) {
+                    Image wallImage = map.getWallImage(x, y);
+                    ImageView wall = new ImageView(wallImage);
+                    wall.setFitWidth(tileSize);
+                    wall.setFitHeight(tileSize * 1.5);
+                    wall.setX(posx);
+                    wall.setY(posy - tileSize * 0.5);
+                    root.getChildren().add(wall);
+                }
+            }
         }
     }
     public void updateAllRadiatingEffect() {
@@ -273,6 +287,7 @@ public abstract class Level {
         drawBackGround(0,0);
         drawBoxes();
         drawPlayer();
+        drawWall(0,0);
         drawButterfly();
         drawGUI();
     }
