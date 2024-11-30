@@ -9,35 +9,36 @@ import org.model.InfiniteMap;
 import org.model.MapMatrix;
 import org.model.User;
 
-public class NormalLevel extends Level {
+public class InfiniteLevel extends Level {
 
     private final int id;
     private boolean default_map = true;
 
-    public MapMatrix getMap() {
-        return (MapMatrix) map;
+    public InfiniteMap getMap() {
+        return (InfiniteMap) map;
     }
 
     public void init() {
         if (default_map)
-            map = new MapMatrix(mapdata.maps[id]);
+            map = new InfiniteMap(mapdata.maps[id]);
 
         super.init();
+        load_gui(user);
     }
 
-    public NormalLevel(Pane root, int id, Stage primaryStage, User user) {
+    public InfiniteLevel(Pane root, int id, Stage primaryStage, User user) {
         super(root, primaryStage, user);
         this.id = id;
-        map = new MapMatrix(mapdata.maps[id]);
+        map = new InfiniteMap(mapdata.maps[id]);
         init();
     }
-
-    public NormalLevel(Pane root, int[][] map_matrix, Stage primaryStage, int id, User user) {
+    public InfiniteLevel(Pane root, int[][] map_matrix, Stage primaryStage, int id, User user) {
         super(root, primaryStage, user);
         this.id = id;
         this.default_map = false;
-        map = new MapMatrix(map_matrix);
+        map = new InfiniteMap(map_matrix);
         init();
         this.default_map = true;
     }
+
 }

@@ -1,15 +1,11 @@
 package org.view.game;
 
-import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
-import javafx.css.SizeUnits;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import org.model.MapMatrix;
+import org.model.GameMap;
 import org.model.config;
-
-import java.lang.Math;
 
 // 所有会动的东西的父类
 public class entity {
@@ -33,11 +29,11 @@ public class entity {
     }
 
     // methods
-    public boolean can_move(MapMatrix map, int vx, int vy) {
+    public boolean can_move(GameMap map, int vx, int vy) {
         return map.hasNoObstacle(x + vx, y + vy); // 没有障碍物的时候动
     }
 
-    public void move(MapMatrix map) {
+    public void move(GameMap map) {
         if (can_move(map, velocity_x, velocity_y)) {
             // 动画
             imageView.setX(imageView.getX() + velocity_x * config.tile_size); // 更新

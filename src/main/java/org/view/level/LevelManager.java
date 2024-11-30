@@ -33,7 +33,7 @@ public class LevelManager {
     private Stage primaryStage; // 直接作为属性 不然函数里有一坨（
     private map level_menu; // 选关界面
     private int move_count;
-    private NormalLevel level;
+    private Level level;
 
     private User user = null; // 正在游玩的user，用于存档
 

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public abstract class Level {
 
-    protected MapMatrix map;
+    protected GameMap map;
     
     private Pane root;
     org.view.game.player player;
@@ -36,7 +36,7 @@ public abstract class Level {
 
     private GUIController guiController; // 显示gui
     private Pane gui_root; // gui的root
-    private User user; // 史山
+    protected User user; // 史山
 
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;
@@ -84,8 +84,8 @@ public abstract class Level {
             }
         }
         createButterflyTimeline();
-        drawMap();
         load_gui(user);
+        drawMap();
     }
     private Timeline butterflyTimeline = null;
     public void createButterflyTimeline(){
@@ -107,13 +107,13 @@ public abstract class Level {
     public Level(Pane root, Stage primaryStage, User user) {
         this.root = root;
         this.primaryStage = primaryStage;
-        init();
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
-        load_gui(user);
+        this.user = user;
+        //load_gui(user);
     }
 
-    private void load_gui(User user) {
+    protected void load_gui(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
         try {
             gui_root = loader.load();
@@ -316,5 +316,7 @@ public abstract class Level {
     public Canvas getCanvas() {
         return canvas;
     }
+
+    public abstract GameMap getMap();
 
 }
