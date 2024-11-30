@@ -24,7 +24,7 @@ public abstract class Level {
 
     protected GameMap map;
     
-    private Pane root;
+    protected Pane root;
     org.view.game.player player;
     ArrayList<box> boxes;
     private Stage primaryStage;
@@ -161,10 +161,10 @@ public abstract class Level {
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
                 Grass.addButterflyShadow(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
-    public void drawBackGround() {
+    public void drawBackGround(int begin_x, int begin_y) {
         int tileSize = config.tile_size;
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
+        for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
+            for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
                 double posx = anchor_posx + x * tileSize;
                 double posy = anchor_posy + y * tileSize;
 
@@ -270,7 +270,7 @@ public abstract class Level {
         root.getChildren().clear(); // 先清空一下地图
         drawGrass();
         drawButterflyShadow();
-        drawBackGround();
+        drawBackGround(0,0);
         drawBoxes();
         drawPlayer();
         drawButterfly();

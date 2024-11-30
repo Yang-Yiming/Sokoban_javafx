@@ -60,27 +60,6 @@ public class InfiniteMap extends GameMap {
         matrix.clear();
     }
 
-    // 加入一条道路
-    public void add_road(int begin_x, int begin_y, int width, int length, Direction direction) {
-        if(direction == Direction.LEFT) {
-            for(int i = begin_x; i > begin_x - length; i--) {
-                set(i, begin_y, 1); set(i, begin_y + width - 1, 1);
-            }
-        } else if (direction == Direction.RIGHT) {
-            for(int i = begin_x; i < begin_x + length; i++) {
-                set(i, begin_y, 1); set(i, begin_y + width - 1, 1);
-            }
-        } else if (direction == Direction.UP) {
-            for(int i = begin_y; i > begin_y - length; i--) {
-                set(begin_x, i, 1); set(begin_x + width - 1, i, 1);
-            }
-        } else if (direction == Direction.DOWN) {
-            for(int i = begin_y; i < begin_y + length; i++) {
-                set(begin_x, i, 1); set(begin_x + width - 1, i, 1);
-            }
-        }
-    }
-
     // 与正常map一样的部分
 //    // public boolean isOne(int num, int n) {
 //        return (((num >> n) & 1) == 1);
@@ -143,23 +122,21 @@ public class InfiniteMap extends GameMap {
 
     public int getWidth() {
         int width = right_boundary - left_boundary + 1;
-        return (int) Math.min(width, (double) config.ScreenWidth / config.tile_size * 1.2);
+        return width;
+        //return (int) Math.min(width, (double) config.ScreenWidth / config.tile_size * 1.2);
     }
 
     public int getHeight() {
         int height = down_boundary - up_boundary + 1;
-        return (int) Math.min(height, (double) config.ScreenHeight / config.tile_size * 1.2);
+        return height;
+        //return (int) Math.min(height, (double) config.ScreenHeight / config.tile_size * 1.2);
     }
 
-    public void add_line(int x1, int y1, int x2, int y2, int type) {
-        for(int x = x1; x <= x2; x++) {
-            for(int y = y1; y<=y2; y++) {
-                set(x,y,type);
-                if(config.is_linear(x1,y1,x2,y2,x,y) < config.EPS) {
-                    break;
-                }
-            }
-        }
+    public int getLeft_boundary() {
+        return left_boundary;
+    }
+    public int getUp_boundary() {
+        return up_boundary;
     }
 
     public InfiniteMap(int[][] matrix) {
@@ -188,6 +165,21 @@ public class InfiniteMap extends GameMap {
         matrix = new HashMap<>();
         box_matrix = new HashMap<>();
         this.DEFAULT_VALUE = DEFAULT_VALUE;
+    }
+
+    public void add_line(int x1, int y1, int dx, int dy, int value){
+        for(int x = x1; x < x1 + dx; x++){
+            set(x, y1, value);
+        }
+        for(int y = y1; y < y1 + dy; y++){
+            set(x1, y, value);
+        }
+    }
+
+    public void add_road(int x1, int y1, int width, int length) {
+        add_line(x1, y1, length, 0, 1);
+        add_line(x1, y1 + width - 1, length, 0, 1);
+        add_line(x1, y1 + 1, 0, width - 2, 0);
     }
 
 }

@@ -114,10 +114,15 @@ public class InfiniteLevelManager {
         fade.setOnFinished(event -> {
             root.getChildren().remove(label);
             level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
+            level_init();
             InLevel();
         });
 //        InLevel();
+    }
 
+    public void level_init() {
+        level.getMap().add_road(10, 3, 4, 10);
+        level.getMap().add_data(20, 3, mapdata.maps[0]);
     }
 
     public void setStage(Stage primaryStage) {

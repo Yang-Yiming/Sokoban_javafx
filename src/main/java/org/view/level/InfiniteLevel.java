@@ -41,4 +41,16 @@ public class InfiniteLevel extends Level {
         this.default_map = true;
     }
 
+    @Override
+    public void drawMap() {
+        root.getChildren().clear(); // 先清空一下地图
+        drawGrass();
+        drawButterflyShadow();
+        drawBackGround(getMap().getLeft_boundary(), getMap().getUp_boundary());
+        drawBoxes();
+        drawPlayer();
+        drawButterfly();
+        drawGUI();
+    }
+
 }
