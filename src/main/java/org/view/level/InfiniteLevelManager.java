@@ -96,11 +96,27 @@ public class InfiniteLevelManager {
 
     public void start() {
         root.getChildren().clear();
-        level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
+//        level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
         scene = primaryStage.getScene();
         scene.setRoot(root);
+        Label label = new Label("Loading...");
+        label.setTextFill(Color.BLACK);
+        label.setStyle("-fx-font-size: 20");
+        label.setTextAlignment(TextAlignment.CENTER);
+        label.setLayoutX(config.ScreenWidth / 2 - 50);
+        label.setLayoutY(config.ScreenHeight / 2 - 50);
+        root.getChildren().add(label);
+        FadeTransition fade = new FadeTransition(Duration.seconds(1), label);
+        fade.setFromValue(1);
+        fade.setToValue(0);
+        fade.play();
+        fade.setOnFinished(event -> {
+            root.getChildren().remove(label);
+            level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
+            InLevel();
+        });
+//        InLevel();
 
-        InLevel();
     }
 
     public void setStage(Stage primaryStage) {
