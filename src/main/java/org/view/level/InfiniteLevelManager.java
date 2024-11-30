@@ -48,10 +48,11 @@ public class InfiniteLevelManager {
             else if(code == KeyCode.R){
                 level.stopTimelines();
                 level.init();
-            } //else return;
+            } else return;
 
             level.player.set_velocity(dx, dy);
             if(!level.player.is_moving){
+                level.player.move(level.getMap(), level.boxes, level);
                 level.player.setImageTowards(level.player.getOrientation());
             }
 
