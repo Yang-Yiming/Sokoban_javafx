@@ -1,44 +1,35 @@
 package org.model;
 
 import java.util.HashMap;
-import java.util.Map;
 
-public class InfiniteMap {
+public class InfiniteMap extends GameMap {
 
-    public static class vector { // 二维坐标
-        public int x, y;
-        public vector(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+    HashMap<Coordinate, Integer> matrix = new HashMap<>(); // 二进制下， 第0位表示是否有墙，第1位是否有箱子，第2位是否有玩家，第3位是否有goal
+    HashMap<Coordinate, Integer> box_matrix = new HashMap<>();
 
-    HashMap<vector, Integer> matrix = new HashMap<>();
-    HashMap<vector, Integer> box_matrix = new HashMap<>();
+    private int left_boundary=0, right_boundary=0, up_boundary=0, down_boundary=0;
+
     private int DEFAULT_VALUE;
 
-    public InfiniteMap() {
-        matrix = new HashMap<>();
-        box_matrix = new HashMap<>();
-        DEFAULT_VALUE = 0;
-    }
-    public InfiniteMap(int DEFAULT_VALUE) {
-        matrix = new HashMap<>();
-        box_matrix = new HashMap<>();
-        this.DEFAULT_VALUE = DEFAULT_VALUE;
-    }
-
     public void set(int x, int y, int value) {
-        matrix.put(new vector(x, y), value);
+        if(value == 0){
+            matrix.remove(new Coordinate(x, y));
+            return;
+        }
+        matrix.put(new Coordinate(x, y), value);
+        if(x < left_boundary) left_boundary = x;
+        if(x > right_boundary) right_boundary = x;
+        if(y < up_boundary) up_boundary = y;
+        if(y > down_boundary) down_boundary = y;
     }
     public int get(int x, int y) {
-        return matrix.getOrDefault(new vector(x, y), DEFAULT_VALUE);
+        return matrix.getOrDefault(new Coordinate(x, y), DEFAULT_VALUE);
     }
 
     public void set_data(int begin_x, int begin_y, int[][] data) {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
-                set(begin_x + i, begin_y + j, data[i][j]);
+                set(begin_x + j, begin_y + i, data[i][j]);
             }
         }
     }
@@ -47,14 +38,14 @@ public class InfiniteMap {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
                 if(data[i][j] != DEFAULT_VALUE) {
-                    set(begin_x + i, begin_y + j, data[i][j]);
+                    set(begin_x + j, begin_y + i, data[i][j]);
                 }
             }
         }
     }
 
     public void delete(int x, int y) {
-        matrix.remove(new vector(x, y));
+        matrix.remove(new Coordinate(x, y));
     }
 
     public void clear(int begin_x, int begin_y, int end_x, int end_y) {
@@ -90,12 +81,11 @@ public class InfiniteMap {
         }
     }
 
-
     // 与正常map一样的部分
-    public boolean isOne(int num, int n) {
-        return (((num >> n) & 1) == 1);
-    }
-
+//    // public boolean isOne(int num, int n) {
+//        return (((num >> n) & 1) == 1);
+//    }
+  
     public boolean hasNothing(int x, int y) {
         return this.get(x, y) == 0;
     }
@@ -103,7 +93,7 @@ public class InfiniteMap {
     public boolean hasNoObstacle(int x, int y) {
         int[] ObstacleTypes = { 0, 1, 2 }; // wall box player 会阻挡
         for (int e : ObstacleTypes) {
-            if (isOne(this.get(x,y), e)) {
+            if (isOne(get(x,y), e)) {
                 return false;
             }
         }
@@ -111,7 +101,7 @@ public class InfiniteMap {
     }
 
     public boolean hasWall(int x, int y) {
-        return isOne(this.get(x,y), 0);
+        return isOne(get(x,y), 0);
     }
 
     public boolean hasBox(int x, int y) {
@@ -135,14 +125,69 @@ public class InfiniteMap {
     }
 
     public void setBox_matrix(int x, int y, int num) {
-        box_matrix.put(new vector(x, y), num);
+        box_matrix.put(new Coordinate(x, y), num);
     }
     public int getBox_matrix_id(int x, int y) {
-        return box_matrix.getOrDefault(new vector(x, y), 0);
+        return box_matrix.getOrDefault(new Coordinate(x, y), 0);
     }
 
-    public HashMap<vector, Integer> getMatrix() {
-        return matrix;
+    public int[][] getMatrix() {
+        int[][] ans = new int[getHeight()][getWidth()];
+        for (int y = up_boundary; y < down_boundary; ++y) {
+            for (int x = left_boundary; x < right_boundary; ++x) {
+                ans[y - up_boundary][x - left_boundary] = get(x, y);
+            }
+        }
+        return ans;
+    }
+
+    public int getWidth() {
+        int width = right_boundary - left_boundary + 1;
+        return (int) Math.min(width, (double) config.ScreenWidth / config.tile_size * 1.2);
+    }
+
+    public int getHeight() {
+        int height = down_boundary - up_boundary + 1;
+        return (int) Math.min(height, (double) config.ScreenHeight / config.tile_size * 1.2);
+    }
+
+    public void add_line(int x1, int y1, int x2, int y2, int type) {
+        for(int x = x1; x <= x2; x++) {
+            for(int y = y1; y<=y2; y++) {
+                set(x,y,type);
+                if(config.is_linear(x1,y1,x2,y2,x,y) < config.EPS) {
+                    break;
+                }
+            }
+        }
+    }
+
+    public InfiniteMap(int[][] matrix) {
+        set_data(0,0,matrix);
+
+        box_matrix = new HashMap<>();
+        int box_index = 1; // 编号从1开始
+
+        for (int y = 0; y < matrix.length; ++y) {
+            for (int x = 0; x < matrix[y].length; ++x) {
+                set(x, y, matrix[y][x]);
+                if(hasBox(x, y)) {
+                    setBox_matrix(x, y, box_index++);
+                } else {
+                    setBox_matrix(x, y, 0);
+                }
+            }
+        }
+    }
+    public InfiniteMap() {
+        matrix = new HashMap<>();
+        box_matrix = new HashMap<>();
+        DEFAULT_VALUE = 0;
+    }
+    public InfiniteMap(int DEFAULT_VALUE) {
+        matrix = new HashMap<>();
+        box_matrix = new HashMap<>();
+        this.DEFAULT_VALUE = DEFAULT_VALUE;
     }
 
 }

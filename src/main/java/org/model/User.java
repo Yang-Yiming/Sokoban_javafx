@@ -2,7 +2,6 @@ package org.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class User {
     public static ArrayList<User> UserInfo = new ArrayList<>(); // 所有的用户
@@ -54,7 +53,7 @@ public class User {
         return PlayingMap;
     }
 
-    public void update_info(int levelAt, int MoveCount, MapMatrix map){
+    public void update_info(int levelAt, int MoveCount, InfiniteMap map){
         this.LevelAt = levelAt;
         this.MoveCount = MoveCount;
         this.PlayingMap = map.getMatrix();

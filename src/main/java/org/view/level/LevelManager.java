@@ -3,7 +3,6 @@ package org.view.level;
 import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -11,11 +10,8 @@ import javafx.scene.input.KeyCode;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.data.mapdata;
 import org.model.SavingManager;
@@ -56,7 +52,7 @@ public class LevelManager {
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
-        level = new Level(rootLevel, currentLevel, primaryStage, user);
+        level = new NormalLevel(rootLevel, currentLevel, primaryStage, user);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 
@@ -67,7 +63,7 @@ public class LevelManager {
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
-        level = new Level(rootLevel, mapmatrix, primaryStage, currentLevel, user);
+        level = new NormalLevel(rootLevel, mapmatrix, primaryStage, currentLevel, user);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 

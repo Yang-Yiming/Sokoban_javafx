@@ -5,12 +5,11 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.model.MapMatrix;
+import org.model.GameMap;
+import org.model.GameMap;
 import org.model.config;
-import org.view.level.Grass;
 import org.view.level.Level;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class player extends entity {
         imageView.setFitWidth(config.tile_size);
     }
 
-    public boolean push(entity obj, MapMatrix map) {
+    public boolean push(entity obj, GameMap map) {
         if (obj.can_move(map, this.velocity_x, this.velocity_y)) {
             obj.velocity_x = this.velocity_x;
             obj.velocity_y = this.velocity_y;
@@ -98,7 +97,7 @@ public class player extends entity {
         cameraTimeline.play();
     }
 
-    public void move(MapMatrix map) {
+    public void move(GameMap map) {
         // 动画
         imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
         imageView.setX(imageView.getX() + velocity_x * config.tile_size); // 更新
@@ -130,7 +129,7 @@ public class player extends entity {
 }
 
 
-    public boolean move(MapMatrix map, ArrayList<box> entities, Level level) {
+    public boolean move(GameMap map, ArrayList<box> entities, Level level) {
         updateAnchorPos(level);
         int newx = x + velocity_x;
         int newy = y + velocity_y;

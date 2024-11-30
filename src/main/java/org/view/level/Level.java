@@ -1,39 +1,33 @@
 package org.view.level;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.canvas.Canvas;
-
-
 import org.data.mapdata;
-import org.model.MapMatrix;
-import org.model.User;
-import org.model.config;
+import org.model.*;
 import org.view.game.box;
 import org.view.game.player;
 
-public class Level {
+import java.io.IOException;
+import java.util.ArrayList;
 
-    private final int id;
-    private MapMatrix map;
+public abstract class Level {
+
+    protected GameMap map;
+    
     private Pane root;
-    player player;
+    org.view.game.player player;
     ArrayList<box> boxes;
     private Stage primaryStage;
-    private boolean default_map = true;
 
     private ArrayList<Rectangle> glowRectangles;
     private Rectangle[][] radiatingEffects;
@@ -42,20 +36,14 @@ public class Level {
 
     private GUIController guiController; // 显示gui
     private Pane gui_root; // gui的root
-    private User user; // 史山
+    protected User user; // 史山
 
     // 从此处开始绘制 // 这可真是依托史山啊
     private double anchor_posx;
     private double anchor_posy;
 
-    public MapMatrix getMap() {
-        return map;
-    }
-
     public void init() {
         glowTimelines.clear();
-        if(default_map)
-            map = new MapMatrix(mapdata.maps[id]);
         radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
         glowRectangles = new ArrayList<>();
         if(canvas == null)
@@ -96,6 +84,7 @@ public class Level {
             }
         }
         createButterflyTimeline();
+        load_gui(user);
         drawMap();
     }
     private Timeline butterflyTimeline = null;
@@ -115,29 +104,16 @@ public class Level {
         this.player.stopCameraTimeline();
     }
 
-    public Level(Pane root, int id, Stage primaryStage, User user) {
+    public Level(Pane root, Stage primaryStage, User user) {
         this.root = root;
-        this.id = id;
         this.primaryStage = primaryStage;
-        init();
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
-        load_gui(user);
-    }
-    public Level(Pane root, int[][] map_matrix, Stage primaryStage, int id, User user) {
-        this.root = root;
-        this.id = id;
-        this.default_map = false;
-        this.map = new MapMatrix(map_matrix);
-        this.primaryStage = primaryStage;
-        init();
-        this.default_map = true;
-        if(canvas == null)
-            canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
-        load_gui(user);
+        this.user = user;
+        //load_gui(user);
     }
 
-    private void load_gui(User user) {
+    protected void load_gui(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
         try {
             gui_root = loader.load();
@@ -271,10 +247,10 @@ public class Level {
         rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
     }
     /*
-    * 开一个数组存放所有的 glowRectangles
-    * 移动鼠标的时候，更新所有的 glowRectangles
-    * 通过 Timeline 来实现动画
-    * */
+     * 开一个数组存放所有的 glowRectangles
+     * 移动鼠标的时候，更新所有的 glowRectangles
+     * 通过 Timeline 来实现动画
+     * */
     public void drawBoxes() {
         for(box box : boxes) {
             root.getChildren().add(box.getImageView());
@@ -340,5 +316,7 @@ public class Level {
     public Canvas getCanvas() {
         return canvas;
     }
+
+    public abstract GameMap getMap();
 
 }
