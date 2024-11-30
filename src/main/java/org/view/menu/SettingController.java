@@ -42,6 +42,12 @@ public class SettingController extends HalfStageController{
     private Text MovingAnimTimeText;
 
     @FXML
+    private Slider ViewingAngleSlider;
+
+    @FXML
+    private Text ViewingAngleText;
+
+    @FXML
     private Text SettingText;
 
     @FXML
@@ -64,10 +70,12 @@ public class SettingController extends HalfStageController{
     @FXML
     void DragDone(DragEvent event) {
         config.move_anim_duration = (int) (10 + 600 * MovingAnimTimeSlider.getValue());
+       // config.viewing_angle_amount = (int) (0.2 + 0.6 * ViewingAngleSlider.getValue());// 会出问题
     }
 
     @FXML
     public void Back(MouseEvent mouseEvent) throws IOException {
+        DragDone(null);
         back_to_menu();
     }
 

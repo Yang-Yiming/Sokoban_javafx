@@ -97,9 +97,9 @@ public class InfiniteLevelManager {
 
     public void start() {
         root.getChildren().clear();
-//        level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
         scene = primaryStage.getScene();
         scene.setRoot(root);
+        //level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
         Label label = new Label("Loading...");
         label.setTextFill(Color.BLACK);
         label.setStyle("-fx-font-size: 20");

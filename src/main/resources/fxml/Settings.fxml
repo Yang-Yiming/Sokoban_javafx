@@ -25,6 +25,12 @@
                   <Slider fx:id="MovingAnimTimeSlider" max="1.0" onDragDone="#DragDone" value="0.5" />
                </children>
             </HBox>
+            <HBox fx:id="ViewingAngleHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+               <children>
+                  <Text fx:id="ViewingAngleText" strokeType="OUTSIDE" strokeWidth="0.0" text="ViewingAngle" />
+                  <Slider fx:id="ViewingAngleSlider" max="1.0" onDragDone="#DragDone" value="0.5" />
+               </children>
+            </HBox>
             <HBox fx:id="IsVerticalHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                <children>
                   <Text fx:id="IsVerticalText" strokeType="OUTSIDE" strokeWidth="0.0" text="显示地图的方向" />

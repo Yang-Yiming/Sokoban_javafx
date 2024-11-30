@@ -113,18 +113,24 @@ public class LevelManager {
             level.drawMap();
 
             if(level.isWin()){
-                level.stopTimelines();
-                user.setLevelAt(++currentLevel);
-                user.setMoveCount(0);
-                if(currentLevel == mapdata.maps.length) currentLevel = 0;
+                Win Win_anim = new Win(primaryStage, root);
 
-                loadLevel(id + 1);
+                Win_anim.win();
 
-                try {
-                    save("自动保存成功");
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                Win_anim.sequentialTransition.setOnFinished(ev -> {
+                    level.stopTimelines();
+                    user.setLevelAt(++currentLevel);
+                    user.setMoveCount(0);
+                    if(currentLevel == mapdata.maps.length) currentLevel = 0;
+
+                    loadLevel(id + 1);
+
+                    try {
+                        save("自动保存成功");
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
         });
 

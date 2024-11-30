@@ -66,18 +66,17 @@ public class MenuController {
             // 将登陆窗口的stage传给controller
             loginController.initialize(loginStage, primaryStage, this);
 
-            ChangeStageAnim(scene, loginStage);
+            ChangeStageAnim(scene, loginStage, primaryStage);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    void SettingButtonClicked(MouseEvent event) {
+    public static void open_settings(Stage primaryStage) {
         try{
             // 加载设置窗口fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Settings.fxml"));
+            FXMLLoader loader = new FXMLLoader(MenuController.class.getResource("/fxml/Settings.fxml"));
             Parent root = loader.load();
             SettingController settingController = loader.getController();
             Scene scene = new Scene(root);
@@ -89,14 +88,19 @@ public class MenuController {
             // 将设置窗口的stage传给controller
             settingController.initialize(settingStage, primaryStage);
 
-            ChangeStageAnim(scene, settingStage);
+            ChangeStageAnim(scene, settingStage, primaryStage);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void ChangeStageAnim(Scene scene, Stage newStage) { // 用于login 和 setting这两个从右侧滑过来的模块
+    @FXML
+    public void SettingButtonClicked(MouseEvent event) {
+        open_settings(primaryStage);
+    }
+
+    public static void ChangeStageAnim(Scene scene, Stage newStage, Stage primaryStage) { // 用于login 和 setting这两个从右侧滑过来的模块
         // 将背景设置为透明
         scene.setFill(null);
         newStage.setScene(scene);

@@ -25,6 +25,6 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="Settings" layoutX="739.0" layoutY="1.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="Settings" layoutX="739.0" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#Settings_Clicked" text="Settings" />
    </children>
 </AnchorPane>

@@ -12,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.data.mapdata;
 import org.model.*;
 import org.view.game.box;
 import org.view.game.player;
@@ -118,6 +117,7 @@ public abstract class Level {
         try {
             gui_root = loader.load();
             guiController = loader.getController();
+            guiController.initialize(primaryStage);
         } catch (IOException e) {
             System.out.println("Failed to load FXML file: " + e.getMessage());
             throw new RuntimeException(e);
@@ -177,11 +177,6 @@ public abstract class Level {
                     goal.setY(posy);
                     root.getChildren().add(goal);
                 }
-//                else {
-//                    Rectangle tile = n.add(tile);ew Rectangle(posx, posy, tileSize, tileSize);
-////                    tile.setFill(Color.GREY); // 空地
-////                    root.getChildren()
-//                }
             }
         }
         //将所有 glowrectangles 里的成员置于图层最上方
@@ -201,9 +196,9 @@ public abstract class Level {
                     Image wallImage = map.getWallImage(x, y);
                     ImageView wall = new ImageView(wallImage);
                     wall.setFitWidth(tileSize);
-                    wall.setFitHeight(tileSize * 1.5);
+                    wall.setFitHeight(tileSize * (1.0 + config.viewing_angle_amount));
                     wall.setX(posx);
-                    wall.setY(posy - tileSize * 0.5);
+                    wall.setY(posy - tileSize * (1.0 - config.viewing_angle_amount));
                     root.getChildren().add(wall);
                 }
             }
