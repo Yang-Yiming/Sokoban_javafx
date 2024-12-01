@@ -115,6 +115,7 @@ public class InfiniteLevelManager {
             root.getChildren().remove(label);
             level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
             level_init();
+            level.super_init();
             InLevel();
         });
 //        InLevel();

@@ -18,12 +18,16 @@ public class InfiniteLevel extends Level {
         return (InfiniteMap) map;
     }
 
+    public void super_init() {
+        super.init();
+        load_gui(user);
+    }
+
     public void init() {
         if (default_map)
             map = new InfiniteMap(mapdata.maps[id]);
 
-        super.init();
-        load_gui(user);
+        super_init();
     }
 
     public InfiniteLevel(Pane root, int id, Stage primaryStage, User user) {
@@ -43,12 +47,17 @@ public class InfiniteLevel extends Level {
 
     @Override
     public void drawMap() {
+        begin_x = getMap().getLeft_boundary();
+        begin_y = getMap().getUp_boundary();
+        sublevel_begin_x = getMap().getSublevel_begin_x();
+        sublevel_begin_y = getMap().getSublevel_begin_y();
+
         root.getChildren().clear(); // 先清空一下地图
         drawGrass();
         drawButterflyShadow();
-        drawBackGround(getMap().getLeft_boundary(), getMap().getUp_boundary());
-        drawBoxes();
+        drawBackGround();
         drawPlayer();
+        drawBoxesAndWall();
         drawButterfly();
         drawGUI();
     }

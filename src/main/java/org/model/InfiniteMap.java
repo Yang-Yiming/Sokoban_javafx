@@ -8,6 +8,7 @@ public class InfiniteMap extends GameMap {
     HashMap<Coordinate, Integer> box_matrix = new HashMap<>();
 
     private int left_boundary=0, right_boundary=0, up_boundary=0, down_boundary=0;
+    private int sublevel_begin_x, sublevel_begin_y;
 
     private int DEFAULT_VALUE;
 
@@ -42,6 +43,11 @@ public class InfiniteMap extends GameMap {
                 }
             }
         }
+    }
+
+    public void add_level(int begin_x, int begin_y, int[][] data) {
+        add_data(begin_x, begin_y, data);
+        sublevel_begin_x = begin_x; sublevel_begin_y = begin_y;
     }
 
     public void delete(int x, int y) {
@@ -137,6 +143,12 @@ public class InfiniteMap extends GameMap {
     }
     public int getUp_boundary() {
         return up_boundary;
+    }
+    public int getSublevel_begin_x() {
+        return sublevel_begin_x;
+    }
+    public int getSublevel_begin_y() {
+        return sublevel_begin_y;
     }
 
     public InfiniteMap(int[][] matrix) {

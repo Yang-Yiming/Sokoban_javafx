@@ -41,6 +41,10 @@ public abstract class Level {
     private double anchor_posx;
     private double anchor_posy;
 
+    // 在大地图上的位置
+    protected int begin_x = 0 , begin_y = 0; // 渲染坐标
+    protected int sublevel_begin_x = 0, sublevel_begin_y = 0; // 在大地图的位置
+
     public void init() {
         glowTimelines.clear();
         radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
@@ -59,8 +63,8 @@ public abstract class Level {
         setAnchor_posx((width - map.getWidth() * config.tile_size)/2);
         setAnchor_posy((height - map.getHeight() * config.tile_size)/2);
 
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
+        for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
+            for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
                 if (map.hasBox(x, y)) {
                     box temp = new box(x, y, boxIndex++);
                     temp.getImageView().setX(anchor_posx + x * config.tile_size);
@@ -75,8 +79,8 @@ public abstract class Level {
                 }
             }
         }
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
+        for (int y = sublevel_begin_y; y < sublevel_begin_y + map.getHeight(); ++y) {
+            for (int x = sublevel_begin_x; x < sublevel_begin_x + map.getWidth(); ++x) {
                 if (map.hasGoal(x, y)) {
                     createRadiatingEffect(x, y, config.tile_size);
                 }
@@ -162,7 +166,7 @@ public abstract class Level {
                 Grass.addButterflyShadow(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
 
-    public void drawBackGround(int begin_x, int begin_y) {
+    public void drawBackGround() {
         int tileSize = config.tile_size;
         for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
             for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
@@ -185,7 +189,7 @@ public abstract class Level {
         }
     }
 
-    public void drawBoxesAndWall(int begin_x, int begin_y) {
+    public void drawBoxesAndWall() {
         int tileSize = config.tile_size;
         for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
             for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
@@ -208,9 +212,9 @@ public abstract class Level {
         }
     }
     public void updateAllRadiatingEffect() {
-        for (int y = 0; y < map.getHeight(); ++y) {
-            for (int x = 0; x < map.getWidth(); ++x) {
-                if (map.hasGoal(x, y)) {
+        for (int y = 0; y < radiatingEffects.length; ++y) {
+            for (int x = 0; x < radiatingEffects[0].length; ++x) {
+                if (map.hasGoal(x + sublevel_begin_x, y + sublevel_begin_y)) {
                     updateRectangle(radiatingEffects[y][x], config.tile_size, x, y);
                 }
             }
@@ -282,10 +286,10 @@ public abstract class Level {
         root.getChildren().clear(); // 先清空一下地图
         drawGrass();
         drawButterflyShadow();
-        drawBackGround(0,0);
+        drawBackGround();
 //        drawBoxes();
         drawPlayer();
-        drawBoxesAndWall(0,0);
+        drawBoxesAndWall();
         drawButterfly();
         drawGUI();
     }

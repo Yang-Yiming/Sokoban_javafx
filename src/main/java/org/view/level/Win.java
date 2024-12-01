@@ -42,7 +42,7 @@ public class Win {
         bottomLine.setStrokeWidth(config.Win_Rect_Stroke);
 
         Label label = new Label("完成");
-        label.setStyle("-fx-font-size: 90px; -fx-text-fill: white;");
+        label.setStyle("-fx-font-size: 90px; -fx-text-fill: white; -fx-font-style: italic;");
 
         // 组合
         VBox vbox = new VBox(topLine, label, bottomLine);
@@ -53,16 +53,16 @@ public class Win {
         root.getChildren().add(vbox);
 
         // 从左边出现
-        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), vbox);
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(config.win_in_duration), vbox);
         translateTransition.setFromX(-ScreenWidth);
         translateTransition.setToX(0);
         translateTransition.setInterpolator(Interpolator.SPLINE(0.25, 0.1, 0.25, 1));
 
         // 等待2秒
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2));
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(config.win_pause_duration));
 
         // 从右边退场
-        TranslateTransition translateTransition2 = new TranslateTransition(Duration.seconds(1), vbox);
+        TranslateTransition translateTransition2 = new TranslateTransition(Duration.seconds(config.win_in_duration), vbox);
         translateTransition2.setFromX(0);
         translateTransition2.setToX(ScreenWidth);
         translateTransition2.setInterpolator(Interpolator.SPLINE(0.25, 0.1, 0.25, 1));
@@ -72,6 +72,7 @@ public class Win {
         sequentialTransition.setOnFinished(event -> {
             root.getChildren().remove(vbox);
         });
+        sequentialTransition.play();
     }
 
     public Win(Stage stage, Pane root) {

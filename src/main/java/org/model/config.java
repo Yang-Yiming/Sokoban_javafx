@@ -13,6 +13,8 @@ public class config {
     public static final int Map_Node_Gap = 20;
     public static final int Win_Rect_Height = 0;
     public static final int Win_Rect_Stroke = 8;
+    public static final double win_in_duration = 0.15;
+    public static final double win_pause_duration = 0.5;
 
     // 可以用设置改变的常量
     public static boolean is_vertical = false;
