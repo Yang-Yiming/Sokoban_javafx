@@ -43,6 +43,7 @@ public class InfiniteMap extends GameMap {
                 }
             }
         }
+        update_box();
     }
 
     public void add_level(int begin_x, int begin_y, int[][] data) {

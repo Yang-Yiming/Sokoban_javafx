@@ -60,6 +60,7 @@ public class InfiniteLevelManager {
 
             level.drawMap();
 
+            level_update();
         });
 
         // 根据鼠标拖动改变anchor_posx anchor_posy
@@ -128,7 +129,15 @@ public class InfiniteLevelManager {
         level.getMap().add_road(10, 3, 5, 10);
         level.getMap().set(20,5,0);
 
-        level.getMap().update_box();
+        //level.getMap().update_box();
+    }
+
+    public void level_update() {
+        if(level.isWin()){
+            level.getMap().set(25,5,0);
+            level.getMap().add_data(31,3, mapdata.maps[1]);
+            level.getMap().add_road(26,3,3,5);
+        }
     }
 
     public void setStage(Stage primaryStage) {
