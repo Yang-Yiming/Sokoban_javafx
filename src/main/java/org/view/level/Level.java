@@ -19,6 +19,12 @@ import org.view.game.player;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+
 public abstract class Level {
 
     protected GameMap map;
@@ -147,7 +153,6 @@ public abstract class Level {
         }
         this.user = user;
     }
-
     public void drawGrass(){
         root.getChildren().add(canvas);
         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());

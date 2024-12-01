@@ -3,8 +3,10 @@ package org.view.level;
 import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
@@ -71,6 +73,8 @@ public class LevelManager {
     }
 
     private void InLevel(int id) {
+        createDirectionButtons();
+        drawDirectionButtons(root);
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -103,36 +107,9 @@ public class LevelManager {
                 }
             }
             else return;
-            if(level.isWin()) return; // 目前来看表现正常
-            level.player.set_velocity(dx, dy);
-            if(!level.player.is_moving){
-                if(level.player.move(level.getMap(), level.boxes, level)) user.addMoveCount();
-                level.player.setImageTowards(level.player.getOrientation());
-            }
-
-            level.drawMap();
-
-            if(level.isWin()){
-                Win Win_anim = new Win(primaryStage, root);
-
-                Win_anim.win();
-
-                Win_anim.sequentialTransition.setOnFinished(ev -> {
-                    level.stopTimelines();
-                    user.setLevelAt(++currentLevel);
-                    user.setMoveCount(0);
-                    if(currentLevel == mapdata.maps.length) currentLevel = 0;
-
-                    loadLevel(id + 1);
-
-                    try {
-                        save("自动保存成功");
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            }
+            keyPressedEvent(dx, dy, id);
         });
+
 
         // 根据鼠标拖动改变anchor_posx anchor_posy
         // 鼠标是否在拖动根据鼠标拖动改变anchor_posx
@@ -169,6 +146,90 @@ public class LevelManager {
         });
     }
 
+    public void keyPressedEvent(int dx, int dy, int id){
+
+        if(level.isWin()) return; // 目前来看表现正常
+        level.player.set_velocity(dx, dy);
+        if(!level.player.is_moving){
+            if(level.player.move(level.getMap(), level.boxes, level)) user.addMoveCount();
+            level.player.setImageTowards(level.player.getOrientation());
+        }
+
+        level.drawMap();
+
+        if(level.isWin()){
+            Win Win_anim = new Win(primaryStage, root);
+
+            Win_anim.win();
+
+            Win_anim.sequentialTransition.setOnFinished(ev -> {
+                level.stopTimelines();
+                user.setLevelAt(++currentLevel);
+                user.setMoveCount(0);
+                if(currentLevel == mapdata.maps.length) currentLevel = 0;
+
+                loadLevel(id + 1);
+
+                try {
+                    save("自动保存成功");
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+    }
+
+    Button upButton, downButton, leftButton, rightButton;
+    static public VBox vbox;
+    static public HBox hbox;
+    public static void drawDirectionButtons(Pane root){
+//        root.getChildren().add(vbox);
+        root.getChildren().add(hbox);
+    }
+    public void createDirectionButtons() {
+        upButton = new Button("Up");
+        downButton = new Button("Down");
+        leftButton = new Button("Left");
+        rightButton = new Button("Right");
+
+        upButton.setFocusTraversable(false);
+        downButton.setFocusTraversable(false);
+        leftButton.setFocusTraversable(false);
+        rightButton.setFocusTraversable(false);
+
+        upButton.setOnAction(event -> simulateKeyPress(KeyCode.UP));
+        downButton.setOnAction(event -> simulateKeyPress(KeyCode.DOWN));
+        leftButton.setOnAction(event -> simulateKeyPress(KeyCode.LEFT));
+        rightButton.setOnAction(event -> simulateKeyPress(KeyCode.RIGHT));
+
+        vbox = new VBox(upButton, downButton);
+        hbox = new HBox(leftButton, vbox, rightButton);
+        hbox.setSpacing(10);
+//        vbox.setSpacing(10);
+        hbox.setLayoutX(primaryStage.getWidth() - 200);
+        hbox.setLayoutY(primaryStage.getHeight() - 200);
+//        vbox.setLayoutX(primaryStage.getWidth() - 130);
+//        vbox.setLayoutY(primaryStage.getHeight() - 110);
+    }
+    private void simulateKeyPress(KeyCode keyCode) {
+        int dx = 0, dy = 0;
+
+        switch (keyCode) {
+            case UP:
+                dy = -1; level.player.setOrientation(1);
+                break;
+            case DOWN:
+                dy = 1; level.player.setOrientation(2);
+                break;
+            case LEFT:
+                dx = -1; level.player.setOrientation(3);
+                break;
+            case RIGHT:
+                dx = 1; level.player.setOrientation(4);
+                break;
+        }
+        keyPressedEvent(dx, dy, currentLevel);
+    }
     public void start() {
         if(user.getMoveCount() > 0) {
             Alert alert  = new Alert(Alert.AlertType.CONFIRMATION);

@@ -36,6 +36,7 @@ public class GUIController {
         movecount = 0;
         movecount_num.setText(String.valueOf(movecount));
         this.primaryStage = primaryStage;
+        Settings.setFocusTraversable(false);
     }
 
     public GUIController() {
