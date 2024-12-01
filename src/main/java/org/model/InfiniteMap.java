@@ -43,7 +43,6 @@ public class InfiniteMap extends GameMap {
                 }
             }
         }
-        update_box();
     }
 
     public void add_level(int begin_x, int begin_y, int[][] data) {
@@ -131,6 +130,10 @@ public class InfiniteMap extends GameMap {
         return ans;
     }
 
+    public HashMap<Coordinate, Integer> getMatrixMap() {
+        return matrix;
+    }
+
     public int getWidth() {
         int width = right_boundary - left_boundary + 1;
         return width;
@@ -170,18 +173,6 @@ public class InfiniteMap extends GameMap {
                 } else {
                     setBox_matrix(x, y, 0);
                 }
-            }
-        }
-    }
-
-    public void update_box() {
-        int box_index = 1; // 编号从1开始
-
-        for(Coordinate key : matrix.keySet()) {
-            if(hasBox(key.x, key.y)) {
-                setBox_matrix(key.x, key.y, box_index++);
-            } else {
-                setBox_matrix(key.x, key.y, 0);
             }
         }
     }

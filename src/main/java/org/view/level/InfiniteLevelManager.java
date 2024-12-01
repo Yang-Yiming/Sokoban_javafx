@@ -15,12 +15,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.data.StartLobby;
 import org.data.mapdata;
-import org.model.SavingManager;
-import org.model.User;
-import org.model.config;
+import org.model.*;
 import org.view.LevelSelect.map;
 
 import org.data.mapdata;
+import org.view.game.box;
 
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -58,9 +57,8 @@ public class InfiniteLevelManager {
                 level.player.setImageTowards(level.player.getOrientation());
             }
 
-            level.drawMap();
-
             level_update();
+            level.drawMap();
         });
 
         // 根据鼠标拖动改变anchor_posx anchor_posy
@@ -129,14 +127,30 @@ public class InfiniteLevelManager {
         level.getMap().add_road(10, 3, 5, 10);
         level.getMap().set(20,5,0);
 
-        //level.getMap().update_box();
+        update_box();
     }
 
     public void level_update() {
         if(level.isWin()){
             level.getMap().set(25,5,0);
+            level.boxes.clear();
             level.getMap().add_data(31,3, mapdata.maps[1]);
             level.getMap().add_road(26,3,3,5);
+            update_box();
+        }
+    }
+
+    public void update_box() {
+        int box_index = 1; // 编号从1开始
+        InfiniteMap map = level.getMap();
+
+        for(Coordinate key : map.getMatrixMap().keySet()) {
+            if(map.hasBox(key.x, key.y)) {
+                map.setBox_matrix(key.x, key.y, box_index++);
+                level.boxes.add(new box(key.x, key.y, box_index));
+            } else {
+                map.setBox_matrix(key.x, key.y, 0);
+            }
         }
     }
 
