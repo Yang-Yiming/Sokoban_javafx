@@ -20,6 +20,8 @@ import org.model.User;
 import org.model.config;
 import org.view.LevelSelect.map;
 
+import org.data.mapdata;
+
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -122,8 +124,11 @@ public class InfiniteLevelManager {
     }
 
     public void level_init() {
-        level.getMap().add_road(10, 3, 4, 10);
         level.getMap().add_data(20, 3, mapdata.maps[0]);
+        level.getMap().add_road(10, 3, 5, 10);
+        level.getMap().set(20,5,0);
+
+        level.getMap().update_box();
     }
 
     public void setStage(Stage primaryStage) {

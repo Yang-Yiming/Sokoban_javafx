@@ -110,6 +110,10 @@ public class InfiniteMap extends GameMap {
     }
 
     public void setBox_matrix(int x, int y, int num) {
+        if(num == 0){
+            box_matrix.remove(new Coordinate(x, y));
+            return;
+        }
         box_matrix.put(new Coordinate(x, y), num);
     }
     public int getBox_matrix_id(int x, int y) {
@@ -168,6 +172,19 @@ public class InfiniteMap extends GameMap {
             }
         }
     }
+
+    public void update_box() {
+        int box_index = 1; // 编号从1开始
+
+        for(Coordinate key : matrix.keySet()) {
+            if(hasBox(key.x, key.y)) {
+                setBox_matrix(key.x, key.y, box_index++);
+            } else {
+                setBox_matrix(key.x, key.y, 0);
+            }
+        }
+    }
+
     public InfiniteMap() {
         matrix = new HashMap<>();
         box_matrix = new HashMap<>();
@@ -191,7 +208,9 @@ public class InfiniteMap extends GameMap {
     public void add_road(int x1, int y1, int width, int length) {
         add_line(x1, y1, length, 0, 1);
         add_line(x1, y1 + width - 1, length, 0, 1);
-        add_line(x1, y1 + 1, 0, width - 2, 0);
+        for(int i = 1; i < width - 1; i++){
+            add_line(x1, y1 + i, length, 0, 0);
+        }
     }
 
 }
