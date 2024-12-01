@@ -23,6 +23,8 @@ public class config {
     public static int save_text_maintain = 1000;
     public static double wall_angle_amount = 0.5;
     public static double box_angle_amount = 0.3;
+    public static int button_size = 50;
+    public static int button_gap = 8;
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例

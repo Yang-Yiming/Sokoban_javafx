@@ -1,11 +1,14 @@
 package org.view.level;
 
 import javafx.animation.FadeTransition;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
@@ -187,10 +190,26 @@ public class LevelManager {
         root.getChildren().add(hbox);
     }
     public void createDirectionButtons() {
-        upButton = new Button("Up");
-        downButton = new Button("Down");
-        leftButton = new Button("Left");
-        rightButton = new Button("Right");
+        Image upImage = new Image(getClass().getResourceAsStream("/images/direction/up.png"), config.button_size, config.button_size, false, false);
+        Image downImage = new Image(getClass().getResourceAsStream("/images/direction/down.png"), config.button_size, config.button_size, false, false);
+        Image leftImage = new Image(getClass().getResourceAsStream("/images/direction/left.png"), config.button_size, config.button_size, false, false);
+        Image rightImage = new Image(getClass().getResourceAsStream("/images/direction/right.png"), config.button_size, config.button_size, false, false);
+
+        upButton = new Button();
+        downButton = new Button();
+        leftButton = new Button();
+        rightButton = new Button();
+
+        upButton.setGraphic(new ImageView(upImage));
+        downButton.setGraphic(new ImageView(downImage));
+        leftButton.setGraphic(new ImageView(leftImage));
+        rightButton.setGraphic(new ImageView(rightImage));
+
+        // Remove button background, border, and text
+        upButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        downButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        leftButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        rightButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
 
         upButton.setFocusTraversable(false);
         downButton.setFocusTraversable(false);
@@ -201,15 +220,25 @@ public class LevelManager {
         downButton.setOnAction(event -> simulateKeyPress(KeyCode.DOWN));
         leftButton.setOnAction(event -> simulateKeyPress(KeyCode.LEFT));
         rightButton.setOnAction(event -> simulateKeyPress(KeyCode.RIGHT));
-
         vbox = new VBox(upButton, downButton);
         hbox = new HBox(leftButton, vbox, rightButton);
-        hbox.setSpacing(10);
-//        vbox.setSpacing(10);
+        hbox.setAlignment(Pos.BOTTOM_CENTER);
         hbox.setLayoutX(primaryStage.getWidth() - 200);
         hbox.setLayoutY(primaryStage.getHeight() - 200);
-//        vbox.setLayoutX(primaryStage.getWidth() - 130);
-//        vbox.setLayoutY(primaryStage.getHeight() - 110);
+        //缩小按钮间距
+        upButton.setMinSize(config.button_size, config.button_size);
+        downButton.setMinSize(config.button_size, config.button_size);
+        leftButton.setMinSize(config.button_size, config.button_size);
+        rightButton.setMinSize(config.button_size, config.button_size);
+        upButton.setMaxSize(config.button_size, config.button_size);
+        downButton.setMaxSize(config.button_size, config.button_size);
+        leftButton.setMaxSize(config.button_size, config.button_size);
+        rightButton.setMaxSize(config.button_size, config.button_size);
+
+        //缩小按钮的间隔
+        vbox.setSpacing(config.button_gap);
+        hbox.setSpacing(config.button_gap);
+
     }
     private void simulateKeyPress(KeyCode keyCode) {
         int dx = 0, dy = 0;
