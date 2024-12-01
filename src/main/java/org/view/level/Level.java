@@ -45,6 +45,8 @@ public abstract class Level {
     protected int begin_x = 0 , begin_y = 0; // 渲染坐标
     protected int sublevel_begin_x = 0, sublevel_begin_y = 0; // 在大地图的位置
 
+    private Rectangle fadeRectangle;
+    private Timeline fadeTimeline;
     public void init() {
         glowTimelines.clear();
         radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
@@ -88,6 +90,23 @@ public abstract class Level {
         }
         createButterflyTimeline();
         load_gui(user);
+        fadeRectangle = new Rectangle(primaryStage.getWidth(), primaryStage.getHeight(), Color.BLACK);
+        fadeRectangle.setX(0);
+        fadeRectangle.setY(0);
+        fadeRectangle.setOpacity(1.0);
+        root.getChildren().add(fadeRectangle);
+        //让长方形逐渐变淡
+        if(fadeTimeline != null) fadeTimeline.stop();
+        fadeTimeline = new Timeline(new KeyFrame(Duration.seconds(0.02), e -> {
+            fadeRectangle.setOpacity(fadeRectangle.getOpacity() - 0.02);
+            if(fadeRectangle.getOpacity() <= 0){
+                fadeRectangle.setOpacity(0);
+                fadeTimeline.stop();
+                root.getChildren().remove(fadeRectangle);
+            }
+        }));
+        fadeTimeline.setCycleCount(Animation.INDEFINITE);
+        fadeTimeline.play();
         drawMap();
     }
     private Timeline butterflyTimeline = null;
@@ -292,6 +311,7 @@ public abstract class Level {
         drawBoxesAndWall();
         drawButterfly();
         drawGUI();
+        root.getChildren().add(fadeRectangle);
     }
 
     public boolean isWin() {

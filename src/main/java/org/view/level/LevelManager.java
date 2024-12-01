@@ -103,7 +103,7 @@ public class LevelManager {
                 }
             }
             else return;
-
+            if(level.isWin()) return; // 目前来看表现正常
             level.player.set_velocity(dx, dy);
             if(!level.player.is_moving){
                 if(level.player.move(level.getMap(), level.boxes, level)) user.addMoveCount();
