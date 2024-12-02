@@ -23,7 +23,7 @@ public class MenuView extends AnchorPane {
         setPrefHeight(600.0);
         setPrefWidth(800.0);
 
-        ImageView title = new ImageView(new Image(getClass().getResourceAsStream("/images/title.png")));
+        ImageView title = new ImageView(new Image(getClass().getResourceAsStream("/images/title.png"))); //有 gif 了
         title.setLayoutX(200.0);
         title.setLayoutY(50.0);
         title.setFitHeight(200.0);
@@ -33,25 +33,27 @@ public class MenuView extends AnchorPane {
         double centerY = title.getLayoutY() - title.getFitHeight() / 2;
         title.setTranslateX(centerX);
         title.setTranslateY(centerY);
+
         // Add rotate animation
+        // 太可爱了建议保留
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.ZERO,
                     new KeyValue(title.rotateProperty(), 0),
                     new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
                     new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(800),
+            new KeyFrame(Duration.millis(5000),
                     new KeyValue(title.rotateProperty(), -4),
                     new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
                     new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(1600),
+            new KeyFrame(Duration.millis(10000),
                     new KeyValue(title.rotateProperty(), 0),
                     new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
                     new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(2400),
+            new KeyFrame(Duration.millis(15000),
                     new KeyValue(title.rotateProperty(), 4),
                     new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
                     new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(3200),
+            new KeyFrame(Duration.millis(20000),
                     new KeyValue(title.rotateProperty(), 0),
                     new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
                     new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight()))

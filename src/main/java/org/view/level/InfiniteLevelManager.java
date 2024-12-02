@@ -168,6 +168,7 @@ public class InfiniteLevelManager {
         for(Coordinate key : keys) {
             map.setBox_matrix(key.x, key.y, box_index++);
             level.boxes.add(new box(key.x, key.y, box_index));
+            System.out.println("add boxes");
         }
     }
 

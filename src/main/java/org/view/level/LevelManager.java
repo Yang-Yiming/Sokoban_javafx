@@ -141,11 +141,13 @@ public class LevelManager {
             // level.setAnchor_posx(level.getAnchor_posx() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
             level.getCanvas().setWidth(newValue.doubleValue());
             level.drawMap();
+            setDirectionButtons();
         });
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
             // level.setAnchor_posy(level.getAnchor_posy() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
             level.getCanvas().setHeight(newValue.doubleValue());
             level.drawMap();
+            setDirectionButtons();
         });
     }
 
@@ -189,11 +191,16 @@ public class LevelManager {
 //        root.getChildren().add(vbox);
         root.getChildren().add(hbox);
     }
+    public void setDirectionButtons(){
+        hbox.setLayoutX(primaryStage.getWidth() - 200);
+        hbox.setLayoutY(primaryStage.getHeight() - 200);
+    }
     public void createDirectionButtons() {
         Image upImage = new Image(getClass().getResourceAsStream("/images/direction/up.png"), config.button_size, config.button_size, false, false);
         Image downImage = new Image(getClass().getResourceAsStream("/images/direction/down.png"), config.button_size, config.button_size, false, false);
         Image leftImage = new Image(getClass().getResourceAsStream("/images/direction/left.png"), config.button_size, config.button_size, false, false);
         Image rightImage = new Image(getClass().getResourceAsStream("/images/direction/right.png"), config.button_size, config.button_size, false, false);
+
 
         upButton = new Button();
         downButton = new Button();
@@ -217,14 +224,25 @@ public class LevelManager {
         rightButton.setFocusTraversable(false);
 
         upButton.setOnAction(event -> simulateKeyPress(KeyCode.UP));
+        upButton.setOnMouseEntered(event -> upButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/up_clicked.png"), config.button_size, config.button_size, false, false))));
+        upButton.setOnMouseExited(event -> upButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/up.png"), config.button_size, config.button_size, false, false))));
+
         downButton.setOnAction(event -> simulateKeyPress(KeyCode.DOWN));
+        downButton.setOnMouseEntered(event -> downButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/down_clicked.png"), config.button_size, config.button_size, false, false))));
+        downButton.setOnMouseExited(event -> downButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/down.png"), config.button_size, config.button_size, false, false))));
+
         leftButton.setOnAction(event -> simulateKeyPress(KeyCode.LEFT));
+        leftButton.setOnMouseEntered(event -> leftButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/left_clicked.png"), config.button_size, config.button_size, false, false))));
+        leftButton.setOnMouseExited(event -> leftButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/left.png"), config.button_size, config.button_size, false, false))));
+
         rightButton.setOnAction(event -> simulateKeyPress(KeyCode.RIGHT));
+        rightButton.setOnMouseEntered(event -> rightButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/right_clicked.png"), config.button_size, config.button_size, false, false))));
+        rightButton.setOnMouseExited(event -> rightButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/right.png"), config.button_size, config.button_size, false, false))));
+
         vbox = new VBox(upButton, downButton);
         hbox = new HBox(leftButton, vbox, rightButton);
         hbox.setAlignment(Pos.BOTTOM_CENTER);
-        hbox.setLayoutX(primaryStage.getWidth() - 200);
-        hbox.setLayoutY(primaryStage.getHeight() - 200);
+        setDirectionButtons();
         //缩小按钮间距
         upButton.setMinSize(config.button_size, config.button_size);
         downButton.setMinSize(config.button_size, config.button_size);

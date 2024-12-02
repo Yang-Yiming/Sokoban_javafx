@@ -60,6 +60,8 @@ public class InfiniteLevel extends Level {
         drawBoxesAndWall();
         drawButterfly();
         drawGUI();
+        //输出 boxes 数量
+//        System.out.println("boxes: " + boxes.size());
     }
 
 }
