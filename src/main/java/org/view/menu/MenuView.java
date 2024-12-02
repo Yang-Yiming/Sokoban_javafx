@@ -1,12 +1,11 @@
 package org.view.menu;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -19,7 +18,7 @@ public class MenuView extends AnchorPane {
     private Button settingsButton;
     MenuController menuController;
 
-    public MenuView(MenuController menuController) {
+    public MenuView(MenuController menuController){
         this.menuController = menuController;
         setPrefHeight(600.0);
         setPrefWidth(800.0);
@@ -60,15 +59,7 @@ public class MenuView extends AnchorPane {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        startButton = new Button("Start");
-        startButton.setLayoutX(315.0);
-        startButton.setLayoutY(310.0);
-        startButton.setPrefHeight(57.0);
-        startButton.setPrefWidth(161.0);
-        startButton.setFont(new Font(30.0));
-        startButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
-        startButton.setOnMouseEntered(event -> startButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-font-size: 35px;"));
-        startButton.setOnMouseExited(event -> startButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-font-size: 30px;"));
+        startButton = generate_button("开始", 315, 310);
         startButton.setOnMouseClicked(event -> startButtonClicked());
 
         loginButton = new Button("Login");
@@ -88,9 +79,49 @@ public class MenuView extends AnchorPane {
         getChildren().addAll(title, startButton, loginButton, settingsButton);
     }
 
+    private Button generate_button(String text, double x, double y) {
+        Button btn = new Button(text);
+        btn.setLayoutX(x - btn.getPrefWidth() / 2);
+        btn.setLayoutY(y - btn.getPrefHeight() / 2);
+        btn.setPrefHeight(57.0);
+        // btn.setPrefWidth(161.0);
+        btn.setFont(new Font(30.0));
+        btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
+        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-font-size: 35px;"));
+        btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-font-size: 30px;"));
+        return btn;
+    }
+
     private void startButtonClicked() {
+        // 按钮生成
+        Button btn_mode1 = generate_button("经典模式", 315, 270);
+        Button btn_mode2 = generate_button("无尽模式", 315, 320);
+        Button btn_mode3 = generate_button("双人模式", 315, 370);
+        getChildren().addAll(btn_mode1, btn_mode2, btn_mode3);
+
+        // 动画
+        FadeTransition btn1_transition = generate_fade_transition(btn_mode1,0.2, 0.0, 1.0);
+        FadeTransition btn2_transition = generate_fade_transition(btn_mode2,0.2, 0.0, 1.0);
+        FadeTransition btn3_transition = generate_fade_transition(btn_mode3,0.2, 0.0, 1.0);
+
+        FadeTransition fadeTransition = generate_fade_transition(startButton,0.2, 1.0, 0.0);
+        fadeTransition.setOnFinished(event -> {
+            getChildren().remove(startButton);
+            btn1_transition.play();
+            btn2_transition.play();
+            btn3_transition.play();
+        });
         // Handle start button click
-        menuController.StartButtonClicked();
+        btn_mode1.setOnMouseClicked(event -> menuController.StartButtonClicked());
+        //menuController.StartButtonClicked();
+    }
+
+    private FadeTransition generate_fade_transition(Button button, double duration, double from, double to) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(duration), button);
+        fadeTransition.setFromValue(from);
+        fadeTransition.setToValue(to);
+        fadeTransition.play();
+        return fadeTransition;
     }
 
     private void loginButtonClicked() {
