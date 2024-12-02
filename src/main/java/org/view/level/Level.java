@@ -18,6 +18,7 @@ import org.view.game.player;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -35,7 +36,7 @@ public abstract class Level {
     private Stage primaryStage;
 
     private ArrayList<Rectangle> glowRectangles;
-    private Rectangle[][] radiatingEffects;
+    private HashMap<Coordinate, Rectangle> radiatingEffects;
 
     private Canvas canvas; // 用来放grass
 
@@ -55,7 +56,7 @@ public abstract class Level {
     private Timeline fadeTimeline;
     public void init() {
         glowTimelines.clear();
-        radiatingEffects = new Rectangle[map.getHeight()][map.getWidth()];
+        radiatingEffects = new HashMap<>();
         glowRectangles = new ArrayList<>();
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
@@ -230,17 +231,18 @@ public abstract class Level {
                     root.getChildren().add(wall);
                 } else if (map.hasBox(x, y)) { // 暂时先这么写
                      box e = boxes.get(map.getBox_matrix_id(x, y) - 1);
-                     root.getChildren().add(e.getImageView());
+                     if(!root.getChildren().contains(e.getImageView()))
+                        root.getChildren().add(e.getImageView());
                 }
             }
         }
     }
     public void updateAllRadiatingEffect() {
-        for (int y = 0; y < radiatingEffects.length; ++y) {
-            for (int x = 0; x < radiatingEffects[0].length; ++x) {
-                if (map.hasGoal(x + sublevel_begin_x, y + sublevel_begin_y)) {
-                    updateRectangle(radiatingEffects[y][x], config.tile_size, x, y);
-                }
+        for (Coordinate pos : radiatingEffects.keySet()) {
+            int x = pos.x;
+            int y = pos.y;
+            if (map.hasGoal(x + sublevel_begin_x, y + sublevel_begin_y)) {
+                updateRectangle(radiatingEffects.get(pos), config.tile_size, x, y);
             }
         }
     }
@@ -258,7 +260,7 @@ public abstract class Level {
         rect.setStrokeWidth(2);
         // root.getChildren().add(rect);
         glowRectangles.add(rect);
-        radiatingEffects[y][x] = rect;
+        radiatingEffects.put(new Coordinate(y - sublevel_begin_y, x - sublevel_begin_x), rect);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             if(rect.getWidth() > tileSize * highLimit) {
                 rect.setWidth(tileSize * lowLimit);

@@ -22,6 +22,8 @@ import org.data.mapdata;
 import org.view.game.box;
 
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -49,6 +51,7 @@ public class InfiniteLevelManager {
             else if(code == KeyCode.R){
                 level.stopTimelines();
                 level.init();
+                level.super_init();
             } else return;
 
             level.player.set_velocity(dx, dy);
@@ -116,41 +119,55 @@ public class InfiniteLevelManager {
             root.getChildren().remove(label);
             level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
             level_init();
+            update_box();
             level.super_init();
             InLevel();
         });
-//        InLevel();
     }
 
     public void level_init() {
-        level.getMap().add_data(20, 3, mapdata.maps[0]);
+        level.getMap().add_level(20, 3, mapdata.maps[0]);
         level.getMap().add_road(10, 3, 5, 10);
+        level.getMap().add_road(26,3,5,5);
         level.getMap().set(20,5,0);
+    }
 
+    public void win_update() {
+        level.getMap().set(25,4,0);
+        level.getMap().add_level(31,3, mapdata.maps[1]);
+        level.getMap().set(31,4,0);
         update_box();
     }
 
     public void level_update() {
         if(level.isWin()){
-            level.getMap().set(25,5,0);
-            level.boxes.clear();
-            level.getMap().add_data(31,3, mapdata.maps[1]);
-            level.getMap().add_road(26,3,3,5);
-            update_box();
+            clear_box();
+            win_update();
         }
+    }
+
+    public void clear_box() {
+        level.getMap().getBox_matrix().clear();
+
+        level.getMap().getMatrixMap().keySet().stream()
+                .filter(coord -> level.getMap().hasBox(coord.x, coord.y))
+                .forEach(coord -> level.getMap().remove(coord.x, coord.y, 2));
     }
 
     public void update_box() {
         int box_index = 1; // 编号从1开始
         InfiniteMap map = level.getMap();
+        if(!map.getBox_matrix().isEmpty())
+            clear_box();
 
-        for(Coordinate key : map.getMatrixMap().keySet()) {
-            if(map.hasBox(key.x, key.y)) {
-                map.setBox_matrix(key.x, key.y, box_index++);
-                level.boxes.add(new box(key.x, key.y, box_index));
-            } else {
-                map.setBox_matrix(key.x, key.y, 0);
-            }
+        List<Coordinate> keys = map.getMatrixMap().keySet()
+                .stream()
+                .filter(integer -> map.hasBox(integer.x, integer.y) && integer.x >= level.sublevel_begin_x && integer.y >= level.sublevel_begin_y)
+                .toList();
+
+        for(Coordinate key : keys) {
+            map.setBox_matrix(key.x, key.y, box_index++);
+            level.boxes.add(new box(key.x, key.y, box_index));
         }
     }
 

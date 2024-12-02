@@ -19,6 +19,7 @@ public class test extends Application {
         InfiniteLevelManager manager = new InfiniteLevelManager(primaryStage);
         manager.start();
         primaryStage.show();
+        config.move_anim_duration = 10; // debug
     }
 
     public static void main(String[] args) {

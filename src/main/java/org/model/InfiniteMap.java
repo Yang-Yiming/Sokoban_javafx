@@ -133,6 +133,7 @@ public class InfiniteMap extends GameMap {
     public HashMap<Coordinate, Integer> getMatrixMap() {
         return matrix;
     }
+    public HashMap<Coordinate, Integer> getBox_matrix() { return box_matrix; }
 
     public int getWidth() {
         int width = right_boundary - left_boundary + 1;
@@ -146,6 +147,12 @@ public class InfiniteMap extends GameMap {
         //return (int) Math.min(height, (double) config.ScreenHeight / config.tile_size * 1.2);
     }
 
+    public int getRight_boundary() {
+        return right_boundary;
+    }
+    public int getDown_boundary() {
+        return down_boundary;
+    }
     public int getLeft_boundary() {
         return left_boundary;
     }
