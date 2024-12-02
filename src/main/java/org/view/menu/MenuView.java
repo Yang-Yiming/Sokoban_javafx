@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.model.config;
 
 import java.sql.Time;
 
@@ -89,8 +90,32 @@ public class MenuView extends AnchorPane {
         // btn.setPrefWidth(161.0);
         btn.setFont(new Font(30.0));
         btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
-        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-font-size: 35px;"));
-        btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-font-size: 30px;"));
+
+        // 字体大小变化
+
+        btn.setOnMouseEntered( event -> {
+            Timeline fontSizeTimeline = new Timeline();
+
+            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
+                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
+            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
+                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
+
+            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
+            fontSizeTimeline.play();
+        });
+        btn.setOnMouseExited(event -> {
+            Timeline fontSizeTimeline = new Timeline();
+
+            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
+                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
+            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
+                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
+
+            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
+            fontSizeTimeline.play();
+        });
+
         return btn;
     }
 
