@@ -4,12 +4,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -19,11 +17,8 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.model.User;
 import org.view.level.LevelManager;
-import org.view.menu.LoginController;
-import org.view.menu.SettingController;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class MenuController {
 
@@ -41,17 +36,17 @@ public class MenuController {
         user = new User("",""); // 初始化一个空的user 不然login无法更改他
     }
 
-    @FXML
-    private Button Login;
+//    @FXML
+//    private Button Login;
+//
+//    @FXML
+//    private Button Settings;
+//
+//    @FXML
+//    private Button StartButton;
 
-    @FXML
-    private Button Settings;
-
-    @FXML
-    private Button StartButton;
-
-    @FXML
-    void LoginButtonClicked(MouseEvent event) throws IOException {
+//    @FXML
+    void LoginButtonClicked() {
         try{
             // 加载登陆窗口fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
@@ -95,8 +90,8 @@ public class MenuController {
         }
     }
 
-    @FXML
-    public void SettingButtonClicked(MouseEvent event) {
+//    @FXML
+    public void SettingButtonClicked() {
         open_settings(primaryStage);
     }
 
@@ -133,8 +128,8 @@ public class MenuController {
         timeline.play();
     }
 
-    @FXML
-    void StartButtonClicked(MouseEvent event) {
+//    @FXML
+    public void StartButtonClicked() {
         if(user == null || user.getName().isEmpty()){ // 好蠢的判断
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
