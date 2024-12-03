@@ -20,11 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-
 
 public abstract class Level {
 
@@ -49,7 +44,6 @@ public abstract class Level {
     private double anchor_posy;
 
     // 在大地图上的位置
-    protected int begin_x = 0 , begin_y = 0; // 渲染坐标
     protected int sublevel_begin_x = 0, sublevel_begin_y = 0; // 在大地图的位置
 
     private Rectangle fadeRectangle;
@@ -72,8 +66,8 @@ public abstract class Level {
         setAnchor_posx((width - map.getWidth() * config.tile_size)/2);
         setAnchor_posy((height - map.getHeight() * config.tile_size)/2);
 
-        for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
-            for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
                 if (map.hasBox(x, y)) {
                     box temp = new box(x, y, boxIndex++);
                     temp.getImageView().setX(anchor_posx + x * config.tile_size);
@@ -193,8 +187,8 @@ public abstract class Level {
 
     public void drawBackGround() {
         int tileSize = config.tile_size;
-        for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
-            for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
                 double posx = anchor_posx + x * tileSize;
                 double posy = anchor_posy + y * tileSize;
 
@@ -214,14 +208,23 @@ public abstract class Level {
         }
     }
 
+    private boolean inScreen(double posx, double posy) {
+        double width = primaryStage.getWidth();
+        double height = primaryStage.getHeight();
+        return !(posx < -config.tile_size) &&
+                !(posy < -config.tile_size) &&
+                !(posx > width + config.tile_size) &&
+                !(posy > height + config.tile_size);
+    }
+
     public void drawBoxesAndWall() {
         int tileSize = config.tile_size;
-        for (int y = begin_y; y < begin_y + map.getHeight(); ++y) {
-            for (int x = begin_x; x < begin_x + map.getWidth(); ++x) {
+        for (int y = 0; y < map.getHeight(); ++y) {
+            for (int x = 0; x < map.getWidth(); ++x) {
                 double posx = anchor_posx + x * tileSize;
                 double posy = anchor_posy + y * tileSize;
 
-                if (map.hasWall(x, y)) {
+                if (map.hasWall(x, y) && inScreen(posx, posy)) {
                     Image wallImage = map.getWallImage(x, y);
                     ImageView wall = new ImageView(wallImage);
                     wall.setFitWidth(tileSize);
@@ -229,7 +232,7 @@ public abstract class Level {
                     wall.setX(posx);
                     wall.setY(posy - tileSize * config.wall_angle_amount);
                     root.getChildren().add(wall);
-                } else if (map.hasBox(x, y)) { // 暂时先这么写
+                } else if (map.hasBox(x, y) && inScreen(posx, posy)) { // 暂时先这么写
                      box e = boxes.get(map.getBox_matrix_id(x, y) - 1);
                      if(!root.getChildren().contains(e.getImageView()))
                         root.getChildren().add(e.getImageView());
