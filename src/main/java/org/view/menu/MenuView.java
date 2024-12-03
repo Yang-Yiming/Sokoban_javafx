@@ -27,7 +27,7 @@ public class MenuView extends AnchorPane {
         setPrefHeight(600.0);
         setPrefWidth(800.0);
 
-        title = new ImageView(new Image(getClass().getResourceAsStream("/images/title.png"))); //有 gif 了
+        title = new ImageView(new Image(getClass().getResourceAsStream("/images/title.gif"))); //有 gif 了
         title.setLayoutX(200.0);
         title.setLayoutY(50.0);
         title.setFitHeight(200.0);
@@ -42,30 +42,30 @@ public class MenuView extends AnchorPane {
 
         // Add rotate animation
         // 太可爱了建议保留
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO,
-                        new KeyValue(title.rotateProperty(), 0),
-                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
-                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
-                new KeyFrame(Duration.millis(5000),
-                        new KeyValue(title.rotateProperty(), -4),
-                        new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
-                        new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
-                new KeyFrame(Duration.millis(10000),
-                        new KeyValue(title.rotateProperty(), 0),
-                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
-                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
-                new KeyFrame(Duration.millis(15000),
-                        new KeyValue(title.rotateProperty(), 4),
-                        new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
-                        new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
-                new KeyFrame(Duration.millis(20000),
-                        new KeyValue(title.rotateProperty(), 0),
-                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
-                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight()))
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+//        Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.ZERO,
+//                        new KeyValue(title.rotateProperty(), 0),
+//                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
+//                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
+//                new KeyFrame(Duration.millis(5000),
+//                        new KeyValue(title.rotateProperty(), -4),
+//                        new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
+//                        new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
+//                new KeyFrame(Duration.millis(10000),
+//                        new KeyValue(title.rotateProperty(), 0),
+//                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
+//                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
+//                new KeyFrame(Duration.millis(15000),
+//                        new KeyValue(title.rotateProperty(), 4),
+//                        new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
+//                        new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
+//                new KeyFrame(Duration.millis(20000),
+//                        new KeyValue(title.rotateProperty(), 0),
+//                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
+//                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight()))
+//        );
+//        timeline.setCycleCount(Timeline.INDEFINITE);
+//        timeline.play();
 
         startButton = generate_button("开始", (getPrefWidth() - 100) / 2, 310);
         startButton.setOnMouseClicked(event -> startButtonClicked());
@@ -143,7 +143,7 @@ public class MenuView extends AnchorPane {
         btn_mode1 = generate_button("经典模式", 300, 270);
         btn_mode2 = generate_button("无尽模式", 300, 320);
         btn_mode3 = generate_button("双人模式", 300, 370);
-        changeBtnPosX(getPrefWidth());
+        changeBtnPosX(getWidth());
         getChildren().addAll(btn_mode1, btn_mode2, btn_mode3);
 
         // 动画
