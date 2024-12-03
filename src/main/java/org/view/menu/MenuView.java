@@ -82,6 +82,18 @@ public class MenuView extends AnchorPane {
         getChildren().addAll(title, startButton, loginButton, settingsButton);
     }
 
+    private ScaleTransition createScaleTransition(Button button, double size1, double size2, Duration duration) {
+        ScaleTransition scaleTransition = new ScaleTransition(duration, button);
+        scaleTransition.setFromX(size1);
+        scaleTransition.setFromY(size1);
+        scaleTransition.setToX(size2);
+        scaleTransition.setToY(size2);
+        scaleTransition.setCycleCount(1);
+        scaleTransition.setAutoReverse(true); // 动画结束后自动反向播放
+        return scaleTransition;
+    }
+
+    private Timeline fontSizeTimeline = null;
     private Button generate_button(String text, double x, double y) {
         Button btn = new Button(text);
         btn.setLayoutX(x - btn.getPrefWidth() / 2);
@@ -90,31 +102,38 @@ public class MenuView extends AnchorPane {
         // btn.setPrefWidth(161.0);
         btn.setFont(new Font(30.0));
         btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
+        ScaleTransition scaleUp = createScaleTransition(btn, 1, config.font_size_2 / config.font_size_1, Duration.millis(config.font_size_change_millis));
+        ScaleTransition scaleDown = createScaleTransition(btn, config.font_size_2 / config.font_size_1, 1, Duration.millis(config.font_size_change_millis));
 
         // 字体大小变化
+//        btn.setOnMouseEntered( event -> {
+//            fontSizeTimeline = new Timeline();
+//
+//            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
+//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
+//            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
+//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
+//
+//            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
+//            fontSizeTimeline.play();
+//        });
+//        btn.setOnMouseExited(event -> {
+//            fontSizeTimeline = new Timeline();
+//
+//            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
+//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
+//            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
+//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
+//
+//            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
+//            fontSizeTimeline.play();
+//        });
 
-        btn.setOnMouseEntered( event -> {
-            Timeline fontSizeTimeline = new Timeline();
+        btn.setOnMouseEntered(event -> scaleUp.play());
 
-            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
-                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
-            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
-                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
+        // 鼠标离开事件
+        btn.setOnMouseExited(event -> scaleDown.play());
 
-            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
-            fontSizeTimeline.play();
-        });
-        btn.setOnMouseExited(event -> {
-            Timeline fontSizeTimeline = new Timeline();
-
-            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
-                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
-            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
-                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
-
-            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
-            fontSizeTimeline.play();
-        });
 
         return btn;
     }

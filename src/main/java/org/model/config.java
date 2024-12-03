@@ -17,7 +17,7 @@ public class config {
     public static final double win_pause_duration = 0.5;
     public static final double font_size_1 = 30;
     public static final double font_size_2 = 35;
-    public static final int font_size_change_millis = 1;
+    public static final int font_size_change_millis = 200;
 
     // 可以用设置改变的常量
     public static boolean is_vertical = false;
