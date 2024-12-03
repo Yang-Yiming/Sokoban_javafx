@@ -43,26 +43,26 @@ public class MenuView extends AnchorPane {
         // Add rotate animation
         // 太可爱了建议保留
         Timeline timeline = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                    new KeyValue(title.rotateProperty(), 0),
-                    new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
-                    new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(5000),
-                    new KeyValue(title.rotateProperty(), -4),
-                    new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
-                    new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(10000),
-                    new KeyValue(title.rotateProperty(), 0),
-                    new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
-                    new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(15000),
-                    new KeyValue(title.rotateProperty(), 4),
-                    new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
-                    new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
-            new KeyFrame(Duration.millis(20000),
-                    new KeyValue(title.rotateProperty(), 0),
-                    new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
-                    new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight()))
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(title.rotateProperty(), 0),
+                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
+                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
+                new KeyFrame(Duration.millis(5000),
+                        new KeyValue(title.rotateProperty(), -4),
+                        new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
+                        new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
+                new KeyFrame(Duration.millis(10000),
+                        new KeyValue(title.rotateProperty(), 0),
+                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
+                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight())),
+                new KeyFrame(Duration.millis(15000),
+                        new KeyValue(title.rotateProperty(), 4),
+                        new KeyValue(title.fitWidthProperty(), 1.2 * title.getFitWidth()),
+                        new KeyValue(title.fitHeightProperty() , 1.2 * title.getFitHeight())),
+                new KeyFrame(Duration.millis(20000),
+                        new KeyValue(title.rotateProperty(), 0),
+                        new KeyValue(title.fitWidthProperty(), 1 * title.getFitWidth()),
+                        new KeyValue(title.fitHeightProperty() , 1 * title.getFitHeight()))
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
