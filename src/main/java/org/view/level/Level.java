@@ -120,10 +120,8 @@ public abstract class Level {
     public void stopTimelines(){
         butterflyTimeline.stop();
         this.player.stopCameraTimeline();
-
-        for(GlowRectangle rect : GlowRectangle.glowRectangles) {
-            rect.getTimeline().stop();
-        }
+        GlowRectangle.timeline.stop();
+        //GlowRectangle.timeline = null;
     }
 
     public Level(Pane root, Stage primaryStage, User user) {
