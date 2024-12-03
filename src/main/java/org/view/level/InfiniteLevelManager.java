@@ -125,17 +125,24 @@ public class InfiniteLevelManager {
         });
     }
 
+    private int last_level_id = 0;
+    private int last_level_right_x = 0;
+    private int RoadLength = 5;
     public void level_init() {
-        level.getMap().add_level(20, 3, mapdata.maps[0]);
-        level.getMap().add_road(10, 3, 5, 10);
-        level.getMap().add_road(26,3,5,5);
-        level.getMap().set(20,5,0);
+        level.getMap().add_level(10 + RoadLength, 3, mapdata.maps[0]);
+        last_level_right_x = 10 + RoadLength + mapdata.maps[0][0].length;
+        level.getMap().add_road(10, 3, 5, RoadLength);
+        level.getMap().add_road(last_level_right_x,3,5,RoadLength);
+        level.getMap().set(10 + RoadLength,5,0);
     }
 
     public void win_update() {
-        level.getMap().set(25,4,0);
-        level.getMap().add_level(31,3, mapdata.maps[1]);
-        level.getMap().set(31,4,0);
+        level.getMap().set(last_level_right_x - 1,4,0);
+        level.getMap().add_level(last_level_right_x + RoadLength,3, mapdata.maps[1]);
+        last_level_right_x += RoadLength + mapdata.maps[1][0].length;
+        level.getMap().add_road(last_level_right_x, 3, 5, RoadLength);
+        level.getMap().set(last_level_right_x - mapdata.maps[1][0].length,4,0);
+
         update_box();
     }
 
@@ -148,10 +155,11 @@ public class InfiniteLevelManager {
 
     public void clear_box() {
         level.getMap().getBox_matrix().clear();
+        level.boxes.clear();
 
         level.getMap().getMatrixMap().keySet().stream()
                 .filter(coord -> level.getMap().hasBox(coord.x, coord.y))
-                .forEach(coord -> level.getMap().remove(coord.x, coord.y, 2));
+                .forEach(coord -> level.getMap().remove(coord.x, coord.y, 1));
     }
 
     public void update_box() {
@@ -166,9 +174,9 @@ public class InfiniteLevelManager {
                 .toList();
 
         for(Coordinate key : keys) {
-            map.setBox_matrix(key.x, key.y, box_index++);
+            map.setBox_matrix(key.x, key.y, box_index);
             level.boxes.add(new box(key.x, key.y, box_index));
-            System.out.println("add boxes");
+            box_index++;
         }
     }
 

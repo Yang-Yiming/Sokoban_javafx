@@ -47,8 +47,6 @@ public class InfiniteLevel extends Level {
 
     @Override
     public void drawMap() {
-        begin_x = getMap().getLeft_boundary();
-        begin_y = getMap().getUp_boundary();
         sublevel_begin_x = getMap().getSublevel_begin_x();
         sublevel_begin_y = getMap().getSublevel_begin_y();
 

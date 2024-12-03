@@ -106,7 +106,7 @@ public class InfiniteMap extends GameMap {
     }
 
     public void remove(int x, int y, int type) {
-        set(x,y,get(x,y)- (1 << type));
+        set(x,y,get(x,y) - (1 << type));
     }
 
     public void setBox_matrix(int x, int y, int num) {
