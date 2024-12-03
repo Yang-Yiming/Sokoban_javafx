@@ -1,19 +1,26 @@
 package org.view.menu;
 
 import javafx.animation.*;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.model.config;
+import org.view.level.Grass;
 
 import java.lang.reflect.Parameter;
 import java.sql.ParameterMetaData;
 import java.sql.Time;
+import java.util.ArrayList;
+
+import static java.lang.Math.max;
 
 public class MenuView extends AnchorPane {
     private Button startButton;
@@ -84,67 +91,98 @@ public class MenuView extends AnchorPane {
 
 
     }
+    Timeline cloudsTimeLine = null;
+    double clouds0Pos = -1000, clouds1Pos = 0, clouds2Pos = -400, clouds3Pos = 200, clouds4Pos = -400, clouds5Pos = -200;
+    private ImageView clouds0 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds0.png"), 1600, 800, false, false));
+    private ImageView clouds1 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds1.png"), 1800, 900, false, false));
+    private ImageView clouds2 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds2.png"), 1300, 500, false, false));
+    private ImageView clouds3 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds3.png"), 1000, 300, false, false));
+    private ImageView clouds4 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds4.png"), 1000, 200, false, false));
+    private ImageView clouds5 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds5.png"), 600, 300, false, false));
     private void createClouds(){
-        // 云朵
-        ImageView cloud1 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds1.png")));
-        cloud1.setFitHeight(50.0);
-        cloud1.setFitWidth(100.0);
-        cloud1.setLayoutX(100.0);
-        cloud1.setLayoutY(100.0);
-        cloud1.setPreserveRatio(true);
-        getChildren().add(cloud1);
-        TranslateTransition cloud1_transition = new TranslateTransition(Duration.seconds(10), cloud1);
-        cloud1_transition.setByX(800.0);
-        cloud1_transition.setCycleCount(TranslateTransition.INDEFINITE);
-        cloud1_transition.setAutoReverse(true);
-        cloud1_transition.play();
-
-        ImageView cloud2 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds2.png")));
-        cloud2.setFitHeight(50.0);
-        cloud2.setFitWidth(100.0);
-        cloud2.setLayoutX(200.0);
-        cloud2.setLayoutY(150.0);
-        cloud2.setPreserveRatio(true);
-        getChildren().add(cloud2);
-        TranslateTransition cloud2_transition = new TranslateTransition(Duration.seconds(10), cloud2);
-        cloud2_transition.setByX(800.0);
-        cloud2_transition.setCycleCount(TranslateTransition.INDEFINITE);
-        cloud2_transition.setAutoReverse(true);
-        cloud2_transition.play();
-
-        ImageView cloud3 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds3.png")));
-        cloud3.setFitHeight(50.0);
-        cloud3.setFitWidth(100.0);
-        cloud3.setLayoutX(300.0);
-        cloud3.setLayoutY(200.0);
-        cloud3.setPreserveRatio(true);
-        getChildren().add(cloud3);
-        TranslateTransition cloud3_transition = new TranslateTransition(Duration.seconds(10), cloud3);
-        cloud3_transition.setByX(800.0);
-        cloud3_transition.setCycleCount(TranslateTransition.INDEFINITE);
-        cloud3_transition.setAutoReverse(true);
-        cloud3_transition.play();
+        if(cloudsTimeLine == null) {
+            cloudsTimeLine = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+                clouds0Pos -= 0.25;
+                if(clouds0Pos < -1600) clouds0Pos = getWidth();
+                clouds0.setLayoutX(clouds0Pos);
+                clouds1Pos -= 0.1;
+                if(clouds1Pos < -1600) clouds1Pos = getWidth();
+                clouds1.setLayoutX(clouds1Pos);
+                clouds2Pos -= 0.2;
+                if(clouds2Pos < -1300) clouds2Pos = getWidth();
+                clouds2.setLayoutX(clouds2Pos);
+                clouds3Pos -= 0.3;
+                if(clouds3Pos < -1000) clouds3Pos = getWidth();
+                clouds3.setLayoutX(clouds3Pos);
+                clouds4Pos -= 0.5;
+                if(clouds4Pos < -1000) clouds4Pos = getWidth();
+                clouds4.setLayoutX(clouds4Pos);
+                clouds5Pos -= -0.7;
+                if(clouds5Pos < -600) clouds5Pos = getWidth();
+            }));
+            cloudsTimeLine.setCycleCount(Timeline.INDEFINITE);
+            cloudsTimeLine.play();
+            getChildren().add(clouds0);
+            getChildren().add(clouds1);
+            getChildren().add(clouds2);
+            getChildren().add(clouds3);
+            getChildren().add(clouds4);
+        }
     }
-    private ImageView grass;
+
+    ArrayList<Rectangle> grass = new ArrayList<>();
+    private void addground(){
+        grass = new ArrayList<>();
+        for(int i = 0; i < 40; ++i){
+//            System.out.println(getPrefHeight());
+                Rectangle rect = new Rectangle(i * 50, getPrefHeight() - 50, 50, 50);
+                grass.add(rect);
+                int divide = 10;
+                double siz = 50 / divide;
+                for(int j = 0; j < divide; ++j){
+                    double height = siz * Grass.myRand(i, j, 0, -1, 3);
+                    if(height <= 0) continue;
+                    height += 50;
+                    Rectangle rect1 = new Rectangle(siz, height);
+                    rect1.setX(i * 50 + j * siz);
+                    rect1.setY(getPrefHeight() - height);
+                    grass.add(rect1);
+//                    System.out.println(rect1.getY());
+                    rect1.setFill(Grass.randColor(i, i));
+                    getChildren().add(rect1);
+//                    ++j;
+                }
+                rect.setFill(Grass.randColor(i, i));
+                getChildren().add(rect);
+        }
+    }
+
+//    private Rectangle grass;
     public MenuView(MenuController menuController){
         this.menuController = menuController;
         setPrefHeight(600.0);
         setPrefWidth(800.0);
-        //将背景设置为上蓝下白的渐变
-        setStyle("-fx-background-color: linear-gradient(to bottom, #add8e6, #ffffff);");
-        //在最下方铺一层绿色的草地
-        grass = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.png"))); //回头再说
-        grass.setFitHeight(200.0);
-        getChildren().add(grass);
+        setMaxHeight(600.0);
+        setMaxWidth(800.0);
+        setMinHeight(600.0);
+        setMinWidth(800.0);
 
+        //设置背景颜色
+        setStyle("-fx-background-color: linear-gradient(to bottom, #b0d5df, #dfecd5);");
         createClouds();
+        //在最下方铺一层绿色的草地
+//        grass = new Rectangle(0, getHeight() - 100, getWidth(), 100);
+//        grass.setFill(Color.rgb(124, 153, 32));
+//        getChildren().add(grass);
+        addground();
 
         createTitle();
         addScreenSizeListener();
         createButtons();
-        changePosX(getWidth());
-        changePosY(getHeight());
+        changePosX(getPrefWidth());
+        changePosY(getPrefHeight());
         getChildren().addAll(title, startButton, loginButton, settingsButton);
+        //重新设置宽度和高度
     }
 
     private void addScreenSizeListener(){
@@ -160,18 +198,27 @@ public class MenuView extends AnchorPane {
         //将 title 居中靠上
         title.setLayoutX((doubleValue - title.getFitWidth()) / 2);
         //将 btn1,2,3 居中
-        startButton.setLayoutX((doubleValue - 100) / 2);
-        loginButton.setLayoutX(doubleValue - 200);
-        settingsButton.setLayoutX(doubleValue - 100);
-        grass.setFitWidth(doubleValue);
+        if(startButton != null) startButton.setLayoutX((doubleValue - 100) / 2);
+        if(loginButton != null) loginButton.setLayoutX(doubleValue - 200);
+        if(settingsButton != null) settingsButton.setLayoutX(doubleValue - 100);
+//        grass.setWidth(doubleValue);
     }
     void changePosY(double doubleValue){
-        grass.setLayoutY(doubleValue - 100);
+//        grass.setY(doubleValue - 100);
+        clouds0.setLayoutY(doubleValue - 600);
+        clouds1.setLayoutY(doubleValue - 800);
+        clouds2.setLayoutY(doubleValue - 400);
+        clouds3.setLayoutY(doubleValue - 600);
+        clouds4.setLayoutY(doubleValue - 700);
+        clouds5.setLayoutY(doubleValue - 600);
+        for(Rectangle rect : grass){
+            rect.setY(doubleValue - rect.getHeight());
+        }
     }
     void changeBtnPosX(double doubleValue){
-        btn_mode1.setLayoutX((doubleValue - 180) / 2);
-        btn_mode2.setLayoutX((doubleValue - 180) / 2);
-        btn_mode3.setLayoutX((doubleValue - 180) / 2);
+        if(btn_mode1 != null) btn_mode1.setLayoutX((doubleValue - 180) / 2);
+        if(btn_mode2 != null) btn_mode2.setLayoutX((doubleValue - 180) / 2);
+        if(btn_mode3 != null) btn_mode3.setLayoutX((doubleValue - 180) / 2);
     }
 
     private ScaleTransition createScaleTransition(Button button, double size1, double size2, Duration duration) {
@@ -203,7 +250,7 @@ public class MenuView extends AnchorPane {
 
         return btn;
     }
-    Button btn_mode1, btn_mode2, btn_mode3;
+    Button btn_mode1 = null, btn_mode2 = null, btn_mode3 = null;
     private void startButtonClicked() {
         // 按钮生成
         btn_mode1 = generate_button("经典模式", 300, 270);
@@ -225,8 +272,8 @@ public class MenuView extends AnchorPane {
             btn3_transition.play();
         });
         // Handle start button click
-        btn_mode1.setOnMouseClicked(event -> menuController.StartButtonClicked());
-        btn_mode2.setOnMouseClicked(event -> menuController.startInfiniteLevel());
+        btn_mode1.setOnMouseClicked(event -> {config.mode = 1; menuController.StartButtonClicked();});
+        btn_mode2.setOnMouseClicked(event -> {config.mode = 2; menuController.startInfiniteLevel();});
     }
 
     private FadeTransition generate_fade_transition(Button button, double duration, double from, double to) {

@@ -58,11 +58,13 @@ public class player extends entity {
         double playerx0 = imageView.getX() + config.tile_size / 2;
         double playery0 = imageView.getY() + config.tile_size / 2;
         double dx0 = midx0 - playerx0, dy0 = midy0 - playery0;
-        if(dx0 < -config.tile_size * 2) dx0 += config.tile_size * 2;
-        else if(dx0 > config.tile_size * 2) dx0 -= config.tile_size * 2;
+        int mid_dis0 = 2;
+        if(config.mode == 2) mid_dis0 = 1;
+        if(dx0 < -config.tile_size * mid_dis0) dx0 += config.tile_size * mid_dis0;
+        else if(dx0 > config.tile_size * mid_dis0) dx0 -= config.tile_size * mid_dis0;
         else dx0 = 0;
-        if(dy0 < -config.tile_size * 2) dy0 += config.tile_size * 2;
-        else if(dy0 > config.tile_size * 2) dy0 -= config.tile_size * 2;
+        if(dy0 < -config.tile_size * mid_dis0) dy0 += config.tile_size * mid_dis0;
+        else if(dy0 > config.tile_size * mid_dis0) dy0 -= config.tile_size * mid_dis0;
         else dy0 = 0;
         if(Math.abs(dx0) < 10 && Math.abs(dy0) < 10) return;
         // 移动画面，使人物在中间
@@ -80,11 +82,13 @@ public class player extends entity {
             double playerx = imageView.getX() + config.tile_size / 2;
             double playery = imageView.getY() + config.tile_size / 2;
             double dx = midx - playerx, dy = midy - playery;
-            if(dx < -config.tile_size * 2) dx += config.tile_size * 2;
-            else if(dx > config.tile_size * 2) dx -= config.tile_size * 2;
+            int mid_dis = 2;
+            if(config.mode == 2) mid_dis = 1;
+            if(dx < -config.tile_size * mid_dis) dx += config.tile_size * mid_dis;
+            else if(dx > config.tile_size * mid_dis) dx -= config.tile_size * mid_dis;
             else dx = 0;
-            if(dy < -config.tile_size * 2) dy += config.tile_size * 2;
-            else if(dy > config.tile_size * 2) dy -= config.tile_size * 2;
+            if(dy < -config.tile_size * mid_dis) dy += config.tile_size * mid_dis;
+            else if(dy > config.tile_size * mid_dis) dy -= config.tile_size * mid_dis;
             else dy = 0;
             if(Math.abs(dx) < 10 && Math.abs(dy) < 10 && cameraTimeline != null) cameraTimeline.stop();
             // 移动画面，使人物在中间

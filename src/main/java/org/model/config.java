@@ -28,6 +28,7 @@ public class config {
     public static double box_angle_amount = 0.3;
     public static int button_size = 50;
     public static int button_gap = 8;
+    public static int mode = 0;
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例
