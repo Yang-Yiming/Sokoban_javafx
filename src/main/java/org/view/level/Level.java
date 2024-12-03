@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import org.model.*;
 import org.view.game.box;
 import org.view.game.player;
+import org.view.VisualEffects.GlowRectangle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -263,7 +264,7 @@ public abstract class Level {
         rect.setStrokeWidth(2);
         // root.getChildren().add(rect);
         glowRectangles.add(rect);
-        radiatingEffects.put(new Coordinate(y - sublevel_begin_y, x - sublevel_begin_x), rect);
+        radiatingEffects.put(new Coordinate(y, x), rect);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             if(rect.getWidth() > tileSize * highLimit) {
                 rect.setWidth(tileSize * lowLimit);
