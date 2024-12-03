@@ -9,6 +9,7 @@ public class InfiniteMap extends GameMap {
 
     private int left_boundary=0, right_boundary=0, up_boundary=0, down_boundary=0;
     private int sublevel_begin_x, sublevel_begin_y;
+    private int win_check_width, win_check_height;
 
     private int DEFAULT_VALUE;
 
@@ -48,6 +49,7 @@ public class InfiniteMap extends GameMap {
     public void add_level(int begin_x, int begin_y, int[][] data) {
         add_data(begin_x, begin_y, data);
         sublevel_begin_x = begin_x; sublevel_begin_y = begin_y;
+        win_check_width = data[0].length; win_check_height = data.length;
     }
 
     public void delete(int x, int y) {
@@ -164,6 +166,12 @@ public class InfiniteMap extends GameMap {
     }
     public int getSublevel_begin_y() {
         return sublevel_begin_y;
+    }
+    public int getWin_check_width() {
+        return win_check_width;
+    }
+    public int getWin_check_height() {
+        return win_check_height;
     }
 
     public InfiniteMap(int[][] matrix) {

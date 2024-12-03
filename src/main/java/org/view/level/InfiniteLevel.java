@@ -63,8 +63,8 @@ public class InfiniteLevel extends Level {
 
     @Override
     public boolean isWin() {
-        for (int y = sublevel_begin_y; y < getMap().getDown_boundary(); ++y)
-            for (int x = sublevel_begin_x; x < getMap().getRight_boundary(); ++x)
+        for (int y = sublevel_begin_y; y < sublevel_begin_y + getMap().getWin_check_height(); ++y)
+            for (int x = sublevel_begin_x; x < getMap().getRight_boundary() + getMap().getWin_check_width(); ++x)
                 if (map.hasGoal(x, y) && !map.hasBox(x, y))
                     return false;
         return true;
