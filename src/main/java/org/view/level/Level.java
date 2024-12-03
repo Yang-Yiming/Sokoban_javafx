@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -31,9 +32,6 @@ public abstract class Level {
     ArrayList<box> boxes;
     private Stage primaryStage;
 
-    private ArrayList<Rectangle> glowRectangles;
-    private HashMap<Coordinate, Rectangle> radiatingEffects;
-
     private Canvas canvas; // 用来放grass
 
     private GUIController guiController; // 显示gui
@@ -50,9 +48,8 @@ public abstract class Level {
     private Rectangle fadeRectangle;
     private Timeline fadeTimeline;
     public void init() {
-        glowTimelines.clear();
-        radiatingEffects = new HashMap<>();
-        glowRectangles = new ArrayList<>();
+        GlowRectangle.glowRectangles.clear();
+
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
 
@@ -86,7 +83,7 @@ public abstract class Level {
         for (int y = sublevel_begin_y; y < sublevel_begin_y + map.getHeight(); ++y) {
             for (int x = sublevel_begin_x; x < sublevel_begin_x + map.getWidth(); ++x) {
                 if (map.hasGoal(x, y)) {
-                    createRadiatingEffect(x, y, config.tile_size);
+                    new GlowRectangle(x, y);
                 }
             }
         }
@@ -122,10 +119,9 @@ public abstract class Level {
     }
     public void stopTimelines(){
         butterflyTimeline.stop();
-        for(Timeline timeline : glowTimelines){
-            timeline.stop();
-        }
         this.player.stopCameraTimeline();
+        GlowRectangle.timeline.stop();
+        //GlowRectangle.timeline = null;
     }
 
     public Level(Pane root, Stage primaryStage, User user) {
@@ -204,8 +200,8 @@ public abstract class Level {
             }
         }
         //将所有 glowrectangles 里的成员置于图层最上方
-        for (Rectangle rect : glowRectangles) {
-            root.getChildren().add(rect);
+        for(GlowRectangle glowRectangle : GlowRectangle.glowRectangles){
+            root.getChildren().add(glowRectangle.getRect());
         }
     }
 
@@ -242,61 +238,12 @@ public abstract class Level {
         }
     }
     public void updateAllRadiatingEffect() {
-        for (Coordinate pos : radiatingEffects.keySet()) {
-            int x = pos.x;
-            int y = pos.y;
-            if (map.hasGoal(x + sublevel_begin_x, y + sublevel_begin_y)) {
-                updateRectangle(radiatingEffects.get(pos), config.tile_size, x, y);
-            }
+        for (GlowRectangle glowRectangle: GlowRectangle.glowRectangles) {
+            if(map.hasGoal(glowRectangle.getX() + sublevel_begin_x, glowRectangle.getY() + sublevel_begin_y))
+                glowRectangle.update(glowRectangle.getX(), glowRectangle.getY());
         }
     }
-    private static final double lowLimit = 0.9;
-    private static final double highLimit = 1.2;
-    private ArrayList<Timeline> glowTimelines = new ArrayList<>();
-    private void createRadiatingEffect(int x, int y, int tileSize) { //需要传实时的数据。
-        double initialCenterX = anchor_posx + x * tileSize;
-        double initialCenterY = anchor_posy + y * tileSize;
-        Rectangle rect = new Rectangle(initialCenterX, initialCenterY, tileSize * lowLimit, tileSize * lowLimit);
-        rect.setX(initialCenterX - (rect.getWidth() - tileSize) / 2);
-        rect.setY(initialCenterY - (rect.getHeight() - tileSize) / 2);
-        rect.setFill(Color.TRANSPARENT);
-        rect.setStroke(Color.WHITE);
-        rect.setStrokeWidth(2);
-        // root.getChildren().add(rect);
-        glowRectangles.add(rect);
-        radiatingEffects.put(new Coordinate(y, x), rect);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
-            if(rect.getWidth() > tileSize * highLimit) {
-                rect.setWidth(tileSize * lowLimit);
-                rect.setHeight(tileSize * lowLimit);
-            }
-            // 正方形逐渐放大
-            rect.setWidth(rect.getWidth() + 1);
-            rect.setHeight(rect.getHeight() + 1);
-            // 正方形居中
-            double centerX = anchor_posx + x * tileSize;
-            double centerY = anchor_posy + y * tileSize;
-            rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
-            rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
-            // 正方形逐渐变淡
-            double v = 1 - (rect.getWidth() - tileSize * lowLimit) / (tileSize * (highLimit - lowLimit));
-            rect.setStroke(Color.rgb(255, 255, 255, Math.max(v,0))); // 小于0会导致一大拖报错
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-        glowTimelines.add(timeline);
-    }
-    private void updateRectangle(Rectangle rect, int tileSize, int x, int y) {
-        double centerX = anchor_posx + x * tileSize;
-        double centerY = anchor_posy + y * tileSize;
-        rect.setX(centerX - (rect.getWidth() - tileSize) / 2);
-        rect.setY(centerY - (rect.getHeight() - tileSize) / 2);
-    }
-    /*
-     * 开一个数组存放所有的 glowRectangles
-     * 移动鼠标的时候，更新所有的 glowRectangles
-     * 通过 Timeline 来实现动画
-     * */
+
     public void drawBoxes() {
         for(box box : boxes) {
             root.getChildren().add(box.getImageView());
@@ -342,6 +289,7 @@ public abstract class Level {
     }
     public void setAnchor_posx(double anchor_posx) {
         this.anchor_posx = anchor_posx;
+        GlowRectangle.anchor_posx = anchor_posx;
         if (player == null) return;
 
         player.getImageView().setX(anchor_posx + player.get_x() * config.tile_size);
@@ -352,6 +300,7 @@ public abstract class Level {
     }
     public void setAnchor_posy(double anchor_posy) {
         this.anchor_posy = anchor_posy;
+        GlowRectangle.anchor_posy = anchor_posy;
         if (player == null) return;
 
         player.getImageView().setY(anchor_posy + player.get_y() * config.tile_size);
