@@ -22,11 +22,7 @@ public class MenuView extends AnchorPane {
     MenuController menuController;
     ImageView title = null;
 
-    public MenuView(MenuController menuController){
-        this.menuController = menuController;
-        setPrefHeight(600.0);
-        setPrefWidth(800.0);
-
+    private void createTitle(){
         title = new ImageView(new Image(getClass().getResourceAsStream("/images/title.gif"))); //有 gif 了
         title.setLayoutX(200.0);
         title.setLayoutY(50.0);
@@ -37,8 +33,6 @@ public class MenuView extends AnchorPane {
         double centerY = title.getLayoutY() - title.getFitHeight() / 2;
         title.setTranslateX(centerX);
         title.setTranslateY(centerY);
-
-        addScreenSizeListener();
 
         // Add rotate animation
         // 太可爱了建议保留
@@ -67,6 +61,10 @@ public class MenuView extends AnchorPane {
 //        timeline.setCycleCount(Timeline.INDEFINITE);
 //        timeline.play();
 
+    }
+
+    private void createButtons(){
+
         startButton = generate_button("开始", (getPrefWidth() - 100) / 2, 310);
         startButton.setOnMouseClicked(event -> startButtonClicked());
 
@@ -83,8 +81,69 @@ public class MenuView extends AnchorPane {
         settingsButton.setPrefHeight(47.0);
         settingsButton.setPrefWidth(100.0);
         settingsButton.setOnMouseClicked(event -> settingsButtonClicked());
-        changePosX(800);
 
+
+    }
+    private void createClouds(){
+        // 云朵
+        ImageView cloud1 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds1.png")));
+        cloud1.setFitHeight(50.0);
+        cloud1.setFitWidth(100.0);
+        cloud1.setLayoutX(100.0);
+        cloud1.setLayoutY(100.0);
+        cloud1.setPreserveRatio(true);
+        getChildren().add(cloud1);
+        TranslateTransition cloud1_transition = new TranslateTransition(Duration.seconds(10), cloud1);
+        cloud1_transition.setByX(800.0);
+        cloud1_transition.setCycleCount(TranslateTransition.INDEFINITE);
+        cloud1_transition.setAutoReverse(true);
+        cloud1_transition.play();
+
+        ImageView cloud2 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds2.png")));
+        cloud2.setFitHeight(50.0);
+        cloud2.setFitWidth(100.0);
+        cloud2.setLayoutX(200.0);
+        cloud2.setLayoutY(150.0);
+        cloud2.setPreserveRatio(true);
+        getChildren().add(cloud2);
+        TranslateTransition cloud2_transition = new TranslateTransition(Duration.seconds(10), cloud2);
+        cloud2_transition.setByX(800.0);
+        cloud2_transition.setCycleCount(TranslateTransition.INDEFINITE);
+        cloud2_transition.setAutoReverse(true);
+        cloud2_transition.play();
+
+        ImageView cloud3 = new ImageView(new Image(getClass().getResourceAsStream("/images/clouds/Clouds3.png")));
+        cloud3.setFitHeight(50.0);
+        cloud3.setFitWidth(100.0);
+        cloud3.setLayoutX(300.0);
+        cloud3.setLayoutY(200.0);
+        cloud3.setPreserveRatio(true);
+        getChildren().add(cloud3);
+        TranslateTransition cloud3_transition = new TranslateTransition(Duration.seconds(10), cloud3);
+        cloud3_transition.setByX(800.0);
+        cloud3_transition.setCycleCount(TranslateTransition.INDEFINITE);
+        cloud3_transition.setAutoReverse(true);
+        cloud3_transition.play();
+    }
+    private ImageView grass;
+    public MenuView(MenuController menuController){
+        this.menuController = menuController;
+        setPrefHeight(600.0);
+        setPrefWidth(800.0);
+        //将背景设置为上蓝下白的渐变
+        setStyle("-fx-background-color: linear-gradient(to bottom, #add8e6, #ffffff);");
+        //在最下方铺一层绿色的草地
+        grass = new ImageView(new Image(getClass().getResourceAsStream("/images/wall.png"))); //回头再说
+        grass.setFitHeight(200.0);
+        getChildren().add(grass);
+
+        createClouds();
+
+        createTitle();
+        addScreenSizeListener();
+        createButtons();
+        changePosX(getWidth());
+        changePosY(getHeight());
         getChildren().addAll(title, startButton, loginButton, settingsButton);
     }
 
@@ -92,6 +151,9 @@ public class MenuView extends AnchorPane {
         widthProperty().addListener((observable, oldValue, newValue) -> {
             changePosX(newValue.doubleValue());
             changeBtnPosX(newValue.doubleValue());
+        });
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            changePosY(newValue.doubleValue());
         });
     }
     void changePosX(double doubleValue){
@@ -101,11 +163,15 @@ public class MenuView extends AnchorPane {
         startButton.setLayoutX((doubleValue - 100) / 2);
         loginButton.setLayoutX(doubleValue - 200);
         settingsButton.setLayoutX(doubleValue - 100);
+        grass.setFitWidth(doubleValue);
+    }
+    void changePosY(double doubleValue){
+        grass.setLayoutY(doubleValue - 100);
     }
     void changeBtnPosX(double doubleValue){
-        btn_mode1.setLayoutX((doubleValue - 200) / 2);
-        btn_mode2.setLayoutX((doubleValue - 200) / 2);
-        btn_mode3.setLayoutX((doubleValue - 200) / 2);
+        btn_mode1.setLayoutX((doubleValue - 180) / 2);
+        btn_mode2.setLayoutX((doubleValue - 180) / 2);
+        btn_mode3.setLayoutX((doubleValue - 180) / 2);
     }
 
     private ScaleTransition createScaleTransition(Button button, double size1, double size2, Duration duration) {
