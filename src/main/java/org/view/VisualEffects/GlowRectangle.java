@@ -71,5 +71,11 @@ public class GlowRectangle {
     public int getY() {
         return y;
     }
+    public Timeline getTimeline() {
+        return timeline;
+    }
+    public Rectangle getRect() {
+        return rect;
+    }
 
 }
