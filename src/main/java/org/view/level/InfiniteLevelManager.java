@@ -137,13 +137,20 @@ public class InfiniteLevelManager {
     }
 
     public void win_update() {
-        level.getMap().set(last_level_right_x - 1,4,0);
-        level.getMap().add_level(last_level_right_x + RoadLength,3, mapdata.maps[1]);
-        last_level_right_x += RoadLength + mapdata.maps[1][0].length;
-        level.getMap().add_road(last_level_right_x, 3, 5, RoadLength);
-        level.getMap().set(last_level_right_x - mapdata.maps[1][0].length,4,0);
+        int new_map_id = (int) (mapdata.maps.length * Math.random());
 
+        level.getMap().set(last_level_right_x - 1,5,0);
+        level.getMap().add_level(last_level_right_x + RoadLength,3, mapdata.maps[new_map_id]);
+        last_level_right_x += RoadLength + mapdata.maps[new_map_id][0].length;
+        level.getMap().add_road(last_level_right_x, 3, 5, RoadLength);
+        level.getMap().set(last_level_right_x - mapdata.maps[new_map_id][0].length,5,0);
+
+        update();
+    }
+
+    private void update() {
         update_box();
+        level.generate_glow_rects();
     }
 
     public void level_update() {
@@ -186,6 +193,5 @@ public class InfiniteLevelManager {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
-
 
 }

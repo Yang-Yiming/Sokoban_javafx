@@ -58,8 +58,16 @@ public class InfiniteLevel extends Level {
         drawBoxesAndWall();
         drawButterfly();
         drawGUI();
-        //输出 boxes 数量
-//        System.out.println("boxes: " + boxes.size());
+
+    }
+
+    @Override
+    public boolean isWin() {
+        for (int y = sublevel_begin_y; y < getMap().getDown_boundary(); ++y)
+            for (int x = sublevel_begin_x; x < getMap().getRight_boundary(); ++x)
+                if (map.hasGoal(x, y) && !map.hasBox(x, y))
+                    return false;
+        return true;
     }
 
 }

@@ -48,8 +48,6 @@ public abstract class Level {
     private Rectangle fadeRectangle;
     private Timeline fadeTimeline;
     public void init() {
-        GlowRectangle.glowRectangles.clear();
-
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
 
@@ -80,13 +78,7 @@ public abstract class Level {
                 }
             }
         }
-        for (int y = sublevel_begin_y; y < sublevel_begin_y + map.getHeight(); ++y) {
-            for (int x = sublevel_begin_x; x < sublevel_begin_x + map.getWidth(); ++x) {
-                if (map.hasGoal(x, y)) {
-                    new GlowRectangle(x, y);
-                }
-            }
-        }
+        generate_glow_rects();
         createButterflyTimeline();
         load_gui(user);
         fadeRectangle = new Rectangle(primaryStage.getWidth(), primaryStage.getHeight(), Color.BLACK);
@@ -108,6 +100,18 @@ public abstract class Level {
         fadeTimeline.play();
         drawMap();
     }
+
+    public void generate_glow_rects() {
+        GlowRectangle.glowRectangles.clear();
+        for (int y = sublevel_begin_y; y < sublevel_begin_y + map.getHeight(); ++y) {
+            for (int x = sublevel_begin_x; x < sublevel_begin_x + map.getWidth(); ++x) {
+                if (map.hasGoal(x, y)) {
+                    new GlowRectangle(x, y);
+                }
+            }
+        }
+    }
+
     private Timeline butterflyTimeline = null;
     public void createButterflyTimeline(){
         butterflyTimeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {
