@@ -93,7 +93,6 @@ public class MenuView extends AnchorPane {
         return scaleTransition;
     }
 
-    private Timeline fontSizeTimeline = null;
     private Button generate_button(String text, double x, double y) {
         Button btn = new Button(text);
         btn.setLayoutX(x - btn.getPrefWidth() / 2);
@@ -105,35 +104,10 @@ public class MenuView extends AnchorPane {
         ScaleTransition scaleUp = createScaleTransition(btn, 1, config.font_size_2 / config.font_size_1, Duration.millis(config.font_size_change_millis));
         ScaleTransition scaleDown = createScaleTransition(btn, config.font_size_2 / config.font_size_1, 1, Duration.millis(config.font_size_change_millis));
 
-        // 字体大小变化
-//        btn.setOnMouseEntered( event -> {
-//            fontSizeTimeline = new Timeline();
-//
-//            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
-//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
-//            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
-//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
-//
-//            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
-//            fontSizeTimeline.play();
-//        });
-//        btn.setOnMouseExited(event -> {
-//            fontSizeTimeline = new Timeline();
-//
-//            KeyFrame startFrame = new KeyFrame(Duration.ZERO,
-//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_2)));
-//            KeyFrame endFrame = new KeyFrame(Duration.millis(config.font_size_change_millis),
-//                    new KeyValue(btn.fontProperty(), new Font(config.font_size_1)));
-//
-//            fontSizeTimeline.getKeyFrames().addAll(startFrame, endFrame);
-//            fontSizeTimeline.play();
-//        });
-
         btn.setOnMouseEntered(event -> scaleUp.play());
 
         // 鼠标离开事件
         btn.setOnMouseExited(event -> scaleDown.play());
-
 
         return btn;
     }
@@ -159,7 +133,7 @@ public class MenuView extends AnchorPane {
         });
         // Handle start button click
         btn_mode1.setOnMouseClicked(event -> menuController.StartButtonClicked());
-        //menuController.StartButtonClicked();
+        btn_mode2.setOnMouseClicked(event -> menuController.startInfiniteLevel());
     }
 
     private FadeTransition generate_fade_transition(Button button, double duration, double from, double to) {

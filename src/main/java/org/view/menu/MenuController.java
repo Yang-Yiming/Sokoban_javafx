@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.model.User;
+import org.view.level.InfiniteLevelManager;
 import org.view.level.LevelManager;
 
 import java.io.IOException;
@@ -146,6 +147,12 @@ public class MenuController {
         LevelManager levelManager = new LevelManager(primaryStage);
         levelManager.setUser(user);
         levelManager.start();
+    }
+
+    public void startInfiniteLevel() {
+        InfiniteLevelManager manager = new InfiniteLevelManager(primaryStage);
+        manager.start();
+        primaryStage.show();
     }
 
     public User get_user(){
