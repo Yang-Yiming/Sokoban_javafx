@@ -1,23 +1,25 @@
 package org.view.menu;
 
 import javafx.animation.*;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.model.SavingManager;
+import org.model.User;
 import org.model.config;
 import org.view.level.Grass;
 
-import java.lang.reflect.Parameter;
-import java.sql.ParameterMetaData;
-import java.sql.Time;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static java.lang.Math.max;
@@ -370,6 +372,13 @@ public class MenuView extends AnchorPane {
     }
     Rectangle shade;
     ImageView paper = new ImageView(new Image(getClass().getResourceAsStream("/images/paper.png"), 500, 500, false, false));
+
+
+    VBox loginVbox;
+    HBox usernameHbox, passwordHbox, confirmPasswordHbox, reminderHbox, buttonsHbox;
+    TextField usernameInput;
+    PasswordField passwordInput, confirmPasswordInput;
+    Text reminderText, loginText;
     private void loginButtonClicked() {
         // Handle login button click
 //        menuController.LoginButtonClicked();
@@ -382,11 +391,67 @@ public class MenuView extends AnchorPane {
         paper.setY(50);
         getChildren().add(paper);
         //标题
-        Text loginText = new Text(340.0, 150.0, "Login");
+        loginText = new Text(340.0, 150.0, "Login");
         loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
         loginText.setFont(new Font(45));
         getChildren().add(loginText);
-        //关闭按钮
+        //按钮
+        
+        // 创建VBox
+        loginVbox = new VBox(10);
+        loginVbox.setPrefHeight(214.0);
+        loginVbox.setPrefWidth(209.0);
+        loginVbox.setLayoutX(200);
+        loginVbox.setLayoutY(200);
+        // 创建用户名HBox
+        usernameHbox = new HBox(10); // 间距为10
+        usernameHbox.setAlignment(javafx.geometry.Pos.CENTER);
+        Text usernameText = new Text("Username");
+        usernameInput = new TextField();
+        usernameHbox.getChildren().addAll(usernameText, usernameInput);
+        loginVbox.getChildren().add(usernameHbox);
+
+        // 创建密码HBox
+        passwordHbox = new HBox(10);
+        passwordHbox.setAlignment(javafx.geometry.Pos.CENTER);
+        Text passwordText = new Text("Password");
+        passwordInput = new PasswordField();
+        passwordHbox.getChildren().addAll(passwordText, passwordInput);
+        loginVbox.getChildren().add(passwordHbox);
+
+        // 创建确认密码HBox
+        confirmPasswordHbox = new HBox(10);
+        Text confirmPasswordText = new Text("确认密码");
+        confirmPasswordInput = new PasswordField();
+        confirmPasswordHbox.getChildren().addAll(confirmPasswordText, confirmPasswordInput);
+        loginVbox.getChildren().add(confirmPasswordHbox);
+
+        // 创建提醒HBox
+        reminderHbox = new HBox(10);
+        reminderText = new Text("");
+        reminderHbox.getChildren().addAll(reminderText);
+        loginVbox.getChildren().add(reminderHbox);
+
+        // 创建按钮HBox
+        buttonsHbox = new HBox(10);
+        buttonsHbox.setAlignment(javafx.geometry.Pos.CENTER);
+        Button loginButton = new Button("Login");
+        loginButton.setOnAction(event -> handleLogin());
+        Button registerButton = new Button("Register");
+        registerButton.setOnAction(event -> {
+            try {
+                handleRegister();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                // 你可以在这里添加更多的错误处理逻辑
+            }
+        });
+        buttonsHbox.getChildren().addAll(loginButton, registerButton);
+        loginVbox.getChildren().add(buttonsHbox);
+
+        getChildren().add(loginVbox);
+
+        //关闭
         Button close = new Button();
         Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
         close.setGraphic(new ImageView(X));
@@ -401,8 +466,68 @@ public class MenuView extends AnchorPane {
             getChildren().remove(paper);
             getChildren().remove(loginText);
             getChildren().remove(close);
+            getChildren().remove(loginVbox);
         });
 
+    }
+    private String UserName, Password;
+    private User user;
+    public void handleLogin() {
+        loginText.setText("Login");
+        loginText.setX(340.0);
+        loginVbox.getChildren().remove(reminderHbox);
+        if(loginVbox.getChildren().contains(confirmPasswordHbox)){
+            loginVbox.getChildren().remove(confirmPasswordHbox);
+            usernameInput.setText(""); passwordInput.setText("");
+            return;
+        }
+
+        UserName = usernameInput.getText();
+        Password = passwordInput.getText();
+
+        SavingManager.read();
+        int userid = SavingManager.getUser(UserName, Password);
+
+        if (userid == -1) {
+            reminderText.setText("User not found");
+        } else if (userid == -2) {
+            reminderText.setText("Wrong password");
+        } else {
+            user = User.UserInfo.get(userid);
+            loginVbox.getChildren().removeAll();
+            reminderText.setText("Login Successfully, Welcome " + UserName);
+            loginVbox.getChildren().add(reminderText);
+        }
+        loginVbox.getChildren().add(2, reminderHbox);
+    }
+    public void handleRegister() throws FileNotFoundException {
+        loginText.setText("Register");
+        loginText.setX(310.0);
+        loginVbox.getChildren().remove(reminderHbox);
+        if(!loginVbox.getChildren().contains(confirmPasswordHbox)){
+            loginVbox.getChildren().add(2, confirmPasswordHbox);
+            return;
+        }
+
+        UserName = usernameInput.getText();
+        Password = passwordInput.getText();
+        String ConfirmPassword = confirmPasswordInput.getText();
+
+        loginVbox.getChildren().add(3, reminderHbox);
+
+        if (SavingManager.NotValidString(UserName)) {
+            reminderText.setText("Invalid username, should only contain letters, numbers and _");
+        } else if (SavingManager.getUser(UserName, Password) != -1) {
+            reminderText.setText("User already exists");
+        } else if (SavingManager.NotValidString(Password)) {
+            reminderText.setText("Invalid password, should only contain letters, numbers and _");
+        } else if (!Password.equals(ConfirmPassword)) {
+            reminderText.setText("Password not match");
+        } else {
+            SavingManager.addUser(UserName, Password);
+            reminderText.setText("Register successfully");
+            loginVbox.getChildren().remove(confirmPasswordHbox);
+        }
     }
 
     private void settingsButtonClicked() {

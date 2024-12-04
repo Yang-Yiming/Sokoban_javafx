@@ -93,62 +93,9 @@ public class LoginController extends HalfStageController{
     @FXML
     private Text UsernameText;
 
-    @FXML
-    void HandleLogin(MouseEvent event) {
-        LoginVbox.getChildren().remove(ReminderHbox);
-        if(LoginVbox.getChildren().contains(ConfirmPasswordHbox)){
-            LoginVbox.getChildren().remove(ConfirmPasswordHbox);
-            UsernameInput.setText(""); PasswordInput.setText("");
-            return;
-        }
+//    @FXML
 
-        UserName = UsernameInput.getText();
-        Password = PasswordInput.getText();
-
-        SavingManager.read();
-        int userid = SavingManager.getUser(UserName, Password);
-
-        if (userid == -1) {
-            ReminderText.setText("User not found");
-        } else if (userid == -2) {
-            ReminderText.setText("Wrong password");
-        } else {
-            user = User.UserInfo.get(userid);
-            LoginVbox.getChildren().removeAll();
-            ReminderText.setText("Login Successfully, Welcome " + UserName);
-            LoginVbox.getChildren().add(ReminderText);
-        }
-        LoginVbox.getChildren().add(2, ReminderHbox);
-    }
-
-    @FXML
-    void HandleRegister(MouseEvent event) throws FileNotFoundException {
-        LoginVbox.getChildren().remove(ReminderHbox);
-        if(!LoginVbox.getChildren().contains(ConfirmPasswordHbox)){
-            LoginVbox.getChildren().add(2, ConfirmPasswordHbox);
-            return;
-        }
-
-        UserName = UsernameInput.getText();
-        Password = PasswordInput.getText();
-        String ConfirmPassword = ConfirmPasswordInput.getText();
-
-        LoginVbox.getChildren().add(3, ReminderHbox);
-
-        if (SavingManager.NotValidString(UserName)) {
-            ReminderText.setText("Invalid username, should only contain letters, numbers and _");
-        } else if (SavingManager.getUser(UserName, Password) != -1) {
-            ReminderText.setText("User already exists");
-        } else if (SavingManager.NotValidString(Password)) {
-            ReminderText.setText("Invalid password, should only contain letters, numbers and _");
-        } else if (!Password.equals(ConfirmPassword)) {
-            ReminderText.setText("Password not match");
-        } else {
-            SavingManager.addUser(UserName, Password);
-            ReminderText.setText("Register successfully");
-            LoginVbox.getChildren().remove(ConfirmPasswordHbox);
-        }
-    }
+//    @FXML
 
     @FXML
     public void Back(MouseEvent mouseEvent) throws IOException {
