@@ -2,13 +2,10 @@ package org.view.level;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -16,14 +13,11 @@ import javafx.util.Duration;
 import org.data.StartLobby;
 import org.data.mapdata;
 import org.model.*;
-import org.view.LevelSelect.map;
+import org.model.Direction;
 
-import org.data.mapdata;
 import org.view.game.box;
 
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -125,27 +119,83 @@ public class InfiniteLevelManager {
         });
     }
 
-    private int last_level_id = 0;
-    private int last_level_right_x = 0;
-    private int RoadLength = 5;
+    private Direction last_direction = Direction.RIGHT;
+    private int last_right = 0, last_up = 0, last_down = 0, last_left = 0;
+    private int RoadLength = 5, RoadWidth = 5;
     public void level_init() {
-        level.getMap().add_level(10 + RoadLength, 3, mapdata.maps[0]);
-        last_level_right_x = 10 + RoadLength + mapdata.maps[0][0].length;
-        level.getMap().add_road(10, 3, 5, RoadLength);
-        level.getMap().add_road(last_level_right_x,3,5,RoadLength);
+        add_level(10 + RoadLength, 3, mapdata.maps[0]);
+        level.getMap().add_road(10, 3, RoadWidth, RoadLength, Direction.RIGHT);
+        level.getMap().add_road(last_right,3,RoadWidth,RoadLength, Direction.RIGHT);
         level.getMap().set(10 + RoadLength,5,0);
     }
 
     public void win_update() {
         int new_map_id = (int) (mapdata.maps.length * Math.random());
-
-        level.getMap().set(last_level_right_x - 1,5,0);
-        level.getMap().add_level(last_level_right_x + RoadLength,3, mapdata.maps[new_map_id]);
-        last_level_right_x += RoadLength + mapdata.maps[new_map_id][0].length;
-        level.getMap().add_road(last_level_right_x, 3, 5, RoadLength);
-        level.getMap().set(last_level_right_x - mapdata.maps[new_map_id][0].length,5,0);
+        //Direction direction = Direction.values()[(int)(2 * Math.random()) + 1];
+        Direction direction = new Direction[]{Direction.RIGHT, Direction.DOWN}[(int)(2 * Math.random())];
+        int[][] next_map = mapdata.maps[new_map_id];
+        change_level(direction, next_map);
 
         update();
+    }
+
+    private void change_level(Direction direction, int[][] data) {
+        open_door(last_direction);
+        add_level(last_direction, data);
+        switch (direction){
+            case RIGHT -> {
+                level.getMap().add_road(last_right, (last_up + last_down - RoadWidth)/2, RoadWidth, RoadLength, direction);
+            } case UP -> {
+                level.getMap().add_road((last_left + last_right - RoadWidth)/2, last_up, RoadWidth, RoadLength, direction);
+            } case DOWN -> {
+                level.getMap().add_road((last_left + last_right - RoadWidth)/2, last_down, RoadWidth, RoadLength, direction);
+            }
+        }
+        last_direction = direction;
+    }
+
+    private void open_door(Direction direction) {
+        switch (direction) {
+            case RIGHT -> {
+                level.getMap().set(last_right - 1, (last_up + last_down)/2, 0);
+            } case UP -> {
+                level.getMap().set((last_right + last_left)/2, last_up, 0);
+            } case DOWN -> {
+                level.getMap().set((last_right +last_left)/2, last_down - 1,0);
+            } case LEFT -> {
+
+            }
+        }
+    }
+    private void add_level(Direction direction, int[][] data) {
+        switch (direction) {
+            case RIGHT -> {
+                int x = last_right + RoadLength;
+                int y = (last_up + last_down - data.length) / 2;
+                add_level(x, y, data);
+                level.getMap().set(x + data.length/2, y, 0);
+            } case LEFT -> {
+
+            } case DOWN -> {
+                int x = (last_right + last_left - RoadWidth) / 2;
+                int y = last_down + RoadLength;
+                add_level(x, y, data);
+                level.getMap().set(x, y + data.length / 2,0);
+            } case UP -> {
+                int x = last_right + last_left - data[0].length/2;
+                int y = last_up - RoadLength;
+                add_level(x, y, data);
+                level.getMap().set(x + data.length - 1, y + data.length / 2, 0);
+            }
+        }
+    }
+
+    private void add_level(int begin_x, int begin_y, int[][] data) {
+        level.getMap().add_level(begin_x, begin_y, data);
+        last_right = begin_x + data[0].length;
+        last_down = begin_y + data.length;
+        last_up = begin_y;
+        last_left = begin_x;
     }
 
     private void update() {
@@ -193,5 +243,4 @@ public class InfiniteLevelManager {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
-
 }
