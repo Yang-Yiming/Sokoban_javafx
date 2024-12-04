@@ -133,6 +133,7 @@ public class InfiniteLevelManager {
         int new_map_id = (int) (mapdata.maps.length * Math.random());
         //Direction direction = Direction.values()[(int)(2 * Math.random()) + 1];
         Direction direction = new Direction[]{Direction.RIGHT, Direction.DOWN}[(int)(2 * Math.random())];
+//        direction = Direction.UP; // debug
         int[][] next_map = mapdata.maps[new_map_id];
         change_level(direction, next_map);
 
@@ -167,25 +168,25 @@ public class InfiniteLevelManager {
             }
         }
     }
-    private void add_level(Direction direction, int[][] data) {
-        switch (direction) {
+    private void add_level(Direction last_direction, int[][] data) {
+        switch (last_direction) {
             case RIGHT -> {
                 int x = last_right + RoadLength;
                 int y = (last_up + last_down - data.length) / 2;
                 add_level(x, y, data);
-                level.getMap().set(x + data.length/2, y, 0);
+                level.getMap().set(x, (last_up + last_down) / 2, 0); // 关卡入口 根据上一关
             } case LEFT -> {
 
             } case DOWN -> {
                 int x = (last_right + last_left - RoadWidth) / 2;
                 int y = last_down + RoadLength;
                 add_level(x, y, data);
-                level.getMap().set(x, y + data.length / 2,0);
+                level.getMap().set(x + data[0].length / 2, y,0);
             } case UP -> {
                 int x = last_right + last_left - data[0].length/2;
                 int y = last_up - RoadLength;
                 add_level(x, y, data);
-                level.getMap().set(x + data.length - 1, y + data.length / 2, 0);
+                level.getMap().set(x + data[0].length/2, y, 0);
             }
         }
     }
