@@ -131,6 +131,65 @@ public class MenuView extends AnchorPane {
     }
 
     ArrayList<Rectangle> grass = new ArrayList<>();
+    private ImageView box;
+    double boxV = 0, boxA = 0.15;
+    Timeline boxTimeline;
+    private void createBox(){
+        box = new ImageView(new Image(getClass().getResourceAsStream("/images/box_2d.png"), 50, 50, false, false));
+        box.setOnMouseDragged(event -> {
+            box.setX(event.getX() - 25);
+            box.setY(event.getY() - 25);
+        });
+        getChildren().add(box);
+        box.setOnMousePressed(event -> boxTimeline.pause());
+        box.setOnMouseReleased(event -> boxTimeline.play());
+        boxTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+            if(box.getY() < getHeight() - 100){
+                boxV += boxA;
+                box.setY(box.getY() + boxV);
+            }else{
+                boxV = 0;
+                box.setY(getHeight() - 100);
+            }
+        }));
+        boxTimeline.setCycleCount(Timeline.INDEFINITE);
+        boxTimeline.play();
+    }
+    Image cat_stand = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), 50, 50, false, false);
+    Image cat_run = new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), 50, 50, false, false);
+    ImageView cat;
+    Timeline catTimeline;
+    double catV = 0, catA = 0.15;
+    private void createCat(){
+        cat = new ImageView(cat_stand);
+        cat.setX(50);
+        cat.setY(getPrefHeight() - 86);
+        getChildren().add(cat);
+
+        catTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+            if(cat.getY() < getHeight() - 86){
+                catV += catA;
+                cat.setY(cat.getY() + catV);
+            }else{
+                catV = 0;
+                cat.setY(getHeight() - 86);
+            }
+            if(cat.getX() < box.getX() - 50){
+                cat.setImage(cat_run);
+                cat.setScaleX(1);
+                cat.setX(cat.getX() + 2);
+            }else if(cat.getX() > box.getX() + 50){
+                cat.setImage(cat_run);
+                cat.setScaleX(-1);
+                cat.setX(cat.getX() - 2);
+            }else{
+                cat.setImage(cat_stand);
+            }
+        }));
+        catTimeline.setCycleCount(Timeline.INDEFINITE);
+        catTimeline.play();
+    }
+
     private void addground(){
         grass = new ArrayList<>();
         for(int i = 0; i < 40; ++i){
@@ -170,6 +229,10 @@ public class MenuView extends AnchorPane {
         //设置背景颜色
         setStyle("-fx-background-color: linear-gradient(to bottom, #b0d5df, #dfecd5);");
         createClouds();
+
+        createBox();
+        createCat();
+
         //在最下方铺一层绿色的草地
 //        grass = new Rectangle(0, getHeight() - 100, getWidth(), 100);
 //        grass.setFill(Color.rgb(124, 153, 32));
