@@ -285,7 +285,7 @@ public class MenuView extends AnchorPane {
         if(startButton != null) startButton.setLayoutX((doubleValue - 100) / 2);
         if(loginButton != null) loginButton.setLayoutX(doubleValue - 150);
         if(settingsButton != null) settingsButton.setLayoutX(doubleValue - 80);
-//        grass.setWidth(doubleValue);
+        if(shade != null) shade.setWidth(doubleValue);
     }
     void changePosY(double doubleValue){
 //        grass.setY(doubleValue - 100);
@@ -298,6 +298,7 @@ public class MenuView extends AnchorPane {
         for(Rectangle rect : grass){
             rect.setY(doubleValue - rect.getHeight());
         }
+        if(shade != null) shade.setHeight(doubleValue);
     }
     void changeBtnPosX(double doubleValue){
         if(btn_mode1 != null) btn_mode1.setLayoutX((doubleValue - 180) / 2);
@@ -367,14 +368,75 @@ public class MenuView extends AnchorPane {
         fadeTransition.play();
         return fadeTransition;
     }
-
+    Rectangle shade;
+    ImageView paper = new ImageView(new Image(getClass().getResourceAsStream("/images/paper.png"), 500, 500, false, false));
     private void loginButtonClicked() {
         // Handle login button click
-        menuController.LoginButtonClicked();
+//        menuController.LoginButtonClicked();
+        //变暗
+        shade = new Rectangle(0, 0, getWidth(), getHeight());
+        shade.setFill(Color.rgb(0, 0, 0, 0.5));
+        getChildren().add(shade);
+        //纸
+        paper.setX(150);
+        paper.setY(50);
+        getChildren().add(paper);
+        //标题
+        Text loginText = new Text(340.0, 150.0, "Login");
+        loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        loginText.setFont(new Font(45));
+        getChildren().add(loginText);
+        //关闭按钮
+        Button close = new Button();
+        Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
+        close.setGraphic(new ImageView(X));
+        getChildren().add(close);
+        close.setLayoutX(630);
+        close.setLayoutY(60);
+        close.setMaxSize(30, 30);
+        close.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-text-fill: #55371d;");
+        //点击关闭按钮
+        close.setOnMouseClicked(event -> {
+            getChildren().remove(shade);
+            getChildren().remove(paper);
+            getChildren().remove(loginText);
+            getChildren().remove(close);
+        });
+
     }
 
     private void settingsButtonClicked() {
         // Handle settings button click
-        menuController.SettingButtonClicked();
+//        menuController.SettingButtonClicked();
+
+        //变暗
+        shade = new Rectangle(0, 0, getWidth(), getHeight());
+        shade.setFill(Color.rgb(0, 0, 0, 0.5));
+        getChildren().add(shade);
+        //纸
+        paper.setX(150);
+        paper.setY(50);
+        getChildren().add(paper);
+        //标题
+        Text loginText = new Text(310.0, 150.0, "Settings");
+        loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        loginText.setFont(new Font(45));
+        getChildren().add(loginText);
+        //关闭按钮
+        Button close = new Button();
+        Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
+        close.setGraphic(new ImageView(X));
+        getChildren().add(close);
+        close.setLayoutX(630);
+        close.setLayoutY(60);
+        close.setMaxSize(30, 30);
+        close.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-text-fill: #55371d;");
+        //点击关闭按钮
+        close.setOnMouseClicked(event -> {
+            getChildren().remove(shade);
+            getChildren().remove(paper);
+            getChildren().remove(loginText);
+            getChildren().remove(close);
+        });
     }
 }

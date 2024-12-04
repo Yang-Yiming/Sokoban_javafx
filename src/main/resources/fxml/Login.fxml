@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.view.menu.LoginController">
    <children>
-      <Rectangle fx:id="BackGround" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="639.0" layoutX="-8.0" layoutY="-6.0" stroke="WHITE" strokeType="INSIDE" width="718.0" />
+      <Rectangle fx:id="BackGround" arcHeight="5.0" arcWidth="5.0" fill="#f7f4ed" height="639.0" layoutX="-8.0" layoutY="-6.0" stroke="WHITE" strokeType="INSIDE" width="718.0" />
       <Text fx:id="LoginText" layoutX="94.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login">
          <font>
             <Font size="45.0" />
