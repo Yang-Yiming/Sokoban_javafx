@@ -75,20 +75,41 @@ public class MenuView extends AnchorPane {
         startButton = generate_button("开始", (getPrefWidth() - 100) / 2, 310);
         startButton.setOnMouseClicked(event -> startButtonClicked());
 
-        loginButton = new Button("Login");
-        loginButton.setLayoutX(678.0);
+        loginButton = new Button();
+        ImageView loginImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/login.png")));
+        loginImageView.setFitWidth(30);
+        loginImageView.setFitHeight(30);
+        loginButton.setGraphic(loginImageView);
+        loginButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
+        loginButton.setLayoutX(700.0);
         loginButton.setLayoutY(35.0);
-        loginButton.setPrefHeight(47.0);
-        loginButton.setPrefWidth(100.0);
+        loginButton.setMaxSize(30, 30);
         loginButton.setOnMouseClicked(event -> loginButtonClicked());
+        //鼠标放上去时变成 login_clicked.png
+        loginButton.setOnMouseEntered(event -> {
+            loginImageView.setImage(new Image(getClass().getResourceAsStream("/images/login_clicked.png")));
+        });
+        loginButton.setOnMouseExited(event -> {
+            loginImageView.setImage(new Image(getClass().getResourceAsStream("/images/login.png")));
+        });
 
-        settingsButton = new Button("Settings");
+        settingsButton = new Button();
+        ImageView settingsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/settings.png")));
+        settingsImageView.setFitWidth(30);
+        settingsImageView.setFitHeight(30);
+        settingsButton.setGraphic(settingsImageView);
+        settingsButton.setMaxSize(30, 30);
+        settingsButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
         settingsButton.setLayoutX(788.0);
         settingsButton.setLayoutY(35.0);
-        settingsButton.setPrefHeight(47.0);
-        settingsButton.setPrefWidth(100.0);
         settingsButton.setOnMouseClicked(event -> settingsButtonClicked());
-
+        //鼠标放上去时变成 settings_clicked.png
+        settingsButton.setOnMouseEntered(event -> {
+            settingsImageView.setImage(new Image(getClass().getResourceAsStream("/images/settings_clicked.png")));
+        });
+        settingsButton.setOnMouseExited(event -> {
+            settingsImageView.setImage(new Image(getClass().getResourceAsStream("/images/settings.png")));
+        });
 
     }
     Timeline cloudsTimeLine = null;
@@ -262,8 +283,8 @@ public class MenuView extends AnchorPane {
         title.setLayoutX((doubleValue - title.getFitWidth()) / 2);
         //将 btn1,2,3 居中
         if(startButton != null) startButton.setLayoutX((doubleValue - 100) / 2);
-        if(loginButton != null) loginButton.setLayoutX(doubleValue - 200);
-        if(settingsButton != null) settingsButton.setLayoutX(doubleValue - 100);
+        if(loginButton != null) loginButton.setLayoutX(doubleValue - 150);
+        if(settingsButton != null) settingsButton.setLayoutX(doubleValue - 80);
 //        grass.setWidth(doubleValue);
     }
     void changePosY(double doubleValue){
@@ -302,7 +323,7 @@ public class MenuView extends AnchorPane {
         btn.setPrefHeight(57.0);
         // btn.setPrefWidth(161.0);
         btn.setFont(new Font(30.0));
-        btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
+        btn.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-text-fill: #55371d;");
         ScaleTransition scaleUp = createScaleTransition(btn, 1, config.font_size_2 / config.font_size_1, Duration.millis(config.font_size_change_millis));
         ScaleTransition scaleDown = createScaleTransition(btn, config.font_size_2 / config.font_size_1, 1, Duration.millis(config.font_size_change_millis));
 
