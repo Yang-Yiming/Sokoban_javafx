@@ -2,9 +2,7 @@ package org.view.menu;
 
 import javafx.animation.*;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -13,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -24,8 +23,6 @@ import org.view.level.Grass;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
-import static java.lang.Math.max;
 
 public class MenuView extends AnchorPane {
     private Button startButton;
@@ -415,7 +412,7 @@ public class MenuView extends AnchorPane {
         // 创建用户名HBox
         usernameHbox = new HBox(10); // 间距为10
         usernameHbox.setAlignment(Pos.CENTER_LEFT);
-        Text usernameText = new Text("Username");
+        Text usernameText = new Text("Username ");
         usernameText.setFill(javafx.scene.paint.Color.web("#55371d"));
         usernameText.setFont(new Font(pixelFont.getName(), 25));
         usernameInput = new TextField();
@@ -432,7 +429,7 @@ public class MenuView extends AnchorPane {
         // 创建密码HBox
         passwordHbox = new HBox(10);
         passwordHbox.setAlignment(Pos.CENTER_LEFT);
-        Text passwordText = new Text("Password");
+        Text passwordText = new Text("Password ");
         passwordText.setFill(javafx.scene.paint.Color.web("#55371d"));
         passwordText.setFont(new Font(pixelFont.getName(), 25));
         passwordInput = new PasswordField();
@@ -447,7 +444,7 @@ public class MenuView extends AnchorPane {
 
         // 创建确认密码HBox
         confirmPasswordHbox = new HBox(10);
-        Text confirmPasswordText = new Text("确认密码  ");
+        Text confirmPasswordText = new Text("确认密码   ");
         confirmPasswordText.setFill(javafx.scene.paint.Color.web("#55371d"));
         confirmPasswordText.setFont(new Font(pixelFont.getName(), 20));
         confirmPasswordInput = new PasswordField();
@@ -572,9 +569,20 @@ public class MenuView extends AnchorPane {
         }
     }
 
+
+    public VBox SettingVbox;
+    public HBox AnimTimeHbox;
+    public Text MovingAnimTimeText;
+    public Slider MovingAnimTimeSlider;
+    public HBox IsVerticalHbox;
+    public Text IsVerticalText;
+    public CheckBox VerticalCheckBox;
+
+
     private void settingsButtonClicked() {
         // Handle settings button click
 //        menuController.SettingButtonClicked();
+//        if(true) return;
 
         //变暗
         shade = new Rectangle(0, 0, getWidth(), getHeight());
@@ -589,6 +597,74 @@ public class MenuView extends AnchorPane {
         loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
         loginText.setFont(new Font(45));
         getChildren().add(loginText);
+
+        SettingVbox = new VBox(0);
+        SettingVbox.setPrefHeight(511.0);
+        SettingVbox.setPrefWidth(340.0);
+        SettingVbox.setLayoutX(240);
+        SettingVbox.setLayoutY(170);
+        getChildren().add(SettingVbox);
+
+        // 创建动画时间HBox
+        AnimTimeHbox = new HBox();
+        AnimTimeHbox.setAlignment(Pos.CENTER_LEFT);
+        AnimTimeHbox.setPrefHeight(100.0);
+        AnimTimeHbox.setPrefWidth(200.0);
+        AnimTimeHbox.setSpacing(30.0);
+        SettingVbox.getChildren().add(AnimTimeHbox);
+
+        // 创建移动动画时间文本Text
+        MovingAnimTimeText = new Text("MovingAnimTime");
+        MovingAnimTimeText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        MovingAnimTimeText.setFont(new Font(pixelFont.getName(), 25));
+        MovingAnimTimeText.setStrokeType(StrokeType.OUTSIDE);
+        MovingAnimTimeText.setStrokeWidth(0.0);
+        AnimTimeHbox.getChildren().add(MovingAnimTimeText);
+
+
+        // 创建移动动画时间Slider
+        if(MovingAnimTimeSlider == null){
+            MovingAnimTimeSlider = new Slider();
+            MovingAnimTimeSlider.setMax(0.69);
+            MovingAnimTimeSlider.setValue(0.5);
+            //将初始化的值设置为config中的值
+            MovingAnimTimeSlider.setValue((config.move_anim_duration - 10) / 600.0);
+            //把滑动条变成棕色并把边框去掉
+            MovingAnimTimeSlider.setStyle("-fx-border-color: transparent; -fx-border-width: 0px; -fx-control-inner-background: #55371d; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+            MovingAnimTimeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                config.move_anim_duration =  (int) (10 + 600 * newValue.doubleValue());
+            });
+        }
+        AnimTimeHbox.getChildren().add(MovingAnimTimeSlider);
+
+        // 创建是否垂直HBox
+        IsVerticalHbox = new HBox();
+        IsVerticalHbox.setAlignment(Pos.CENTER_LEFT);
+        IsVerticalHbox.setPrefHeight(100.0);
+        IsVerticalHbox.setPrefWidth(200.0);
+        IsVerticalHbox.setSpacing(30.0);
+        SettingVbox.getChildren().add(IsVerticalHbox);
+
+        // 创建是否垂直文本Text
+        IsVerticalText = new Text("显示地图的方向");
+        IsVerticalText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        IsVerticalText.setFont(new Font(pixelFont.getName(), 20));
+        IsVerticalText.setStrokeType(StrokeType.OUTSIDE);
+        IsVerticalText.setStrokeWidth(0.0);
+        IsVerticalHbox.getChildren().add(IsVerticalText);
+
+        // 创建是否垂直CheckBox
+        if(VerticalCheckBox == null){
+            VerticalCheckBox = new CheckBox("Vertical");
+            //将文本改为棕色
+            VerticalCheckBox.setTextFill(javafx.scene.paint.Color.web("#55371d"));
+            VerticalCheckBox.setStyle("-fx-mark-color: #55371d; -fx-box-border: transparent; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");            VerticalCheckBox.setFont(new Font(pixelFont.getName(), 20));
+            VerticalCheckBox.setMnemonicParsing(false);
+        }
+        IsVerticalHbox.getChildren().add(VerticalCheckBox);
+        // onMouseClicked="#Clicked" 需要在控制器中处理
+
+
         //关闭按钮
         Button close = new Button();
         Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
@@ -604,6 +680,7 @@ public class MenuView extends AnchorPane {
             getChildren().remove(paper);
             getChildren().remove(loginText);
             getChildren().remove(close);
+            getChildren().remove(SettingVbox);
         });
     }
 }
