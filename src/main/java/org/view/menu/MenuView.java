@@ -1,6 +1,7 @@
 package org.view.menu;
 
 import javafx.animation.*;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -9,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -18,6 +20,7 @@ import org.model.SavingManager;
 import org.model.User;
 import org.model.config;
 import org.view.level.Grass;
+
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -72,9 +75,12 @@ public class MenuView extends AnchorPane {
 
     }
 
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
+
     private void createButtons(){
 
         startButton = generate_button("开始", (getPrefWidth() - 100) / 2, 310);
+        startButton.setFont(pixelFont);
         startButton.setOnMouseClicked(event -> startButtonClicked());
 
         loginButton = new Button();
@@ -343,6 +349,9 @@ public class MenuView extends AnchorPane {
         btn_mode1 = generate_button("经典模式", 300, 270);
         btn_mode2 = generate_button("无尽模式", 300, 320);
         btn_mode3 = generate_button("双人模式", 300, 370);
+        btn_mode1.setFont(pixelFont);
+        btn_mode2.setFont(pixelFont);
+        btn_mode3.setFont(pixelFont);
         changeBtnPosX(getWidth());
         getChildren().addAll(btn_mode1, btn_mode2, btn_mode3);
 
@@ -373,7 +382,6 @@ public class MenuView extends AnchorPane {
     Rectangle shade;
     ImageView paper = new ImageView(new Image(getClass().getResourceAsStream("/images/paper.png"), 500, 500, false, false));
 
-
     VBox loginVbox;
     HBox usernameHbox, passwordHbox, confirmPasswordHbox, reminderHbox, buttonsHbox;
     TextField usernameInput;
@@ -392,52 +400,77 @@ public class MenuView extends AnchorPane {
         getChildren().add(paper);
         //标题
         loginText = new Text(340.0, 150.0, "Login");
+        loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
-        loginText.setFont(new Font(45));
         getChildren().add(loginText);
         //按钮
         
         // 创建VBox
-        loginVbox = new VBox(10);
+        loginVbox = new VBox(25);
         loginVbox.setPrefHeight(214.0);
         loginVbox.setPrefWidth(209.0);
-        loginVbox.setLayoutX(200);
+        loginVbox.setLayoutX(260);
         loginVbox.setLayoutY(200);
+
         // 创建用户名HBox
         usernameHbox = new HBox(10); // 间距为10
-        usernameHbox.setAlignment(javafx.geometry.Pos.CENTER);
+        usernameHbox.setAlignment(Pos.CENTER_LEFT);
         Text usernameText = new Text("Username");
+        usernameText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        usernameText.setFont(new Font(pixelFont.getName(), 25));
         usernameInput = new TextField();
+        usernameInput.setPrefWidth(150);
+        usernameInput.setMaxWidth(150);
+        usernameInput.setMinWidth(150);
+        HBox.setHgrow(usernameInput, Priority.NEVER);
         usernameHbox.getChildren().addAll(usernameText, usernameInput);
         loginVbox.getChildren().add(usernameHbox);
 
         // 创建密码HBox
         passwordHbox = new HBox(10);
-        passwordHbox.setAlignment(javafx.geometry.Pos.CENTER);
+        passwordHbox.setAlignment(Pos.CENTER_LEFT);
         Text passwordText = new Text("Password");
+        passwordText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        passwordText.setFont(new Font(pixelFont.getName(), 25));
         passwordInput = new PasswordField();
+        passwordInput.setMaxWidth(150);
+        passwordInput.setMaxWidth(150);
+        passwordInput.setMinWidth(150);
+        HBox.setHgrow(passwordInput, Priority.NEVER);
         passwordHbox.getChildren().addAll(passwordText, passwordInput);
         loginVbox.getChildren().add(passwordHbox);
 
         // 创建确认密码HBox
         confirmPasswordHbox = new HBox(10);
-        Text confirmPasswordText = new Text("确认密码");
+        Text confirmPasswordText = new Text("确认密码  ");
+        confirmPasswordText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        confirmPasswordText.setFont(new Font(pixelFont.getName(), 20));
         confirmPasswordInput = new PasswordField();
+        confirmPasswordInput.setMaxWidth(150);
+        confirmPasswordInput.setMaxWidth(150);
+        confirmPasswordInput.setMinWidth(150);
+        HBox.setHgrow(confirmPasswordInput, Priority.NEVER);
         confirmPasswordHbox.getChildren().addAll(confirmPasswordText, confirmPasswordInput);
-        loginVbox.getChildren().add(confirmPasswordHbox);
+//        loginVbox.getChildren().add(confirmPasswordHbox);
 
         // 创建提醒HBox
         reminderHbox = new HBox(10);
         reminderText = new Text("");
+        reminderText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        reminderText.setFont(new Font(pixelFont.getName(), 15));
         reminderHbox.getChildren().addAll(reminderText);
         loginVbox.getChildren().add(reminderHbox);
 
         // 创建按钮HBox
         buttonsHbox = new HBox(10);
-        buttonsHbox.setAlignment(javafx.geometry.Pos.CENTER);
+        buttonsHbox.setAlignment(Pos.CENTER_LEFT);
         Button loginButton = new Button("Login");
+        loginButton.setFont(new Font(pixelFont.getName(), 15));
         loginButton.setOnAction(event -> handleLogin());
+        loginButton.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
         Button registerButton = new Button("Register");
+        registerButton.setFont(new Font(pixelFont.getName(), 15));
+        registerButton.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
         registerButton.setOnAction(event -> {
             try {
                 handleRegister();
@@ -474,6 +507,7 @@ public class MenuView extends AnchorPane {
     private User user;
     public void handleLogin() {
         loginText.setText("Login");
+        loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(340.0);
         loginVbox.getChildren().remove(reminderHbox);
         if(loginVbox.getChildren().contains(confirmPasswordHbox)){
@@ -502,6 +536,7 @@ public class MenuView extends AnchorPane {
     }
     public void handleRegister() throws FileNotFoundException {
         loginText.setText("Register");
+        loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(310.0);
         loginVbox.getChildren().remove(reminderHbox);
         if(!loginVbox.getChildren().contains(confirmPasswordHbox)){
@@ -516,7 +551,7 @@ public class MenuView extends AnchorPane {
         loginVbox.getChildren().add(3, reminderHbox);
 
         if (SavingManager.NotValidString(UserName)) {
-            reminderText.setText("Invalid username, should only contain letters, numbers and _");
+            reminderText.setText("Invalid username,\nshould only contain letters, numbers and _");
         } else if (SavingManager.getUser(UserName, Password) != -1) {
             reminderText.setText("User already exists");
         } else if (SavingManager.NotValidString(Password)) {
