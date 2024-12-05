@@ -422,6 +422,9 @@ public class MenuView extends AnchorPane {
         usernameInput.setPrefWidth(150);
         usernameInput.setMaxWidth(150);
         usernameInput.setMinWidth(150);
+        //将输入框改为透明，边框是棕色
+        usernameInput.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px;");
+
         HBox.setHgrow(usernameInput, Priority.NEVER);
         usernameHbox.getChildren().addAll(usernameText, usernameInput);
         loginVbox.getChildren().add(usernameHbox);
@@ -436,6 +439,8 @@ public class MenuView extends AnchorPane {
         passwordInput.setMaxWidth(150);
         passwordInput.setMaxWidth(150);
         passwordInput.setMinWidth(150);
+        passwordInput.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px;");
+
         HBox.setHgrow(passwordInput, Priority.NEVER);
         passwordHbox.getChildren().addAll(passwordText, passwordInput);
         loginVbox.getChildren().add(passwordHbox);
@@ -449,6 +454,8 @@ public class MenuView extends AnchorPane {
         confirmPasswordInput.setMaxWidth(150);
         confirmPasswordInput.setMaxWidth(150);
         confirmPasswordInput.setMinWidth(150);
+        confirmPasswordInput.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px;");
+
         HBox.setHgrow(confirmPasswordInput, Priority.NEVER);
         confirmPasswordHbox.getChildren().addAll(confirmPasswordText, confirmPasswordInput);
 //        loginVbox.getChildren().add(confirmPasswordHbox);
