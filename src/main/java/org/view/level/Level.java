@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
@@ -34,7 +36,7 @@ public abstract class Level {
 
     private Canvas canvas; // 用来放grass
 
-    private GUIController guiController; // 显示gui
+//    private GUIController guiController; // 显示gui
     private Pane gui_root; // gui的root
     protected User user; // 史山
 
@@ -136,17 +138,32 @@ public abstract class Level {
         this.user = user;
         //load_gui(user);
     }
-
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 20);
+    Text stepText;
+    private int step;
+    public void addStep(){
+        ++step;
+        stepText.setText("移动步数: " + step);
+    }
     protected void load_gui(User user) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
-        try {
-            gui_root = loader.load();
-            guiController = loader.getController();
-            guiController.initialize(primaryStage);
-        } catch (IOException e) {
-            System.out.println("Failed to load FXML file: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        step = 0;
+        stepText = new Text("移动步数: " + step);
+        stepText.setX(15);
+        stepText.setY(25);
+        //棕色
+        stepText.setFill(Color.web("#55371d"));
+        stepText.setFont(pixelFont);
+        root.getChildren().add(stepText);
+
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
+//        try {
+//            gui_root = loader.load();
+//            guiController = loader.getController();
+//            guiController.initialize(primaryStage);
+//        } catch (IOException e) {
+//            System.out.println("Failed to load FXML file: " + e.getMessage());
+//            throw new RuntimeException(e);
+//        }
         this.user = user;
     }
     public void drawGrass(){
@@ -258,9 +275,10 @@ public abstract class Level {
     }
 
     public void drawGUI() {
-        if(user == null) return;
-        guiController.update(user.getMoveCount());
-        root.getChildren().addAll(gui_root);
+        root.getChildren().add(stepText);
+//        if(user == null) return;
+//        guiController.update(user.getMoveCount());
+//        root.getChildren().addAll(gui_root);
     }
 
     public void drawMap() {

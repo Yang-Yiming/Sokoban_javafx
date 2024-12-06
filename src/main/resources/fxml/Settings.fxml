@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Text?>
+<!--<?import javafx.scene.control.Button?>-->
+<!--<?import javafx.scene.control.CheckBox?>-->
+<!--<?import javafx.scene.control.Slider?>-->
+<!--<?import javafx.scene.layout.AnchorPane?>-->
+<!--<?import javafx.scene.layout.HBox?>-->
+<!--<?import javafx.scene.layout.VBox?>-->
+<!--<?import javafx.scene.shape.Rectangle?>-->
+<!--<?import javafx.scene.text.Text?>-->
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.view.menu.SettingController">
-   <children>
-      <Rectangle fx:id="Background" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="516.0" stroke="WHITE" strokeType="INSIDE" width="649.0" />
-      <VBox fx:id="SettingVbox" prefHeight="511.0" prefWidth="340.0">
-         <children>
-            <HBox fx:id="SettingTextHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Text fx:id="SettingText" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" />
-               </children>
-            </HBox>
-            <HBox fx:id="AnimTimeHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-               <children>
-                  <Text fx:id="MovingAnimTimeText" strokeType="OUTSIDE" strokeWidth="0.0" text="MovingAnimTime" />
-                  <Slider fx:id="MovingAnimTimeSlider" max="1.0" onDragDone="#DragDone" value="0.5" />
-               </children>
-            </HBox>
-            <HBox fx:id="ViewingAngleHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-               <children>
-                  <Text fx:id="ViewingAngleText" strokeType="OUTSIDE" strokeWidth="0.0" text="ViewingAngle" />
-                  <Slider fx:id="ViewingAngleSlider" max="1.0" onDragDone="#DragDone" value="0.5" />
-               </children>
-            </HBox>
-            <HBox fx:id="IsVerticalHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-               <children>
-                  <Text fx:id="IsVerticalText" strokeType="OUTSIDE" strokeWidth="0.0" text="显示地图的方向" />
-                  <CheckBox fx:id="VerticalCheckBox" mnemonicParsing="false" onMouseClicked="#Clicked" text="Vertical" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <Button fx:id="BackButton" mnemonicParsing="false" onMouseClicked="#Back" text="Back" />
-   </children>
-</AnchorPane>
+<!--<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.view.menu.SettingController">-->
+<!--   <children>-->
+<!--      <Rectangle fx:id="Background" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="516.0" stroke="WHITE" strokeType="INSIDE" width="649.0" />-->
+<!--      <VBox fx:id="SettingVbox" prefHeight="511.0" prefWidth="340.0">-->
+<!--         <children>-->
+<!--            <HBox fx:id="SettingTextHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="SettingText" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--            <HBox fx:id="AnimTimeHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="MovingAnimTimeText" strokeType="OUTSIDE" strokeWidth="0.0" text="MovingAnimTime" />-->
+<!--                  <Slider fx:id="MovingAnimTimeSlider" max="1.0" onDragDone="#DragDone" value="0.5" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--            <HBox fx:id="ViewingAngleHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="ViewingAngleText" strokeType="OUTSIDE" strokeWidth="0.0" text="ViewingAngle" />-->
+<!--                  <Slider fx:id="ViewingAngleSlider" max="1.0" onDragDone="#DragDone" value="0.5" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--            <HBox fx:id="IsVerticalHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="IsVerticalText" strokeType="OUTSIDE" strokeWidth="0.0" text="显示地图的方向" />-->
+<!--                  <CheckBox fx:id="VerticalCheckBox" mnemonicParsing="false" onMouseClicked="#Clicked" text="Vertical" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--         </children>-->
+<!--      </VBox>-->
+<!--      <Button fx:id="BackButton" mnemonicParsing="false" onMouseClicked="#Back" text="Back" />-->
+<!--   </children>-->
+<!--</AnchorPane>-->

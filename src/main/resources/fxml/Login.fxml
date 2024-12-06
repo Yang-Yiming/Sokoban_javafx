@@ -1,64 +1,64 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.effect.Blend?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<!--<?import javafx.geometry.Insets?>-->
+<!--<?import javafx.scene.control.Button?>-->
+<!--<?import javafx.scene.control.TextField?>-->
+<!--<?import javafx.scene.control.PasswordField?>-->
+<!--<?import javafx.scene.effect.Blend?>-->
+<!--<?import javafx.scene.layout.AnchorPane?>-->
+<!--<?import javafx.scene.layout.HBox?>-->
+<!--<?import javafx.scene.layout.VBox?>-->
+<!--<?import javafx.scene.shape.Rectangle?>-->
+<!--<?import javafx.scene.text.Font?>-->
+<!--<?import javafx.scene.text.Text?>-->
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.view.menu.LoginController">
-   <children>
-      <Rectangle fx:id="BackGround" arcHeight="5.0" arcWidth="5.0" fill="#f7f4ed" height="639.0" layoutX="-8.0" layoutY="-6.0" stroke="WHITE" strokeType="INSIDE" width="718.0" />
-      <Text fx:id="LoginText" layoutX="94.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Text>
-      <VBox fx:id="LoginVbox" layoutX="44.0" layoutY="142.0" prefHeight="214.0" prefWidth="209.0">
-         <children>
-            <HBox fx:id="UsernameHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Text fx:id="UsernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-                  <TextField fx:id="UsernameInput" />
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <effect>
-                  <Blend />
-               </effect>
-            </HBox>
-            <HBox fx:id="PasswordHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Text fx:id="PasswordText" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-                  <PasswordField fx:id="PasswordInput" />
-               </children>
-            </HBox>
-            <HBox fx:id="ConfirmPasswordHbox" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Text fx:id="ConfirmPasswordText" strokeType="OUTSIDE" strokeWidth="0.0" text="确认密码" />
-                  <PasswordField fx:id="ConfirmPasswordInput" />
-               </children>
-            </HBox>
-            <HBox fx:id="ReminderHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Text fx:id="ReminderText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-               </children>
-            </HBox>
-            <HBox fx:id="ButtonsHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button fx:id="LoginButton" mnemonicParsing="false" onMouseClicked="#HandleLogin" text="Login " />
-                  <Button fx:id="RegisterButton" mnemonicParsing="false" onMouseClicked="#HandleRegister" text="Register" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <Button fx:id="Back" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" onMouseClicked="#Back" text="Back" />
-   </children>
-</AnchorPane>
+<!--<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.view.menu.LoginController">-->
+<!--   <children>-->
+<!--      <Rectangle fx:id="BackGround" arcHeight="5.0" arcWidth="5.0" fill="#f7f4ed" height="639.0" layoutX="-8.0" layoutY="-6.0" stroke="WHITE" strokeType="INSIDE" width="718.0" />-->
+<!--      <Text fx:id="LoginText" layoutX="94.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login">-->
+<!--         <font>-->
+<!--            <Font size="45.0" />-->
+<!--         </font>-->
+<!--      </Text>-->
+<!--      <VBox fx:id="LoginVbox" layoutX="44.0" layoutY="142.0" prefHeight="214.0" prefWidth="209.0">-->
+<!--         <children>-->
+<!--            <HBox fx:id="UsernameHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="UsernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />-->
+<!--                  <TextField fx:id="UsernameInput" />-->
+<!--               </children>-->
+<!--               <opaqueInsets>-->
+<!--                  <Insets />-->
+<!--               </opaqueInsets>-->
+<!--               <effect>-->
+<!--                  <Blend />-->
+<!--               </effect>-->
+<!--            </HBox>-->
+<!--            <HBox fx:id="PasswordHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="PasswordText" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />-->
+<!--                  <PasswordField fx:id="PasswordInput" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--            <HBox fx:id="ConfirmPasswordHbox" prefHeight="100.0" prefWidth="200.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="ConfirmPasswordText" strokeType="OUTSIDE" strokeWidth="0.0" text="确认密码" />-->
+<!--                  <PasswordField fx:id="ConfirmPasswordInput" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--            <HBox fx:id="ReminderHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">-->
+<!--               <children>-->
+<!--                  <Text fx:id="ReminderText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--            <HBox fx:id="ButtonsHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">-->
+<!--               <children>-->
+<!--                  <Button fx:id="LoginButton" mnemonicParsing="false" onMouseClicked="#HandleLogin" text="Login " />-->
+<!--                  <Button fx:id="RegisterButton" mnemonicParsing="false" onMouseClicked="#HandleRegister" text="Register" />-->
+<!--               </children>-->
+<!--            </HBox>-->
+<!--         </children>-->
+<!--      </VBox>-->
+<!--      <Button fx:id="Back" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" onMouseClicked="#Back" text="Back" />-->
+<!--   </children>-->
+<!--</AnchorPane>-->

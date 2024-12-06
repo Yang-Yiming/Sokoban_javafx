@@ -20,7 +20,8 @@ public class InfiniteLevel extends Level {
 
     public void super_init() {
         super.init();
-        load_gui(user);
+        this.user = user;
+//        load_gui(user);
     }
 
     public void init() {
@@ -57,7 +58,7 @@ public class InfiniteLevel extends Level {
         drawPlayer();
         drawBoxesAndWall();
         drawButterfly();
-        drawGUI();
+//        drawGUI();
 
     }
 
