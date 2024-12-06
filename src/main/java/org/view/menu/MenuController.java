@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import org.model.User;
 import org.view.level.InfiniteLevelManager;
 import org.view.level.LevelManager;
+import org.view.level.FightLevelManager;
 
 import java.io.IOException;
 
@@ -153,6 +154,12 @@ public class MenuController {
         InfiniteLevelManager manager = new InfiniteLevelManager(primaryStage);
         manager.start();
         primaryStage.show();
+    }
+
+    public void startFightLevel(){
+         FightLevelManager manager = new FightLevelManager(primaryStage);
+         manager.start();
+         primaryStage.show();
     }
 
     public User get_user(){

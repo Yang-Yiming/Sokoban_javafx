@@ -386,7 +386,7 @@ public class MenuView extends AnchorPane {
         // Handle start button click
         btn_mode1.setOnMouseClicked(event -> {setMusic("classic.m4a"); config.mode = 1; menuController.StartButtonClicked();});
         btn_mode2.setOnMouseClicked(event -> {setMusic("inf.m4a"); config.mode = 2; menuController.startInfiniteLevel();});
-        btn_mode3.setOnMouseClicked(event -> {setMusic("fight.m4a");});
+        btn_mode3.setOnMouseClicked(event -> {setMusic("fight.m4a"); config.mode = 3; menuController.startFightLevel();});
     }
 
     private FadeTransition generate_fade_transition(Button button, double duration, double from, double to) {
