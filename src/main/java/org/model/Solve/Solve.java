@@ -66,13 +66,13 @@ public class Solve {
     }
 
     static Coordinate move(char action) {
-        if(action == 'W'){
+        if(action == 'W' || action == 'w') {
             return new Coordinate(0, -1);
-        } else if(action == 'A'){
+        } else if(action == 'A' || action == 'a'){
             return new Coordinate(-1, 0);
-        } else if(action == 'S'){
+        } else if(action == 'S' || action == 's'){
             return new Coordinate(0, 1);
-        } else if(action == 'D'){
+        } else if(action == 'D' || action == 'd'){
             return new Coordinate(1, 0);
         } else {
             return new Coordinate(0, 0);

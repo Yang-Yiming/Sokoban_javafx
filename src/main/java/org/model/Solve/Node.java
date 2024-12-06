@@ -21,6 +21,11 @@ class Stage {
         Stage that = (Stage) o;
         return this.player.equals(that.player) && this.boxes.equals(that.boxes);
     }
+
+    @Override
+    public int hashCode() {
+        return this.player.hashCode() + this.boxes.hashCode();
+    }
 }
 
 public class Node {

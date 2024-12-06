@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class test {
     public static void main(String[] args) {
-        MapMatrix map = new MapMatrix(mapdata.maps[0]);
+        MapMatrix map = new MapMatrix(mapdata.maps[2]);
         Solve solve = new Solve(map);
         solve.aStarSearch();
 
