@@ -268,17 +268,9 @@ public class MenuView extends AnchorPane {
 //        getChildren().add(grass);
         addground();
 
-        Media backgroundMusic = new Media(getClass().getResource("/music/bgm1.m4a").toExternalForm());
-        mediaPlayer = new MediaPlayer(backgroundMusic);
-        // 设置音量
-        mediaPlayer.setVolume(0.0); // 初始音量为0
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // 循环播放
+        mediaPlayer = new MediaPlayer(new Media(getClass().getResource("/music/main.m4a").toExternalForm()));
         mediaPlayer.play();
-        Timeline volumeUp = new Timeline(
-//                new KeyFrame(Duration.ZERO, new KeyValue(mediaPlayer.volumeProperty(), 0.0)),
-                new KeyFrame(Duration.seconds(5), new KeyValue(mediaPlayer.volumeProperty(), config.volume)) // 5秒内音量增加到0.5
-        );
-        volumeUp.play();
+        setMusic("main.m4a");
 
         createTitle();
         addScreenSizeListener();
@@ -356,6 +348,18 @@ public class MenuView extends AnchorPane {
         return btn;
     }
     Button btn_mode1 = null, btn_mode2 = null, btn_mode3 = null;
+    public void setMusic(String music){
+        mediaPlayer.stop();
+        Media backgroundMusic = new Media(getClass().getResource("/music/" + music).toExternalForm());
+        mediaPlayer = new MediaPlayer(backgroundMusic);
+        mediaPlayer.setVolume(0);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
+        Timeline volumeUp = new Timeline(
+                new KeyFrame(Duration.seconds(5), new KeyValue(mediaPlayer.volumeProperty(), config.volume))
+        );
+        volumeUp.play();
+    }
     private void startButtonClicked() {
         // 按钮生成
         btn_mode1 = generate_button("经典模式", 300, 270);
@@ -380,8 +384,9 @@ public class MenuView extends AnchorPane {
             btn3_transition.play();
         });
         // Handle start button click
-        btn_mode1.setOnMouseClicked(event -> {config.mode = 1; menuController.StartButtonClicked();});
-        btn_mode2.setOnMouseClicked(event -> {config.mode = 2; menuController.startInfiniteLevel();});
+        btn_mode1.setOnMouseClicked(event -> {setMusic("classic.m4a"); config.mode = 1; menuController.StartButtonClicked();});
+        btn_mode2.setOnMouseClicked(event -> {setMusic("inf.m4a"); config.mode = 2; menuController.startInfiniteLevel();});
+        btn_mode3.setOnMouseClicked(event -> {setMusic("fight.m4a");});
     }
 
     private FadeTransition generate_fade_transition(Button button, double duration, double from, double to) {
@@ -390,6 +395,10 @@ public class MenuView extends AnchorPane {
         fadeTransition.setToValue(to);
         fadeTransition.play();
         return fadeTransition;
+    }
+    private boolean haveUser(){
+        if(menuController.get_user() != null && !menuController.get_user().getName().isEmpty()) return true;
+        return false;
     }
     Rectangle shade;
     ImageView paper = new ImageView(new Image(getClass().getResourceAsStream("/images/paper.png"), 500, 500, false, false));
@@ -411,7 +420,7 @@ public class MenuView extends AnchorPane {
         paper.setX(150);
         paper.setY(50);
         getChildren().add(paper);
-        if(menuController.get_user() != null){
+        if(haveUser()){
             //名字居中
             loginText = new Text(400 - menuController.get_user().getName().length() * 11, 150.0, menuController.get_user().getName());
             loginText.setFont(new Font(pixelFont.getName(), 45));
@@ -425,7 +434,7 @@ public class MenuView extends AnchorPane {
             logout.setLayoutX(350);
             logout.setLayoutY(300);
             logout.setOnMouseClicked(event -> {
-                menuController.set_user(null);
+                menuController.set_user(new User("", ""));
                 getChildren().remove(shade);
                 getChildren().remove(paper);
                 getChildren().remove(loginText);
@@ -568,7 +577,7 @@ public class MenuView extends AnchorPane {
     }
     private String UserName, Password;
     public void handleLogin() {
-        if(menuController.get_user() != null) return;
+        if(haveUser()) return;
         loginText.setText("Login");
         loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(340.0);
@@ -608,7 +617,7 @@ public class MenuView extends AnchorPane {
         loginVbox.getChildren().add(2, reminderHbox);
     }
     public void handleRegister() throws FileNotFoundException {
-        if(menuController.get_user() != null) return;
+        if(haveUser()) return;
         loginText.setText("Register");
         loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(310.0);
