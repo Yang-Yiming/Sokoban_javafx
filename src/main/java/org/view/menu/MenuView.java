@@ -220,29 +220,29 @@ public class MenuView extends AnchorPane {
         grass = new ArrayList<>();
         for(int i = 0; i < 40; ++i){
 //            System.out.println(getPrefHeight());
-                Rectangle rect = new Rectangle(i * 50, getPrefHeight() - 50, 50, 50);
-                grass.add(rect);
-                int divide = 10;
-                double siz = 50 / divide;
-                for(int j = 0; j < divide; ++j){
-                    double height = siz * Grass.myRand(i, j, 0, -1, 3);
-                    if(height <= 0) continue;
-                    height += 50;
-                    Rectangle rect1 = new Rectangle(siz, height);
-                    rect1.setX(i * 50 + j * siz);
-                    rect1.setY(getPrefHeight() - height);
-                    grass.add(rect1);
+            Rectangle rect = new Rectangle(i * 50, getPrefHeight() - 50, 50, 50);
+            grass.add(rect);
+            int divide = 10;
+            double siz = 50 / divide;
+            for(int j = 0; j < divide; ++j){
+                double height = siz * Grass.myRand(i, j, 0, -1, 3);
+                if(height <= 0) continue;
+                height += 50;
+                Rectangle rect1 = new Rectangle(siz, height);
+                rect1.setX(i * 50 + j * siz);
+                rect1.setY(getPrefHeight() - height);
+                grass.add(rect1);
 //                    System.out.println(rect1.getY());
-                    rect1.setFill(Grass.randColor(i, i));
-                    getChildren().add(rect1);
+                rect1.setFill(Grass.randColor(i, i));
+                getChildren().add(rect1);
 //                    ++j;
-                }
-                rect.setFill(Grass.randColor(i, i));
-                getChildren().add(rect);
+            }
+            rect.setFill(Grass.randColor(i, i));
+            getChildren().add(rect);
         }
     }
 
-//    private Rectangle grass;
+    //    private Rectangle grass;
     public MenuView(MenuController menuController){
         this.menuController = menuController;
         setPrefHeight(600.0);
@@ -384,6 +384,7 @@ public class MenuView extends AnchorPane {
     TextField usernameInput;
     PasswordField passwordInput, confirmPasswordInput;
     Text reminderText, loginText;
+    Button close;
     private void loginButtonClicked() {
         // Handle login button click
 //        menuController.LoginButtonClicked();
@@ -395,13 +396,56 @@ public class MenuView extends AnchorPane {
         paper.setX(150);
         paper.setY(50);
         getChildren().add(paper);
+        if(haveUser()){
+            //名字居中
+            loginText = new Text(400 - menuController.get_user().getName().length() * 11, 150.0, menuController.get_user().getName());
+            loginText.setFont(new Font(pixelFont.getName(), 45));
+            loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
+            getChildren().add(loginText);
+
+            //退出登录
+            Button logout = new Button("Logout");
+            logout.setFont(new Font(pixelFont.getName(), 20));
+            logout.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
+            logout.setLayoutX(350);
+            logout.setLayoutY(300);
+            logout.setOnMouseClicked(event -> {
+                menuController.set_user(new User("", ""));
+                getChildren().remove(shade);
+                getChildren().remove(paper);
+                getChildren().remove(loginText);
+                getChildren().remove(close);
+                getChildren().remove(logout);
+                loginButtonClicked();
+            });
+            getChildren().add(logout);
+
+            //X
+            close = new Button();
+            Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
+            close.setGraphic(new ImageView(X));
+            getChildren().add(close);
+            close.setLayoutX(630);
+            close.setLayoutY(60);
+            close.setMaxSize(30, 30);
+            close.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-text-fill: #55371d;");
+            //点击关闭按钮
+            close.setOnMouseClicked(event -> {
+                getChildren().remove(shade);
+                getChildren().remove(paper);
+                getChildren().remove(loginText);
+                getChildren().remove(close);
+                getChildren().remove(logout);
+            });
+            return;
+        }
         //标题
         loginText = new Text(340.0, 150.0, "Login");
         loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
         getChildren().add(loginText);
         //按钮
-        
+
         // 创建VBox
         loginVbox = new VBox(25);
         loginVbox.setPrefHeight(214.0);
@@ -489,7 +533,7 @@ public class MenuView extends AnchorPane {
         getChildren().add(loginVbox);
 
         //关闭
-        Button close = new Button();
+        close = new Button();
         Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
         close.setGraphic(new ImageView(X));
         getChildren().add(close);
@@ -508,8 +552,8 @@ public class MenuView extends AnchorPane {
 
     }
     private String UserName, Password;
-    private User user;
     public void handleLogin() {
+        if(haveUser()) return;
         loginText.setText("Login");
         loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(340.0);
@@ -531,14 +575,29 @@ public class MenuView extends AnchorPane {
         } else if (userid == -2) {
             reminderText.setText("Wrong password");
         } else {
-            user = User.UserInfo.get(userid);
+            menuController.set_user(User.UserInfo.get(userid));
             loginVbox.getChildren().removeAll();
             reminderText.setText("Login Successfully, Welcome " + UserName);
             loginVbox.getChildren().add(reminderText);
+            //等待1秒后关闭
+            PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+            pause.setOnFinished(event -> {
+                getChildren().remove(shade);
+                getChildren().remove(paper);
+                getChildren().remove(loginText);
+                getChildren().remove(loginVbox);
+                getChildren().remove(close);
+            });
+            pause.play();
         }
         loginVbox.getChildren().add(2, reminderHbox);
     }
+    public boolean haveUser(){
+        if(menuController.get_user() != null && !menuController.get_user().getName().isEmpty()) return true;
+        return false;
+    }
     public void handleRegister() throws FileNotFoundException {
+        if(haveUser()) return;
         loginText.setText("Register");
         loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(310.0);
@@ -595,7 +654,7 @@ public class MenuView extends AnchorPane {
         //标题
         Text loginText = new Text(310.0, 150.0, "Settings");
         loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
-        loginText.setFont(new Font(45));
+        loginText.setFont(new Font(pixelFont.getName(), 45));
         getChildren().add(loginText);
 
         SettingVbox = new VBox(0);
