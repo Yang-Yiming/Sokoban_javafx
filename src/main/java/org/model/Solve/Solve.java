@@ -141,6 +141,15 @@ public class Solve {
         return len;
     }
 
+    private boolean contain(HashSet<HashSet<Coordinate>> explored, HashSet<Coordinate> boxes) {
+        for(HashSet<Coordinate> set : explored) {
+            if(set.equals(boxes)) {
+                return true;
+            }
+        }
+        return false;
+    } // 如果底下的contains不行就换这个 备用
+
     void aStarSearch() {
         State startState = new State(beginPlayer, beginBoxes, heuristic(beginBoxes));
         PriorityQueue<State> frontier = new PriorityQueue<>();
@@ -157,8 +166,9 @@ public class Solve {
                 }
                 return;
             }
-            if(!explored.contains(node.boxes)) { // 这里似乎因为equalsto的问题会有bug
+            if(!explored.contains(node.boxes)) {
                 explored.add(node.boxes);
+                
 
             }
         }
