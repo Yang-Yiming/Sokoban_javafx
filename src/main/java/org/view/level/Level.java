@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
@@ -136,17 +138,28 @@ public abstract class Level {
         this.user = user;
         //load_gui(user);
     }
-
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
+    Text stepText;
     protected void load_gui(User user) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
-        try {
-            gui_root = loader.load();
-            guiController = loader.getController();
-            guiController.initialize(primaryStage);
-        } catch (IOException e) {
-            System.out.println("Failed to load FXML file: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        user.setMoveCount(0);
+        //在左上角显示步数
+        stepText = new Text("移动步数:" + user.getMoveCount());
+        stepText.setX(100);
+        stepText.setY(100);
+        //棕色
+        stepText.setFill(Color.web("#55371d"));
+        stepText.setFont(pixelFont);
+        root.getChildren().add(stepText);
+
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
+//        try {
+//            gui_root = loader.load();
+//            guiController = loader.getController();
+//            guiController.initialize(primaryStage);
+//        } catch (IOException e) {
+//            System.out.println("Failed to load FXML file: " + e.getMessage());
+//            throw new RuntimeException(e);
+//        }
         this.user = user;
     }
     public void drawGrass(){
@@ -258,9 +271,10 @@ public abstract class Level {
     }
 
     public void drawGUI() {
-        if(user == null) return;
-        guiController.update(user.getMoveCount());
-        root.getChildren().addAll(gui_root);
+        root.getChildren().add(stepText);
+//        if(user == null) return;
+//        guiController.update(user.getMoveCount());
+//        root.getChildren().addAll(gui_root);
     }
 
     public void drawMap() {
