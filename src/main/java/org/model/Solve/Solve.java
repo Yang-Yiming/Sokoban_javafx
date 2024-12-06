@@ -3,9 +3,9 @@ package org.model.Solve;
 import org.model.Coordinate;
 import org.model.MapMatrix;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class Solve {
@@ -13,7 +13,7 @@ public class Solve {
     Coordinate beginPlayer;
     HashSet<Coordinate> Walls, Goals, beginBoxes;
 
-    static class Pair<T1,T2> {
+    static class Pair<T1,T2 extends Comparable<T2>> implements Comparable<Pair<T1,T2>> {
         T1 first;
         T2 second;
         Pair(T1 first, T2 second) {
@@ -25,6 +25,22 @@ public class Solve {
         }
         public T2 getSecond() {
             return second;
+        }
+
+        @Override
+        public int compareTo(Pair<T1, T2> o) {
+            return this.second.compareTo(o.second);
+        }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass()!= o.getClass()) return false;
+            Pair<?,?> that = (Pair<?,?>) o;
+            return this.first.equals(that.first) && this.second.equals(that.second);
+        }
+        @Override
+        public int hashCode() {
+            return Objects.hash(first,second);
         }
     }
 
@@ -49,8 +65,25 @@ public class Solve {
         return res;
     }
 
+    static Coordinate move(char action) {
+        if(action == 'W'){
+            return new Coordinate(0, -1);
+        } else if(action == 'A'){
+            return new Coordinate(-1, 0);
+        } else if(action == 'S'){
+            return new Coordinate(0, 1);
+        } else if(action == 'D'){
+            return new Coordinate(1, 0);
+        } else {
+            return new Coordinate(0, 0);
+        }
+    }
+
     public Solve(MapMatrix map) {
         this.map = map;
+        this.Walls = new HashSet<>();
+        this.Goals = new HashSet<>();
+        this.beginBoxes = new HashSet<>();
         for(int i = 0; i < map.getHeight(); i++) {
             for(int j = 0; j < map.getWidth(); j++) {
                 if(map.hasBox(j, i)) {
@@ -73,24 +106,23 @@ public class Solve {
         return setIntersect(Boxes, Goals).size() == Goals.size();
     }
 
-    boolean isLegalAction(Action action, Coordinate player, HashSet<Coordinate> Boxes) {
+    boolean isLegalAction(char action, Coordinate player, HashSet<Coordinate> Boxes) {
         Coordinate next;
-        if(action.push()) {
-            next = new Coordinate(player.x + 2 * action.move_1, player.y + 2 * action.move_2);
+        if(Character.isUpperCase(action)) {
+            next = new Coordinate(player.x + 2 * move(action).x, player.y + 2 * move(action).y);
         } else {
-            next = new Coordinate(player.x + action.move_1, player.y + action.move_2);
+            next = new Coordinate(player.x + move(action).x, player.y + move(action).y);
         }
         return !setAdd(Walls, Boxes).contains(next);
     }
 
-    ArrayList<Action> legalActions(Coordinate player, HashSet<Coordinate> Boxes) {
-        ArrayList<Action> actions = new ArrayList<>();
-        Action[] AllActions = new Action[] {
-                new Action(0, -1), new Action(0, 1), new Action(-1, 0), new Action(1, 0)
-        };
-        for(Action action : AllActions){
-            if(Boxes.contains(new Coordinate(player.x + action.move_1, player.y + action.move_2))){
-                action.set_push(true);
+    ArrayList<Character> legalActions(Coordinate player, HashSet<Coordinate> Boxes) {
+        ArrayList<Character> actions = new ArrayList<>();
+        char[] AllActions = new char[] {'w', 'a', 's', 'd'};
+
+        for(char action : AllActions){
+            if(Boxes.contains(new Coordinate(player.x + move(action).x, player.y + move(action).y))){
+                action = Character.toUpperCase(action);
             }
             if(isLegalAction(action, player, Boxes)){
                 actions.add(action);
@@ -99,18 +131,18 @@ public class Solve {
         return actions;
     }
 
-    Pair<Coordinate, HashSet<Coordinate>> updateState(Coordinate player, HashSet<Coordinate> Boxes, Action action) {
-        Coordinate nextPlayer = new Coordinate(player.x + action.move_1, player.y + action.move_2);
+    Pair<HashSet<Coordinate>, Coordinate> updateState(Coordinate player, HashSet<Coordinate> Boxes, char action) {
+        Coordinate nextPlayer = new Coordinate(player.x + move(action).x, player.y + move(action).y);
         HashSet<Coordinate> nextBoxes = new HashSet<>(Boxes);
-        if(action.push()){
-            nextBoxes.remove(new Coordinate(player.x + action.move_1, player.y + action.move_2));
-            nextBoxes.add(new Coordinate(player.x + 2 * action.move_1, player.y + 2 * action.move_2));
+        if(Character.isUpperCase(action)) {
+            nextBoxes.remove(new Coordinate(player.x + move(action).x, player.y + move(action).y));
+            nextBoxes.add(new Coordinate(player.x + 2 * move(action).x, player.y + 2 * move(action).y));
         }
-        return new Pair<>(nextPlayer, nextBoxes);
+        return new Pair<>(nextBoxes, nextPlayer);
     }
 
 
-    boolean isFailed() {
+    boolean isFailed(HashSet<Coordinate> Boxes) {
         //TODO 判断一些典型类型的已失败
         return false;
     }
@@ -131,44 +163,48 @@ public class Solve {
         return distance;
     }
 
-    int cost(ArrayList<Action> actions) { // 没推箱子走的步数 激励推箱子
+    int cost(String actions) { // 没推箱子走的步数 激励推箱子
         int len = 0;
-        for(Action action : actions) {
-            if(!action.push()) {
+        for(char action : actions.toCharArray()) {
+            if(Character.isLowerCase(action)) {
                 len++;
             }
         }
         return len;
     }
 
-    private boolean contain(HashSet<HashSet<Coordinate>> explored, HashSet<Coordinate> boxes) {
-        for(HashSet<Coordinate> set : explored) {
-            if(set.equals(boxes)) {
-                return true;
-            }
-        }
-        return false;
-    } // 如果底下的contains不行就换这个 备用
+    public void aStarSearch() {
+        Node startNode = new Node(new Stage(beginPlayer,beginBoxes));
+        PriorityQueue<Pair<Node, Integer>> frontier = new PriorityQueue<>();
+        frontier.add(new Pair<>(startNode, heuristic(beginBoxes)));
 
-    void aStarSearch() {
-        State startState = new State(beginPlayer, beginBoxes, heuristic(beginBoxes));
-        PriorityQueue<State> frontier = new PriorityQueue<>();
-        frontier.add(startState);
-        HashSet<HashSet<Coordinate>> explored = new HashSet<>();
-        PriorityQueue<Pair<Action, Integer>> actions = new PriorityQueue<>();
-        actions.add(new Pair<>(new Action(0, 0), heuristic(beginBoxes)));
+        HashSet<Stage> explored = new HashSet<>();
+        PriorityQueue<Pair<String, Integer>> actions = new PriorityQueue<>();
+        actions.add(new Pair<>(" ", heuristic(beginBoxes)));
+
         while(!frontier.isEmpty()) {
-            State node = frontier.poll();
-            Action nodeAction = actions.poll().getFirst();
-            if(isEndState(node.boxes)) {
-                for(Pair<Action, Integer> action : actions) {
-                    System.out.println(action.getFirst().move);
-                }
+            Node node = frontier.poll().getFirst();
+            String nodeAction = actions.poll().getFirst();
+            if(isEndState(node.getLast().boxes)) {
+                System.out.println(nodeAction);
                 return;
             }
-            if(!explored.contains(node.boxes)) {
-                explored.add(node.boxes);
-                
+            if(!explored.contains(node.getLast())) {
+                explored.add(node.getLast());
+                int Cost = cost(nodeAction.substring(1));
+                for(char action : legalActions(node.getLast().player, node.getLast().boxes)) {
+                    Pair<HashSet<Coordinate>, Coordinate> next = updateState(node.getLast().player, node.getLast().boxes, action);
+                    Coordinate newPlayer = next.getSecond(); HashSet<Coordinate> newBoxes = next.getFirst();
+                    if(isFailed(newBoxes)) {
+                        continue;
+                    }
+                    int Heuristic = heuristic(newBoxes);
+
+                    Node newNode = new Node(node);
+                    newNode.add(new Stage(newPlayer, newBoxes));
+                    frontier.add(new Pair<>(newNode, Cost + Heuristic));
+                    actions.add(new Pair<>(nodeAction + action, Cost + Heuristic));
+                }
 
             }
         }

@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.data.mapdata;
 import org.model.MapMatrix;
+import org.model.Solve.Solve;
 import org.model.config;
 import org.view.level.InfiniteLevelManager;
 
@@ -16,6 +17,8 @@ import java.util.Map;
 public class test {
     public static void main(String[] args) {
         MapMatrix map = new MapMatrix(mapdata.maps[0]);
+        Solve solve = new Solve(map);
+        solve.aStarSearch();
 
     }
 }
