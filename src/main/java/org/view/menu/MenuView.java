@@ -20,6 +20,8 @@ import org.model.User;
 import org.model.config;
 import org.view.level.Grass;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -186,6 +188,7 @@ public class MenuView extends AnchorPane {
     ImageView cat;
     Timeline catTimeline;
     double catV = 0, catA = 0.15;
+    MediaPlayer mediaPlayer;
     private void createCat(){
         cat = new ImageView(cat_stand);
         cat.setX(50);
@@ -264,6 +267,18 @@ public class MenuView extends AnchorPane {
 //        grass.setFill(Color.rgb(124, 153, 32));
 //        getChildren().add(grass);
         addground();
+
+        Media backgroundMusic = new Media(getClass().getResource("/music/bgm1.m4a").toExternalForm());
+        mediaPlayer = new MediaPlayer(backgroundMusic);
+        // 设置音量
+        mediaPlayer.setVolume(0.0); // 初始音量为0
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // 循环播放
+        mediaPlayer.play();
+        Timeline volumeUp = new Timeline(
+//                new KeyFrame(Duration.ZERO, new KeyValue(mediaPlayer.volumeProperty(), 0.0)),
+                new KeyFrame(Duration.seconds(5), new KeyValue(mediaPlayer.volumeProperty(), config.volume)) // 5秒内音量增加到0.5
+        );
+        volumeUp.play();
 
         createTitle();
         addScreenSizeListener();
@@ -396,7 +411,7 @@ public class MenuView extends AnchorPane {
         paper.setX(150);
         paper.setY(50);
         getChildren().add(paper);
-        if(haveUser()){
+        if(menuController.get_user() != null){
             //名字居中
             loginText = new Text(400 - menuController.get_user().getName().length() * 11, 150.0, menuController.get_user().getName());
             loginText.setFont(new Font(pixelFont.getName(), 45));
@@ -410,7 +425,7 @@ public class MenuView extends AnchorPane {
             logout.setLayoutX(350);
             logout.setLayoutY(300);
             logout.setOnMouseClicked(event -> {
-                menuController.set_user(new User("", ""));
+                menuController.set_user(null);
                 getChildren().remove(shade);
                 getChildren().remove(paper);
                 getChildren().remove(loginText);
@@ -553,7 +568,7 @@ public class MenuView extends AnchorPane {
     }
     private String UserName, Password;
     public void handleLogin() {
-        if(haveUser()) return;
+        if(menuController.get_user() != null) return;
         loginText.setText("Login");
         loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(340.0);
@@ -592,12 +607,8 @@ public class MenuView extends AnchorPane {
         }
         loginVbox.getChildren().add(2, reminderHbox);
     }
-    public boolean haveUser(){
-        if(menuController.get_user() != null && !menuController.get_user().getName().isEmpty()) return true;
-        return false;
-    }
     public void handleRegister() throws FileNotFoundException {
-        if(haveUser()) return;
+        if(menuController.get_user() != null) return;
         loginText.setText("Register");
         loginText.setFont(new Font(pixelFont.getName(), 45));
         loginText.setX(310.0);
@@ -631,8 +642,11 @@ public class MenuView extends AnchorPane {
 
     public VBox SettingVbox;
     public HBox AnimTimeHbox;
+    public HBox VolumeHbox;
     public Text MovingAnimTimeText;
     public Slider MovingAnimTimeSlider;
+    public Text VolumeText;
+    public Slider VolumeSlider;
     public HBox IsVerticalHbox;
     public Text IsVerticalText;
     public CheckBox VerticalCheckBox;
@@ -654,7 +668,7 @@ public class MenuView extends AnchorPane {
         //标题
         Text loginText = new Text(310.0, 150.0, "Settings");
         loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
-        loginText.setFont(new Font(pixelFont.getName(), 45));
+        loginText.setFont(new Font(45));
         getChildren().add(loginText);
 
         SettingVbox = new VBox(0);
@@ -695,6 +709,36 @@ public class MenuView extends AnchorPane {
             });
         }
         AnimTimeHbox.getChildren().add(MovingAnimTimeSlider);
+
+        // 创建音量HBox
+        VolumeHbox = new HBox();
+        VolumeHbox.setAlignment(Pos.CENTER_LEFT);
+        VolumeHbox.setPrefHeight(100.0);
+        VolumeHbox.setPrefWidth(200.0);
+        VolumeHbox.setSpacing(30.0);
+        SettingVbox.getChildren().add(VolumeHbox);
+
+        // 创建音量文本Text
+        VolumeText = new Text("Volume        ");
+        VolumeText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        VolumeText.setFont(new Font(pixelFont.getName(), 25));
+        VolumeText.setStrokeType(StrokeType.OUTSIDE);
+        VolumeText.setStrokeWidth(0.0);
+        VolumeHbox.getChildren().add(VolumeText);
+
+        // 创建音量Slider
+        if (VolumeSlider == null) {
+            VolumeSlider = new Slider();
+            VolumeSlider.setMax(1);
+            VolumeSlider.setValue(config.volume);
+            // 把滑动条变成棕色并把边框去掉
+            VolumeSlider.setStyle("-fx-border-color: transparent; -fx-border-width: 0px; -fx-control-inner-background: #55371d; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+            VolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                config.volume = newValue.doubleValue();
+                mediaPlayer.setVolume(newValue.doubleValue());
+            });
+        }
+        VolumeHbox.getChildren().add(VolumeSlider);
 
         // 创建是否垂直HBox
         IsVerticalHbox = new HBox();
