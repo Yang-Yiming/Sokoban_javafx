@@ -118,7 +118,7 @@ public abstract class Level {
         }
     }
 
-    private Timeline butterflyTimeline = null;
+    protected Timeline butterflyTimeline = null;
     public void createButterflyTimeline(){
 //        if(butterflyTimeline == null)
             butterflyTimeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {

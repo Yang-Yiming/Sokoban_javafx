@@ -98,5 +98,35 @@ public class FightLevel extends Level {
         root.getChildren().add(player2.getImageView());
     }
 
+    public int oneIsWin(){
+        boolean player1Win = true, player2Win = true;
+        for(int y = 0; y < map.getHeight(); y++){
+            for(int x = 0; x < map.getWidth() / 2; x++){
+                if(map.hasGoal(x, y) && !map.hasBox(x, y)){
+                    player1Win = false;
+                    break;
+                }
+            }
+        }
+        for(int y = 0; y < map.getHeight(); y++){
+            for(int x = map.getWidth() / 2; x < map.getWidth(); x++){
+                if(map.hasGoal(x, y) && !map.hasBox(x, y)){
+                    player2Win = false;
+                    break;
+                }
+            }
+        }
+        if(player1Win) return 1;
+        if(player2Win) return 2;
+        return 0;
+    }
+
+    @Override
+    public void stopTimelines(){
+        butterflyTimeline.stop();
+        this.player1.stopCameraTimeline();
+        this.player2.stopCameraTimeline();
+        GlowRectangle.timeline.stop();
+    }
 
 }

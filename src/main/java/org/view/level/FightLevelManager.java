@@ -91,7 +91,17 @@ public class FightLevelManager {
             level.player2.setImageTowards(level.player2.getOrientation());
 //        }
         level.drawMap();
-
+        int whoWin = level.oneIsWin();
+        if (whoWin != 0) {
+            //退出游戏
+            root.getChildren().clear();
+            level.root.getChildren().clear();
+            scene.setOnKeyPressed(null);
+            scene.setOnMousePressed(null);
+            scene.setOnMouseDragged(null);
+            level.stopTimelines();
+            start();
+        }
     }
 }
 

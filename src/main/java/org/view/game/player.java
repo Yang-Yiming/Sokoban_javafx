@@ -18,7 +18,7 @@ public class player extends entity {
     //    private Image image;
 //    private ImageView imageView;
     private Stage primaryStage;
-    public boolean is_moving = false;
+    public static boolean is_moving = false;
     private int orientation = 4;
 
     public player(int x, int y, Stage primaryStage, boolean fixed) {
