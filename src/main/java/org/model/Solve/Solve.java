@@ -205,25 +205,24 @@ public class Solve {
         return len;
     }
 
-    public void aStarSearch() {
+    public String aStarSearch() {
         Node startNode = new Node(new Stage(beginPlayer,beginBoxes));
         PriorityQueue<Pair<Node, Integer>> frontier = new PriorityQueue<>();
         frontier.add(new Pair<>(startNode, heuristic(beginBoxes)));
 
         HashSet<Stage> explored = new HashSet<>();
         PriorityQueue<Pair<String, Integer>> actions = new PriorityQueue<>();
-        actions.add(new Pair<>(" ", heuristic(beginBoxes)));
+        actions.add(new Pair<>("", heuristic(beginBoxes)));
 
         while(!frontier.isEmpty()) {
             Node node = frontier.poll().getFirst();
             String nodeAction = actions.poll().getFirst();
             if(isEndState(node.getLast().boxes)) {
-                System.out.println(nodeAction);
-                return;
+                return nodeAction;
             }
             if(!explored.contains(node.getLast())) {
                 explored.add(node.getLast());
-                int Cost = cost(nodeAction.substring(1));
+                int Cost = cost(nodeAction);
                 for(char action : legalActions(node.getLast().player, node.getLast().boxes)) {
                     Pair<HashSet<Coordinate>, Coordinate> next = updateState(node.getLast().player, node.getLast().boxes, action);
                     Coordinate newPlayer = next.getSecond(); HashSet<Coordinate> newBoxes = next.getFirst();
@@ -240,6 +239,7 @@ public class Solve {
 
             }
         }
+        return null;
     }
 
 }
