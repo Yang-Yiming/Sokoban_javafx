@@ -318,10 +318,13 @@ public abstract class Level {
         return true;
     }
 
+    public String solve_moves() {
+        solve = new Solve(map);
+        return solve.aStarSearch();
+    }
     public char solve_next_move() {
         if(!config.auto_check_fail) return ' ';
-        solve = new Solve(map);
-        String solution =  solve.aStarSearch();
+        String solution = solve_moves();
         if(solution.isEmpty()) return 'E'; // 赢了
         return solution.charAt(0);
     }

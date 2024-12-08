@@ -9,9 +9,11 @@ import org.model.config;
 
 public class Hint {
     public Level level;
+    String moves;
 
     public Hint(Level level) {
         this.level = level;
+        moves = "";
     }
 
     public void autoMove(){
