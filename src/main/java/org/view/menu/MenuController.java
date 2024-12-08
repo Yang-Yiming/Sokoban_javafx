@@ -158,7 +158,7 @@ public class MenuController {
     }
 
     public void startFightLevel(){
-         FightLevelManager manager = new FightLevelManager(primaryStage);
+         FightLevelManager manager = new FightLevelManager(primaryStage, this);
          manager.start();
          primaryStage.show();
     }
