@@ -13,6 +13,8 @@ import javafx.util.Duration;
 import org.model.config;
 
 public class Grass {
+    public Grass() {
+    }
     public static int myRand(int a, int b, int c, int l, int r){
         int randomNumber = generatePseudoRandom(a, b, c);
 //        System.out.println(a + " " + b + " " + c + " " + randomNumber);
@@ -36,9 +38,9 @@ public class Grass {
         int result = (x ^ y ^ z);
         return result;
     }
-    private static int grasstimeid = 0;
+    private int grasstimeid = 0;
     private static int[] grassMove = {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, -1, -1, -1, -1, -1};
-    public static void addGrass(Canvas canvas, int dx, int dy, double anchor_posx, double anchor_posy, double size){
+    public void addGrass(Canvas canvas, int dx, int dy, double anchor_posx, double anchor_posy, double size){
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         int x = (int) (anchor_posx + dx * size);
@@ -96,17 +98,14 @@ public class Grass {
     private static int ButterHeight[] = {1, 0, 2, 2, 1, 2, 2, 2, 1, 0, 2, 2, 1, 2, 2, 2};
     private static int ButterWidth[] = {2, 2, 1, 2, 2, 0, 1, 2, 2, 2, 1, 2, 2, 0, 1, 2};
     private static int timeid = 0;
-    public static void updateTimeid(){
+    public void updateTimeid(){
         grasstimeid = (grasstimeid + 1) % (butterT * 2);
         timeid = (timeid + 1) % butterT;
     }
-    public static void addButterfly(Pane root, int dx, int dy, double anchor_posx, double anchor_posy, double size) {
-        int x = (int) (anchor_posx + dx * size);
-        int y = (int) (anchor_posy + dy * size);
+    public void addButterfly(Pane root, int dx, int dy, double anchor_posx, double anchor_posy, double size) {
         int divide = 8;
         double dsize = size / divide;
         Color white = Color.rgb(255, 255, 255);
-        Color darkgreen = randColor(dx, dy);
         int butterDX, butterDY;
         if(myRand(dx, dy, 1, 0, 1) == 0) butterDX = ButterDX[(timeid + myRand(dx, dy, 1, 0, butterT - 1)) % butterT];
         else butterDX = ButterDX[(-timeid + myRand(dx, dy, 1, 0, butterT - 1) + butterT) % ButterDX.length];

@@ -32,7 +32,7 @@ public abstract class Level {
     protected Pane root;
     org.view.game.player player;
     ArrayList<box> boxes;
-    private Stage primaryStage;
+    protected Stage primaryStage;
 
     private Canvas canvas; // 用来放grass
 
@@ -47,8 +47,9 @@ public abstract class Level {
     // 在大地图上的位置
     protected int sublevel_begin_x = 0, sublevel_begin_y = 0; // 在大地图的位置
 
-    private Rectangle fadeRectangle;
-    private Timeline fadeTimeline;
+    protected Rectangle fadeRectangle;
+    protected Timeline fadeTimeline;
+    protected Grass grass = new Grass();
     public void init() {
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
@@ -88,6 +89,10 @@ public abstract class Level {
         fadeRectangle.setY(0);
         fadeRectangle.setOpacity(1.0);
         root.getChildren().add(fadeRectangle);
+        createFadeTimeline();
+        drawMap();
+    }
+    public void createFadeTimeline(){
         //让长方形逐渐变淡
         if(fadeTimeline != null) fadeTimeline.stop();
         fadeTimeline = new Timeline(new KeyFrame(Duration.seconds(0.02), e -> {
@@ -100,7 +105,6 @@ public abstract class Level {
         }));
         fadeTimeline.setCycleCount(Animation.INDEFINITE);
         fadeTimeline.play();
-        drawMap();
     }
 
     public void generate_glow_rects() {
@@ -114,12 +118,13 @@ public abstract class Level {
         }
     }
 
-    private Timeline butterflyTimeline = null;
+    public static Timeline butterflyTimeline = null;
     public void createButterflyTimeline(){
-        butterflyTimeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {
-            Grass.updateTimeid();
-            drawMap();
-        }));
+        if(butterflyTimeline == null)
+            butterflyTimeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {
+                grass.updateTimeid();
+                drawMap();
+            }));
         butterflyTimeline.setCycleCount(Animation.INDEFINITE);
         butterflyTimeline.play();
     }
@@ -178,7 +183,7 @@ public abstract class Level {
         int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
         for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
-                Grass.addGrass(canvas, dx, dy, anchor_posx, anchor_posy, config.tile_size);
+                grass.addGrass(canvas, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
     public void drawButterfly(){
         double width = primaryStage.getWidth();
@@ -189,7 +194,7 @@ public abstract class Level {
         int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
         for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
-                Grass.addButterfly(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
+                grass.addButterfly(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
     public void drawButterflyShadow(){
         double width = primaryStage.getWidth();
@@ -200,7 +205,7 @@ public abstract class Level {
         int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
         for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
-                Grass.addButterflyShadow(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
+                grass.addButterflyShadow(root, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
 
     public void drawBackGround() {
