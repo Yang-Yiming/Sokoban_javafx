@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.data.mapdata;
 import org.model.config;
@@ -98,12 +99,40 @@ public class FightLevelManager {
         int whoWin = level.oneIsWin();
         if (whoWin != 0) {
             level.stopTimelines();
-            level.root.getChildren().clear();
             //移除监听器
             scene.setOnKeyPressed(null);
-            root.getChildren().remove(levelRoot);
-            start();
-//            level.init();
+            //让胜利的文字显示在屏幕中间
+            Text winText = new Text();
+            winText.setText("Player " + whoWin + " Win!");
+            winText.setLayoutX(primaryStage.getWidth() / 2 - 100);
+            winText.setLayoutY(primaryStage.getHeight() / 2);
+            root.getChildren().add(winText);
+            //再来一局按钮
+            Button restartButton = new Button("再来一局");
+            restartButton.setLayoutX(primaryStage.getWidth() / 2 - 50);
+            restartButton.setLayoutY(primaryStage.getHeight() / 2 + 50);
+            //返回按钮
+            Button backButton = new Button("返回");
+            backButton.setLayoutX(primaryStage.getWidth() / 2 - 50);
+            backButton.setLayoutY(primaryStage.getHeight() / 2 + 100);
+            backButton.setOnAction(event -> {
+                root.getChildren().remove(winText);
+                root.getChildren().remove(restartButton);
+                root.getChildren().remove(backButton);
+                root.getChildren().remove(levelRoot);
+                level.root.getChildren().clear();
+                start();
+            });
+            restartButton.setOnAction(event -> {
+                root.getChildren().remove(winText);
+                root.getChildren().remove(restartButton);
+                root.getChildren().remove(backButton);
+                inLevel(level);
+                level.setId((int) (Math.random() * 5));
+                level.init();
+            });
+            root.getChildren().add(restartButton);
+            root.getChildren().add(backButton);
         }
     }
 }
