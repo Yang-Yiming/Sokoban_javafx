@@ -16,19 +16,23 @@ public class Hint {
 
     public void autoMove(){
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration), event -> {
-            char move = Character.toLowerCase(level.solve_next_move());
-            KeyCode code;
-            if (move == 'w') code = KeyCode.W;
-            else if (move == 'a') code = KeyCode.A;
-            else if (move == 's') code = KeyCode.S;
-            else if (move == 'd') code = KeyCode.D;
-            else return;
-
-            KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, false, false, false, false);
-            level.getRoot().fireEvent(keyEvent);
+            autoMoveOnce();
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    public void autoMoveOnce() {
+        char move = Character.toLowerCase(level.solve_next_move());
+        KeyCode code;
+        if (move == 'w') code = KeyCode.W;
+        else if (move == 'a') code = KeyCode.A;
+        else if (move == 's') code = KeyCode.S;
+        else if (move == 'd') code = KeyCode.D;
+        else return;
+
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, false, false, false, false);
+        level.getRoot().fireEvent(keyEvent);
     }
 
 }

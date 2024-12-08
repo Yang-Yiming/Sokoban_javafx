@@ -122,7 +122,10 @@ public class LevelManager {
             else if(code == KeyCode.U) {
                 Hint hint = new Hint(level);
                 hint.autoMove();
-            } // 玩玩）（
+            } else if(code == KeyCode.J) {
+                Hint hint = new Hint(level);
+                hint.autoMoveOnce();
+            }
             else return;
             keyPressedEvent(dx, dy, id);
         });
