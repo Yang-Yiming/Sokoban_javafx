@@ -1,6 +1,7 @@
 package org.model.Solve;
 
 import org.model.Coordinate;
+import org.model.GameMap;
 import org.model.MapMatrix;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class Solve {
-    MapMatrix map;
+    GameMap map;
     Coordinate beginPlayer;
     HashSet<Coordinate> Walls, Goals, beginBoxes;
 
@@ -79,7 +80,7 @@ public class Solve {
         }
     }
 
-    public Solve(MapMatrix map) {
+    public Solve(GameMap map) {
         this.map = map;
         this.Walls = new HashSet<>();
         this.Goals = new HashSet<>();
@@ -239,7 +240,7 @@ public class Solve {
 
             }
         }
-        return null;
+        return "N";
     }
 
 }

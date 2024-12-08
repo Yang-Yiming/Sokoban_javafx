@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
@@ -189,6 +190,13 @@ public class LevelManager {
                     throw new RuntimeException(e);
                 }
             });
+        }
+
+        if(level.solve_next_move() == 'N'){
+            System.out.println("铸币吧 似了");
+            // 直接模拟重开）
+            KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.R, false, false, false, false);
+            scene.getRoot().fireEvent(keyEvent); // 这个好好玩 感觉可以用来写一个自动打关）
         }
     }
 

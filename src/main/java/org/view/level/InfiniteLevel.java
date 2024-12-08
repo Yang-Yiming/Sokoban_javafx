@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.data.mapdata;
 import org.model.InfiniteMap;
 import org.model.MapMatrix;
+import org.model.Solve.Solve;
 import org.model.User;
 
 public class InfiniteLevel extends Level {
@@ -69,6 +70,11 @@ public class InfiniteLevel extends Level {
                 if (map.hasGoal(x, y) && !map.hasBox(x, y))
                     return false;
         return true;
+    }
+
+    @Override
+    public char solve_next_move() {
+        return ' '; // 因为不会写
     }
 
 }

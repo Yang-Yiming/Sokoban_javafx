@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.data.mapdata;
 import org.model.InfiniteMap;
 import org.model.MapMatrix;
+import org.model.Solve.Solve;
 import org.model.User;
 
 public class NormalLevel extends Level {
@@ -21,7 +22,7 @@ public class NormalLevel extends Level {
     public void init() {
         if (default_map)
             map = new MapMatrix(mapdata.maps[id]);
-
+        solve = new Solve(map);
         super.init();
     }
 

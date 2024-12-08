@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
+import org.model.Solve.Solve;
 import org.view.game.box;
 import org.view.game.player;
 import org.view.VisualEffects.GlowRectangle;
@@ -36,6 +37,7 @@ public abstract class Level {
     ArrayList<box> boxes;
     protected Stage primaryStage;
 
+    protected Solve solve; // 解决关卡
     protected Canvas canvas; // 用来放grass
 
 //    private GUIController guiController; // 显示gui
@@ -314,6 +316,12 @@ public abstract class Level {
                 if (map.hasGoal(x, y) && !map.hasBox(x, y))
                     return false;
         return true;
+    }
+
+    public char solve_next_move() {
+        if(!config.auto_check_fail) return ' ';
+        solve = new Solve(map);
+        return solve.aStarSearch().charAt(0);
     }
 
     // getter setter

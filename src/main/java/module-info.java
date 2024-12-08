@@ -6,6 +6,7 @@ module Sokoban {
     requires java.scripting;
     requires java.sql;
     requires javafx.media;
+    requires java.desktop;
 
     opens org.view.menu to javafx.fxml;
     opens org.view.level to javafx.fxml;

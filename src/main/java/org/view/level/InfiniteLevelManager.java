@@ -17,6 +17,8 @@ import org.data.mapdata;
 import org.model.*;
 import org.model.Direction;
 
+import org.model.Solve.Solve;
+import org.view.VisualEffects.GlowRectangle;
 import org.view.game.box;
 import org.view.menu.Settings;
 
@@ -125,6 +127,7 @@ public class InfiniteLevelManager {
             level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
             level_init();
             update_box();
+            //level.solve = new Solve(level.getMap());
             level.super_init();
             InLevel();
         });
@@ -218,6 +221,8 @@ public class InfiniteLevelManager {
     public void level_update() {
         if(level.isWin()){
             clear_box();
+            clear_goals();
+            GlowRectangle.glowRectangles.clear();
             win_update();
         }
     }
@@ -229,6 +234,11 @@ public class InfiniteLevelManager {
         level.getMap().getMatrixMap().keySet().stream()
                 .filter(coord -> level.getMap().hasBox(coord.x, coord.y))
                 .forEach(coord -> level.getMap().remove(coord.x, coord.y, 1));
+    }
+    public void clear_goals() {
+        level.getMap().getMatrixMap().keySet().stream()
+                .filter(coord -> level.getMap().hasGoal(coord.x, coord.y))
+                .forEach(coord -> level.getMap().remove(coord.x, coord.y, 3));
     }
 
     public void update_box() {
