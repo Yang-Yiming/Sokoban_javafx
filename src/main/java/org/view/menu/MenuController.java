@@ -131,7 +131,7 @@ public class MenuController {
     }
 
 //    @FXML
-    public void StartButtonClicked() {
+    public void StartButtonClicked(MenuView menuView) {
         if(user == null || user.getName().isEmpty()){ // 好蠢的判断
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -145,6 +145,7 @@ public class MenuController {
                 return;
             }
         }
+        menuView.setMusic("classic.m4a");
         LevelManager levelManager = new LevelManager(primaryStage);
         levelManager.setUser(user);
         levelManager.start();

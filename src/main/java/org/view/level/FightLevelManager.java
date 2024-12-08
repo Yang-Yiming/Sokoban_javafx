@@ -8,6 +8,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.data.mapdata;
 import org.model.config;
+import org.view.menu.Settings;
 
 import java.io.FileNotFoundException;
 
@@ -47,7 +48,14 @@ public class FightLevelManager {
         root.getChildren().add(startButton);
     }
 
+    Button settingsButton;
+    public void createSettingsButton(){
+        Settings settings = new Settings();
+        settingsButton = settings.createButton(root);
+    }
     private void inLevel(FightLevel level) {
+        createSettingsButton();
+        root.getChildren().add(settingsButton);
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();

@@ -2,6 +2,7 @@ package org.view.level;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
@@ -17,6 +18,7 @@ import org.model.*;
 import org.model.Direction;
 
 import org.view.game.box;
+import org.view.menu.Settings;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,8 +35,15 @@ public class InfiniteLevelManager {
         this.root = new Pane();
         this.primaryStage = primaryStage;
     }
-
+    Button settingsButton;
+    public void createSettingsButton(){
+        Settings settings = new Settings();
+        settingsButton = settings.createButton(root);
+        System.out.println("settingsButton created");
+    }
     private void InLevel() {
+        createSettingsButton();
+        root.getChildren().add(settingsButton);
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
             level.player.set_velocity(0, 0);

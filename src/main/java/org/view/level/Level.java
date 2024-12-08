@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +20,7 @@ import org.model.*;
 import org.view.game.box;
 import org.view.game.player;
 import org.view.VisualEffects.GlowRectangle;
+import org.view.menu.Settings;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -278,13 +280,20 @@ public abstract class Level {
     public void drawPlayer() {
         root.getChildren().add(player.getImageView());
     }
-
+//    Button settingsButton;
     public void drawGUI() {
         root.getChildren().add(stepText);
+//        if(settingsButton == null) {
+//            Settings settings = new Settings();
+//            settingsButton = settings.createButton(root);
+//            settingsButton.setLayoutX(root.getPrefWidth() - 80);
+//        }
+//        root.getChildren().add(settingsButton);
 //        if(user == null) return;
 //        guiController.update(user.getMoveCount());
 //        root.getChildren().addAll(gui_root);
     }
+
 
     public void drawMap() {
         root.getChildren().clear(); // 先清空一下地图

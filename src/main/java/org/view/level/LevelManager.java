@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.view.LevelSelect.node;
+import org.view.menu.Settings;
 
 public class LevelManager {
     private int currentLevel;
@@ -77,7 +78,9 @@ public class LevelManager {
 
     private void InLevel(int id) {
         createDirectionButtons();
+        createSettingsButton();
         drawDirectionButtons(root);
+        drawSettingsButton(root);
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -140,8 +143,10 @@ public class LevelManager {
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
             // level.setAnchor_posx(level.getAnchor_posx() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
             level.getCanvas().setWidth(newValue.doubleValue());
+//            level.settingsButton.setLayoutX(newValue.doubleValue() - 80);
             level.drawMap();
             setDirectionButtons();
+            setSettingsButton();
         });
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
             // level.setAnchor_posy(level.getAnchor_posy() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
@@ -194,9 +199,20 @@ public class LevelManager {
 //        root.getChildren().add(vbox);
         root.getChildren().add(hbox);
     }
+    static Button settingsButton;
+    public static void drawSettingsButton(Pane root){
+        root.getChildren().add(settingsButton);
+    }
     public void setDirectionButtons(){
         hbox.setLayoutX(primaryStage.getWidth() - 200);
         hbox.setLayoutY(primaryStage.getHeight() - 200);
+    }
+    public void createSettingsButton(){
+        Settings settings = new Settings();
+        settingsButton = settings.createButton(root);
+    }
+    public void setSettingsButton(){
+        settingsButton.setLayoutX(primaryStage.getWidth() - 80);
     }
     public void createDirectionButtons() {
         Image upImage = new Image(getClass().getResourceAsStream("/images/direction/up.png"), config.button_size, config.button_size, false, false);
