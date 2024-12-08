@@ -34,15 +34,15 @@ public abstract class Level {
     ArrayList<box> boxes;
     protected Stage primaryStage;
 
-    private Canvas canvas; // 用来放grass
+    protected Canvas canvas; // 用来放grass
 
 //    private GUIController guiController; // 显示gui
     private Pane gui_root; // gui的root
     protected User user; // 史山
 
     // 从此处开始绘制 // 这可真是依托史山啊
-    private double anchor_posx;
-    private double anchor_posy;
+    protected double anchor_posx;
+    protected double anchor_posy;
 
     // 在大地图上的位置
     protected int sublevel_begin_x = 0, sublevel_begin_y = 0; // 在大地图的位置
@@ -74,7 +74,7 @@ public abstract class Level {
                     boxes.add(temp);
                 }
                 if (map.hasPlayer(x, y)) {
-                    player = new player(x, y, primaryStage);
+                    player = new player(x, y, primaryStage, false);
                     player.getImageView().setX(anchor_posx + x * config.tile_size);
                     player.getImageView().setY(anchor_posy + y * config.tile_size);
                     // System.out.println("x : " + x + ", y : " + y);

@@ -18,12 +18,13 @@ public class player extends entity {
     //    private Image image;
 //    private ImageView imageView;
     private Stage primaryStage;
-    public static boolean is_moving = false;
+    public boolean is_moving = false;
     private int orientation = 4;
 
-    public player(int x, int y, Stage primaryStage) {
+    public player(int x, int y, Stage primaryStage, boolean fixed) {
         super(x, y, 2);
         this.primaryStage = primaryStage;
+        this.fixed = fixed;
         image = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.tile_size, config.tile_size, false, false);
         imageView = new ImageView(image);
         //禁用平滑属性
@@ -132,15 +133,15 @@ public class player extends entity {
         transition.play();
 }
 
-
+    boolean fixed = false;
     public boolean move(GameMap map, ArrayList<box> entities, Level level) {
-        updateAnchorPos(level);
+        if(!fixed) updateAnchorPos(level);
         int newx = x + velocity_x;
         int newy = y + velocity_y;
         if(can_move(map, velocity_x, velocity_y)){
             this.move(map);
             return true;
-        } else if(map.hasBox(newx, newy)) { // 暂时先这么写
+        }else if(map.hasBox(newx, newy)) { // 暂时先这么写
             box e = entities.get(map.getBox_matrix_id(newx, newy) - 1); // 获得那个被推的箱子
             if(push(e, map)){
                 //map.setBox_matrix(e.get_x(), e.get_y(), 0);
@@ -151,6 +152,7 @@ public class player extends entity {
                 return true;
             }
         }
+        is_moving = false;
         return false;
     }
 

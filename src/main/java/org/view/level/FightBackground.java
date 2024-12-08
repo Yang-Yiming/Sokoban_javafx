@@ -40,6 +40,7 @@ public class FightBackground extends Level {
         drawGrass();
         drawButterflyShadow();
         drawButterfly();
+//        root.getChildren().add(fadeRectangle);
     }
 
 }
