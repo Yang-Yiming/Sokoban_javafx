@@ -321,7 +321,9 @@ public abstract class Level {
     public char solve_next_move() {
         if(!config.auto_check_fail) return ' ';
         solve = new Solve(map);
-        return solve.aStarSearch().charAt(0);
+        String solution =  solve.aStarSearch();
+        if(solution.isEmpty()) return 'E'; // 赢了
+        return solution.charAt(0);
     }
 
     // getter setter
@@ -359,5 +361,7 @@ public abstract class Level {
     }
 
     public abstract GameMap getMap();
-
+    public Pane getRoot() {
+        return root;
+    }
 }

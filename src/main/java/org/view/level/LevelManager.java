@@ -119,6 +119,10 @@ public class LevelManager {
                     e.printStackTrace();
                 }
             }
+            else if(code == KeyCode.U) {
+                Hint hint = new Hint(level);
+                hint.autoMove();
+            } // 玩玩）（
             else return;
             keyPressedEvent(dx, dy, id);
         });
