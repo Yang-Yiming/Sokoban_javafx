@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class FightLevel extends Level {
 
-    private final int id;
+    private int id;
     private boolean reverse = false;
 
 
@@ -34,6 +34,13 @@ public class FightLevel extends Level {
         super(root, primaryStage, user);
         this.id = id;
         this.reverse = reverse;
+        init();
+    }
+    public void setId(int id){
+        this.id = id;
+    }
+    @Override
+    public void init() {
         //将 mapdata.maps[id] 对称复制一份，然后赋值给 map
         int[][] doubleMap = new int[mapdata.maps[id].length][mapdata.maps[id][0].length * 2 + 1];
         for(int i = 0; i < mapdata.maps[id].length; i++){
@@ -43,10 +50,6 @@ public class FightLevel extends Level {
             }
         }
         map = new MapMatrix(doubleMap);
-        init();
-    }
-    @Override
-    public void init() {
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
 
@@ -60,7 +63,8 @@ public class FightLevel extends Level {
 
         setAnchor_posx((width - map.getWidth() * config.tile_size)/2);
         setAnchor_posy((height - map.getHeight() * config.tile_size)/2);
-
+        player1 = null;
+        player2 = null;
         for (int y = 0; y < map.getHeight(); ++y) {
             for (int x = 0; x < map.getWidth(); ++x) {
                 if (map.hasBox(x, y)) {

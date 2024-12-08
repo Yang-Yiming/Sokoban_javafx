@@ -21,7 +21,8 @@ public class FightLevelManager {
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
     }
-
+    Pane levelRoot;
+    FightLevel level;
     public void start() {
         //背景颜色
         root.setStyle("-fx-background-color: #8e804b");
@@ -33,8 +34,11 @@ public class FightLevelManager {
         startButton.setFocusTraversable(false);
         startButton.setOnAction(event -> {
             config.tile_size = 48;
-            Pane levelRoot = new Pane();
-            FightLevel level = new FightLevel(levelRoot, 1, primaryStage, null, true);
+            if(levelRoot == null) levelRoot = new Pane();
+            if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
+            //在 0-4 之间随机选择一个地图
+            int id = (int) (Math.random() * 5);
+            level.setId(id);
             level.init();
             root.getChildren().add(levelRoot);
             inLevel(level);
@@ -93,14 +97,13 @@ public class FightLevelManager {
         level.drawMap();
         int whoWin = level.oneIsWin();
         if (whoWin != 0) {
-            //退出游戏
-            root.getChildren().clear();
-            level.root.getChildren().clear();
-            scene.setOnKeyPressed(null);
-            scene.setOnMousePressed(null);
-            scene.setOnMouseDragged(null);
             level.stopTimelines();
+            level.root.getChildren().clear();
+            //移除监听器
+            scene.setOnKeyPressed(null);
+            root.getChildren().remove(levelRoot);
             start();
+//            level.init();
         }
     }
 }
