@@ -6,6 +6,10 @@ public class Coordinate implements Comparable<Coordinate> { // 二维坐标
         this.x = x;
         this.y = y;
     }
+    public Coordinate(int[] a) {
+        this.x = a[0];
+        this.y = a[1];
+    }
 
     @Override
     public boolean equals(Object o) {

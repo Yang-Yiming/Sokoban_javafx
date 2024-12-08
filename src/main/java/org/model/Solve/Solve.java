@@ -143,7 +143,39 @@ public class Solve {
 
 
     boolean isFailed(HashSet<Coordinate> Boxes) {
-        //TODO 判断一些典型类型的已失败
+        int[][] Patterns = new int[][] {
+                {0,1,2,3,4,5,6,7,8},
+                {2,5,8,1,4,7,0,3,6},
+                {8,7,6,5,4,3,2,1,0},
+                {6,3,0,7,4,1,8,5,2},
+                {2,1,0,5,4,3,8,7,6},
+                {0,3,6,1,4,7,2,5,8},
+                {6,7,8,3,4,5,0,1,2},
+                {8,5,2,7,4,1,6,3,0}
+        };
+
+        for(Coordinate box : Boxes) {
+            if(!Goals.contains(box)){
+                int[][] board = new int[][] {
+                        {box.x-1,box.y-1},{box.x-1,box.y},{box.x-1,box.y+1},
+                        {box.x,box.y-1},{box.x,box.y},{box.x,box.y+1},
+                        {box.x+1,box.y-1},{box.x+1,box.y},{box.x+1,box.y+1}
+                };
+                for(int[] pattern : Patterns) {
+                    int[][] newboard = new int[9][2];
+                    for(int i = 0; i < 9; i++){
+                        newboard[i][0] = board[pattern[i]][0];
+                        newboard[i][1] = board[pattern[i]][1];
+                    }
+                    if(Walls.contains(new Coordinate(newboard[0])) && Walls.contains(new Coordinate(newboard[5]))) return true;
+                    if(Boxes.contains(new Coordinate(newboard[1])) && Walls.contains(new Coordinate(newboard[2])) && Walls.contains(new Coordinate(newboard[5]))) return true;
+                    if(Boxes.contains(new Coordinate(newboard[1])) && Walls.contains(new Coordinate(newboard[2])) && Boxes.contains(new Coordinate(newboard[5]))) return true;
+                    if(Boxes.contains(new Coordinate(newboard[1])) && Boxes.contains(new Coordinate(newboard[2])) && Boxes.contains(new Coordinate(newboard[5]))) return true;
+                    if(Boxes.contains(new Coordinate(newboard[1])) && Boxes.contains(new Coordinate(newboard[6])) && Walls.contains(new Coordinate(newboard[2])) && Walls.contains(new Coordinate(newboard[3])) && Walls.contains(new Coordinate(newboard[8]))) return true;
+                }
+            }
+        }
+
         return false;
     }
 
