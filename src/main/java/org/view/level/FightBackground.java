@@ -10,6 +10,7 @@ import org.data.mapdata;
 import org.model.MapMatrix;
 import org.model.User;
 import org.model.config;
+import org.view.VisualEffects.GlowRectangle;
 
 public class FightBackground extends Level {
 
