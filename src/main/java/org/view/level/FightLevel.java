@@ -10,6 +10,7 @@ import org.data.mapdata;
 import org.model.MapMatrix;
 import org.model.User;
 import org.model.config;
+import org.view.VisualEffects.GlowRectangle;
 
 public class FightLevel extends Level {
 
@@ -22,7 +23,7 @@ public class FightLevel extends Level {
     }
 
     public void init() {
-            map = new MapMatrix(mapdata.maps[id]);
+        map = new MapMatrix(mapdata.maps[id]);
 
         super.init();
     }
@@ -67,4 +68,20 @@ public class FightLevel extends Level {
         fadeTimeline.play();
     }
 
+    @Override
+    public void generate_glow_rects() {
+        for (int y = sublevel_begin_y; y < sublevel_begin_y + map.getHeight(); ++y) {
+            for (int x = sublevel_begin_x; x < sublevel_begin_x + map.getWidth(); ++x) {
+                if (map.hasGoal(x, y)) {
+                    new GlowRectangle(x, y);
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void createButterflyTimeline(){
+        return;
+    }
 }

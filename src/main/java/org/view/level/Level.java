@@ -118,9 +118,9 @@ public abstract class Level {
         }
     }
 
-    public static Timeline butterflyTimeline = null;
+    private Timeline butterflyTimeline = null;
     public void createButterflyTimeline(){
-        if(butterflyTimeline == null)
+//        if(butterflyTimeline == null)
             butterflyTimeline = new Timeline(new KeyFrame(Duration.seconds(0.08), e -> {
                 grass.updateTimeid();
                 drawMap();
