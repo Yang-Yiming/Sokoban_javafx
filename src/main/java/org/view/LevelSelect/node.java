@@ -48,8 +48,8 @@ public class node {
         this.is_connected = false;
         this.is_locked = false;
 
-        if(levelManager == null)
-            node.levelManager = new LevelManager(primaryStage); // 保险用 其实要是后面能正常跑的话就删掉吧
+//        if(levelManager == null)
+//            node.levelManager = new LevelManager(primaryStage); // 保险用 其实要是后面能正常跑的话就删掉吧
 
         this.primaryStage = levelManager.getPrimaryStage();
         //this.primaryStage = primaryStage;

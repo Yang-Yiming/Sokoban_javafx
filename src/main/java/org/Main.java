@@ -20,7 +20,10 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws IOException {
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
 //        Pane fxmlroot = loader.load();
-        MenuController controller = null;
+        MenuController controller = null;{
+//            controller = loader.getController();
+            controller = new MenuController();
+        }
         try {
 //            controller = loader.getController();
             controller = new MenuController();

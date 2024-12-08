@@ -30,6 +30,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.view.LevelSelect.node;
+import org.view.menu.Home;
+import org.view.menu.MenuController;
 import org.view.menu.Settings;
 
 public class LevelManager {
@@ -41,11 +43,13 @@ public class LevelManager {
     private map level_menu; // 选关界面
     private int move_count;
     private Level level;
+    MenuController controller;
 
     private User user = null; // 正在游玩的user，用于存档
 
-    public LevelManager(Stage primaryStage) {
+    public LevelManager(Stage primaryStage, MenuController controller) {
         this.root = new Pane(); // 直接用新的Pane 除了stage其他全部新建
+        this.controller = controller;
         this.currentLevel = 0;
         this.totalLevel = mapdata.maps.length;
         this.primaryStage = primaryStage; // 主舞台
@@ -80,8 +84,10 @@ public class LevelManager {
     private void InLevel(int id) {
         createDirectionButtons();
         createSettingsButton();
+        createHomeButton();
         drawDirectionButtons(root);
         drawSettingsButton(root);
+        drawHomeButton(root);
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -148,6 +154,7 @@ public class LevelManager {
             level.drawMap();
             setDirectionButtons();
             setSettingsButton();
+            setHomeButton();
         });
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
             // level.setAnchor_posy(level.getAnchor_posy() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
@@ -207,6 +214,7 @@ public class LevelManager {
 //        root.getChildren().add(vbox);
         root.getChildren().add(hbox);
     }
+    static Button homeButton;
     static Button settingsButton;
     public static void drawSettingsButton(Pane root){
         root.getChildren().add(settingsButton);
@@ -221,6 +229,17 @@ public class LevelManager {
     }
     public void setSettingsButton(){
         settingsButton.setLayoutX(primaryStage.getWidth() - 80);
+    }
+
+    public void createHomeButton(){
+        Home home = new Home();
+        homeButton = home.createButton(root, primaryStage, controller);
+    }
+    public void setHomeButton(){
+        homeButton.setLayoutX(primaryStage.getWidth() - 150);
+    }
+    public void drawHomeButton(Pane root){
+        root.getChildren().add(homeButton);
     }
     public void createDirectionButtons() {
         Image upImage = new Image(getClass().getResourceAsStream("/images/direction/up.png"), config.button_size, config.button_size, false, false);

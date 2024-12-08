@@ -146,7 +146,7 @@ public class MenuController {
             }
         }
         menuView.setMusic("classic.m4a");
-        LevelManager levelManager = new LevelManager(primaryStage);
+        LevelManager levelManager = new LevelManager(primaryStage, this);
         levelManager.setUser(user);
         levelManager.start();
     }
@@ -158,7 +158,7 @@ public class MenuController {
     }
 
     public void startFightLevel(){
-         FightLevelManager manager = new FightLevelManager(primaryStage);
+         FightLevelManager manager = new FightLevelManager(primaryStage, this);
          manager.start();
          primaryStage.show();
     }

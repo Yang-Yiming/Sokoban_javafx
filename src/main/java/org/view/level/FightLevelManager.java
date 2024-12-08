@@ -2,12 +2,15 @@ package org.view.level;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.data.mapdata;
 import org.model.config;
+import org.view.menu.Home;
+import org.view.menu.MenuController;
 import org.view.menu.Settings;
 
 import java.io.FileNotFoundException;
@@ -16,10 +19,12 @@ public class FightLevelManager {
     private Pane root;
     private Stage primaryStage;
     private Scene scene;
+    private MenuController controller;
 
-    public FightLevelManager(Stage primaryStage) {
+    public FightLevelManager(Stage primaryStage, MenuController controller) {
         this.root = new Pane();
         this.primaryStage = primaryStage;
+        this.controller = controller;
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
     }
@@ -53,9 +58,16 @@ public class FightLevelManager {
         Settings settings = new Settings();
         settingsButton = settings.createButton(root);
     }
+    Button homeButton;
+    public void createHomeButton(){
+        Home home = new Home();
+        homeButton = home.createButton(root, primaryStage, controller);
+    }
     private void inLevel(FightLevel level) {
         createSettingsButton();
+        createHomeButton();
         root.getChildren().add(settingsButton);
+        root.getChildren().add(homeButton);
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
