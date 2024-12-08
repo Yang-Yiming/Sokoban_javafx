@@ -81,6 +81,9 @@ public class MenuView extends AnchorPane {
         startButton = generate_button("开始", (getPrefWidth() - 100) / 2, 310);
         startButton.setFont(pixelFont);
         startButton.setOnMouseClicked(event -> startButtonClicked());
+        startButton.setOnKeyPressed(event -> {
+            if(event.getCode().toString().equals("ENTER")) startButtonClicked();
+        });
 
         loginButton = new Button();
         ImageView loginImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/login.png")));
