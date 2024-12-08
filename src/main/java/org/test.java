@@ -22,17 +22,16 @@ public class test {
 
 
     public static void main(String[] args) {
-//        Test(mapdata.maps[1], "EasyMap", 100);
-//        Test(mapdata.maps[4], "HardMap", 20);
-//        Test(new int[][] {
-//                        {1, 1, 1, 1, 1, 1, 0, 0},
-//                        {1, 0, 0, 0, 0, 1, 1, 1},
-//                        {1, 0, 0, 0, 8, 8, 0, 1},
-//                        {1, 2, 0, 2, 2, 4, 0, 1},
-//                        {1, 0, 0, 1, 0, 8, 0, 1},
-//                        {1, 1, 1, 1, 1, 1, 1, 1}},
-//                "NoSolveMap", 20);
-//        Solve solve = new Solve(new MapMatrix(mapdata.huge_maps[0]));
-        Test(mapdata.huge_maps[2], "HugeMap", 1);
+        Test(mapdata.maps[1], "EasyMap", 100);
+        Test(mapdata.maps[4], "HardMap", 20);
+        Test(new int[][] {
+                        {1, 1, 1, 1, 1, 1, 0, 0},
+                        {1, 0, 0, 0, 0, 1, 1, 1},
+                        {1, 0, 0, 0, 8, 8, 0, 1},
+                        {1, 2, 0, 2, 2, 4, 0, 1},
+                        {1, 0, 0, 1, 0, 8, 0, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1}},
+                "NoSolveMap", 20);
+        Solve solve = new Solve(new MapMatrix(mapdata.huge_maps[0]));
     }
 }
