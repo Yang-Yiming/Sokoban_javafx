@@ -40,6 +40,8 @@ public class Settings {
         settingsButton.setOnMouseExited(event -> {
             settingsImageView.setImage(new Image(getClass().getResourceAsStream("/images/settings.png")));
         });
+        //取消 settingsButton 对上下左右键的监听
+        settingsButton.setFocusTraversable(false);
         return settingsButton;
     }
     Rectangle shade;

@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -29,6 +30,7 @@ public class Win {
         ScreenHeight = stage.getHeight();
     }
 
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 90);
     public void win() {
         get_size();
 
@@ -42,7 +44,9 @@ public class Win {
         bottomLine.setStrokeWidth(config.Win_Rect_Stroke);
 
         Label label = new Label("完成");
-        label.setStyle("-fx-font-size: 90px; -fx-text-fill: white; -fx-font-style: italic;");
+//        label.setStyle("-fx-font-size: 90px; -fx-text-fill: white; -fx-font-style: italic;");
+        label.setFont(pixelFont);
+        label.setTextFill(Color.WHITE);
 
         // 组合
         VBox vbox = new VBox(topLine, label, bottomLine);
