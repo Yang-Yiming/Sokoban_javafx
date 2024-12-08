@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -92,7 +93,7 @@ public class InfiniteLevelManager {
             level.drawMap();
         });
     }
-
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
     public void start() {
         root.getChildren().clear();
         scene = primaryStage.getScene();
@@ -100,7 +101,8 @@ public class InfiniteLevelManager {
         //level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
         Label label = new Label("Loading...");
         label.setTextFill(Color.BLACK);
-        label.setStyle("-fx-font-size: 20");
+        label.setFont(pixelFont);
+
         label.setTextAlignment(TextAlignment.CENTER);
         label.setLayoutX(config.ScreenWidth / 2 - 50);
         label.setLayoutY(config.ScreenHeight / 2 - 50);
