@@ -83,7 +83,7 @@ public class LevelManager {
         InLevel(id);
     }
 
-    ImageView item_hint, item_plus;
+    ImageView item_hint, item_plus, item_withdraw;
     boolean isDraggingItem = false;
     private void addItem_hint(Pane root){
         item_hint = new ImageView(new Image(getClass().getResourceAsStream("/images/hint.png"), 40, 40, false, false));
@@ -134,6 +134,29 @@ public class LevelManager {
         root.getChildren().add(item_plus);
     }
 
+    private void addItem_withdraw(Pane root){
+        item_withdraw = new ImageView(new Image(getClass().getResourceAsStream("/images/withdraw.png"), 40, 40, false, false));
+        item_withdraw.setLayoutX(165);
+        item_withdraw.setLayoutY(primaryStage.getHeight() - 135);
+        item_withdraw.setOnMouseDragged(event -> {
+            item_withdraw.setX(event.getX() - 20);
+            item_withdraw.setY(event.getY() - 20);
+        });
+        item_withdraw.setOnMousePressed(event -> {
+            isDraggingItem = true;
+        });
+        item_withdraw.setOnMouseReleased(event -> {
+            if(item_withdraw.getY() < -50){
+//                撤销操作
+            }
+            isDraggingItem = false;
+            //回到原来的位置
+            item_withdraw.setX(0);
+            item_withdraw.setY(0);
+        });
+        root.getChildren().add(item_withdraw);
+    }
+
     ImageView itemsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/items.png"), 190, 70, false, false));
 
     private void InLevel(int id) {
@@ -150,6 +173,7 @@ public class LevelManager {
         root.getChildren().add(itemsImageView);
         addItem_hint(root);
         addItem_plus(root);
+        addItem_withdraw(root);
 
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
@@ -236,6 +260,7 @@ public class LevelManager {
             itemsImageView.setLayoutY(newValue.doubleValue() - 112);
             item_hint.setLayoutY(newValue.doubleValue() - 97);
             item_plus.setLayoutY(newValue.doubleValue() - 97);
+            item_withdraw.setLayoutY(newValue.doubleValue() - 97);
         });
     }
 
