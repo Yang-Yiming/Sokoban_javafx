@@ -234,6 +234,8 @@ public class LevelManager {
             level.drawMap();
             setDirectionButtons();
             itemsImageView.setLayoutY(newValue.doubleValue() - 112);
+            item_hint.setLayoutY(newValue.doubleValue() - 97);
+            item_plus.setLayoutY(newValue.doubleValue() - 97);
         });
     }
 
