@@ -67,7 +67,7 @@ public class Home {
 
         //返回主页按钮
         Button home = new Button("Home");
-        home.setLayoutX(345);
+        home.setLayoutX(348);
         home.setLayoutY(270);
         home.setPrefSize(100, 50);
         home.setStyle("-fx-background-color: #55371d; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #f2f2f2;");

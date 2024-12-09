@@ -162,8 +162,8 @@ public abstract class Level {
     protected void load_gui(User user) {
         step = 0;
         stepText = new Text("移动步数: " + step);
-        stepText.setX(15);
-        stepText.setY(25);
+        stepText.setX(40);
+        stepText.setY(60);
         //棕色
         stepText.setFill(Color.web("#55371d"));
         stepText.setFont(pixelFont);

@@ -1,13 +1,20 @@
 package org.view.level;
 
-import javafx.animation.Timeline;
+import javafx.animation.*;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.data.mapdata;
 import org.model.config;
 import org.view.menu.Home;
@@ -55,6 +62,7 @@ public class FightLevelManager {
             inLevel(level);
         });
         root.getChildren().add(startButton);
+        checkSize();
     }
 
     Button settingsButton;
@@ -107,7 +115,7 @@ public class FightLevelManager {
             keyPressedEvent(dx1, dy1, dx2, dy2, level);
         });
     }
-
+    Button restartButton, backButton;
     public void keyPressedEvent(int dx1, int dy1, int dx2, int dy2, FightLevel level) {
         level.player1.set_velocity(dx1, dy1);
         level.player2.set_velocity(dx2, dy2);
@@ -126,21 +134,27 @@ public class FightLevelManager {
             //移除监听器
             scene.setOnKeyPressed(null);
             //让胜利的文字显示在屏幕中间
-            Text winText = new Text();
-            winText.setText("Player " + whoWin + " Win!");
-            winText.setLayoutX(primaryStage.getWidth() / 2 - 100);
-            winText.setLayoutY(primaryStage.getHeight() / 2);
-            root.getChildren().add(winText);
+            showWinText("Player" + whoWin + " Win!");
             //再来一局按钮
-            Button restartButton = new Button("再来一局");
-            restartButton.setLayoutX(primaryStage.getWidth() / 2 - 50);
+            restartButton = new Button("再来一局");
+            restartButton.setLayoutX(primaryStage.getWidth() / 2 - 65);
             restartButton.setLayoutY(primaryStage.getHeight() / 2 + 50);
+            //取消 restartButton 对上下左右键的监听
+            restartButton.setFocusTraversable(false);
+            //设置为透明白色边框白色文字
+            restartButton.setStyle("-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2px; -fx-text-fill: white;");
+            restartButton.setFont(new Font(pixelFont.getName(), 25));
             //返回按钮
-            Button backButton = new Button("返回");
-            backButton.setLayoutX(primaryStage.getWidth() / 2 - 50);
-            backButton.setLayoutY(primaryStage.getHeight() / 2 + 100);
+            backButton = new Button("返回");
+            backButton.setLayoutX(primaryStage.getWidth() / 2 - 45);
+            backButton.setLayoutY(primaryStage.getHeight() / 2 + 120);
+            //取消 backButton 对上下左右键的监听
+            backButton.setFocusTraversable(false);
+            //设置为透明白色边框白色文字
+            backButton.setStyle("-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2px; -fx-text-fill: white;");
+            backButton.setFont(new Font(pixelFont.getName(), 25));
             backButton.setOnAction(event -> {
-                root.getChildren().remove(winText);
+                root.getChildren().remove(vbox);
                 root.getChildren().remove(restartButton);
                 root.getChildren().remove(backButton);
                 root.getChildren().remove(levelRoot);
@@ -148,7 +162,7 @@ public class FightLevelManager {
                 start();
             });
             restartButton.setOnAction(event -> {
-                root.getChildren().remove(winText);
+                root.getChildren().remove(vbox);
                 root.getChildren().remove(restartButton);
                 root.getChildren().remove(backButton);
                 inLevel(level);
@@ -159,5 +173,56 @@ public class FightLevelManager {
             root.getChildren().add(backButton);
         }
     }
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 90);
+    VBox vbox;
+    Line topLine, bottomLine;
+    Label label;
+    public void showWinText(String text) {
+
+        // 两条线
+        topLine = new Line(0, 0, primaryStage.getWidth(), 0);
+        topLine.setStroke(Color.WHITE);
+        topLine.setStrokeWidth(config.Win_Rect_Stroke);
+
+        bottomLine = new Line(0, config.Win_Rect_Height, primaryStage.getWidth(), config.Win_Rect_Height);
+        bottomLine.setStroke(Color.WHITE);
+        bottomLine.setStrokeWidth(config.Win_Rect_Stroke);
+
+        label = new Label(text);
+        label.setFont(pixelFont);
+        label.setTextFill(Color.WHITE);
+
+        // 组合
+        vbox = new VBox(topLine, label, bottomLine);
+        vbox.setSpacing(10);
+        vbox.setAlignment(javafx.geometry.Pos.CENTER);
+        vbox.setPadding(new Insets(primaryStage.getHeight() / 2 - 110,0,0,0));
+
+        root.getChildren().add(vbox);
+
+        // 从左边出现
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(config.win_in_duration), vbox);
+        translateTransition.setFromX(-primaryStage.getWidth());
+        translateTransition.setToX(0);
+        translateTransition.setInterpolator(Interpolator.SPLINE(0.25, 0.1, 0.25, 1));
+    }
+
+    //检测屏幕大小变化
+    public void checkSize() {
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> {
+//            primaryStage.setWidth((double) newValue);
+            if(vbox != null) vbox.setPadding(new Insets(primaryStage.getHeight() / 2 - 110,0,0,0));
+            if(topLine != null) topLine.setEndX(primaryStage.getWidth());
+            if(bottomLine != null) bottomLine.setEndX(primaryStage.getWidth());
+            if(restartButton != null) restartButton.setLayoutX(primaryStage.getWidth() / 2 - 65);
+            if(backButton != null) backButton.setLayoutX(primaryStage.getWidth() / 2 - 45);
+        });
+        scene.heightProperty().addListener((observable, oldValue, newValue) -> {
+//            primaryStage.setHeight((double) newValue);
+            if(restartButton != null) restartButton.setLayoutY(primaryStage.getHeight() / 2 + 50);
+            if(backButton != null) backButton.setLayoutY(primaryStage.getHeight() / 2 + 120);
+        });
+    }
+
 }
 

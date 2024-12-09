@@ -85,6 +85,9 @@ public class FightLevel extends Level {
                     }
                 }
             }
+            //取消 player1 和 player2 的 cameraTimeline
+            if(player1 != null) player1.stopCameraTimeline();
+            if(player2 != null) player2.stopCameraTimeline();
         }
         generate_glow_rects();
         createButterflyTimeline();
@@ -124,7 +127,6 @@ public class FightLevel extends Level {
         if(player2Win) return 2;
         return 0;
     }
-
     @Override
     public void stopTimelines(){
 //        butterflyTimeline.stop();
