@@ -45,6 +45,15 @@ public class Home {
         });
         //取消 homeButton 对上下左右键的监听
         homeButton.setFocusTraversable(false);
+
+        //添加屏幕大小改变时的监听
+        root.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if(shade != null) shade.setWidth(newValue.doubleValue());
+        });
+        root.heightProperty().addListener((observable, oldValue, newValue) -> {
+            if(shade != null) shade.setHeight(newValue.doubleValue());
+        });
+
         return homeButton;
     }
     Rectangle shade;

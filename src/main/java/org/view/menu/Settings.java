@@ -42,6 +42,14 @@ public class Settings {
         });
         //取消 settingsButton 对上下左右键的监听
         settingsButton.setFocusTraversable(false);
+        //添加屏幕大小改变时的监听
+        root.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if(shade != null) shade.setWidth(newValue.doubleValue());
+        });
+        root.heightProperty().addListener((observable, oldValue, newValue) -> {
+            if(shade != null) shade.setHeight(newValue.doubleValue());
+        });
+
         return settingsButton;
     }
     Rectangle shade;
