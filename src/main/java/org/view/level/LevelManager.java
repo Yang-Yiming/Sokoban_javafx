@@ -207,10 +207,8 @@ public class LevelManager {
         }
 
         if(level.solve_next_move() == 'N'){
-            System.out.println("铸币吧 似了");
-            // 直接模拟重开）
-            KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.R, false, false, false, false);
-            scene.getRoot().fireEvent(keyEvent); // 这个好好玩 感觉可以用来写一个自动打关）
+            Win lose_anim = new Win(primaryStage, root);
+            lose_anim.lose();
         }
     }
 
