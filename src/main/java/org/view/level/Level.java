@@ -325,10 +325,12 @@ public abstract class Level {
 
     public String solve_moves() {
         solve = new Solve(map);
+        if(!config.auto_check_fail)
+            return solve.simple_search()? "N":" ";
+
         return solve.aStarSearch();
     }
     public char solve_next_move() {
-        if(!config.auto_check_fail) return ' ';
         String solution = solve_moves();
         if(solution.isEmpty()) return 'E'; // 赢了
         return solution.charAt(0);

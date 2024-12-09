@@ -57,6 +57,9 @@ public class Settings {
     public HBox IsVerticalHbox;
     public Text IsVerticalText;
     public CheckBox VerticalCheckBox;
+    public HBox AutoCheckFailHbox;
+    public Text AutoCheckFailText;
+    public CheckBox AutoCheckFailCheckBox;
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
 
     private void settingsButtonClicked(Pane root) {
@@ -82,12 +85,13 @@ public class Settings {
         SettingVbox.setPrefWidth(340.0);
         SettingVbox.setLayoutX(240);
         SettingVbox.setLayoutY(170);
+        SettingVbox.setSpacing(0);
         root.getChildren().add(SettingVbox);
 
         // 创建动画时间HBox
         AnimTimeHbox = new HBox();
         AnimTimeHbox.setAlignment(Pos.CENTER_LEFT);
-        AnimTimeHbox.setPrefHeight(100.0);
+        AnimTimeHbox.setPrefHeight(70.0);
         AnimTimeHbox.setPrefWidth(200.0);
         AnimTimeHbox.setSpacing(30.0);
         SettingVbox.getChildren().add(AnimTimeHbox);
@@ -120,7 +124,7 @@ public class Settings {
         // 创建音量HBox
         VolumeHbox = new HBox();
         VolumeHbox.setAlignment(Pos.CENTER_LEFT);
-        VolumeHbox.setPrefHeight(100.0);
+        VolumeHbox.setPrefHeight(70.0);
         VolumeHbox.setPrefWidth(200.0);
         VolumeHbox.setSpacing(30.0);
         SettingVbox.getChildren().add(VolumeHbox);
@@ -150,7 +154,7 @@ public class Settings {
         // 创建是否垂直HBox
         IsVerticalHbox = new HBox();
         IsVerticalHbox.setAlignment(Pos.CENTER_LEFT);
-        IsVerticalHbox.setPrefHeight(100.0);
+        IsVerticalHbox.setPrefHeight(70.0);
         IsVerticalHbox.setPrefWidth(200.0);
         IsVerticalHbox.setSpacing(30.0);
         SettingVbox.getChildren().add(IsVerticalHbox);
@@ -174,6 +178,36 @@ public class Settings {
         }
         IsVerticalHbox.getChildren().add(VerticalCheckBox);
         // onMouseClicked="#Clicked" 需要在控制器中处理
+
+        // 创建是否启用astarCheckBox
+        AutoCheckFailHbox = new HBox();
+        AutoCheckFailHbox.setAlignment(Pos.CENTER_LEFT);
+        AutoCheckFailHbox.setPrefHeight(70.0);
+        AutoCheckFailHbox.setPrefWidth(200.0);
+        AutoCheckFailHbox.setSpacing(30.0);
+        SettingVbox.getChildren().add(AutoCheckFailHbox);
+
+        // 创建是否启用astarText
+        AutoCheckFailText = new Text("采用更智能的无解判断");
+        AutoCheckFailText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        AutoCheckFailText.setFont(new Font(pixelFont.getName(), 20));
+        AutoCheckFailText.setStrokeType(StrokeType.OUTSIDE);
+        AutoCheckFailText.setStrokeWidth(0.0);
+        AutoCheckFailHbox.getChildren().add(AutoCheckFailText);
+
+        // 创建是否启用astarCheckBox
+        if (AutoCheckFailCheckBox == null) {
+            AutoCheckFailCheckBox = new CheckBox("启用A*");
+            //将文本改为棕色
+            AutoCheckFailCheckBox.setTextFill(javafx.scene.paint.Color.web("#55371d"));
+            AutoCheckFailCheckBox.setStyle("-fx-mark-color: #55371d; -fx-box-border: transparent; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+            AutoCheckFailCheckBox.setFont(new Font(pixelFont.getName(), 20));
+            AutoCheckFailCheckBox.setMnemonicParsing(false);
+            AutoCheckFailCheckBox.setSelected(config.auto_check_fail);
+        }
+        AutoCheckFailHbox.getChildren().add(AutoCheckFailCheckBox);
+        AutoCheckFailCheckBox.setOnAction(event -> config.auto_check_fail = AutoCheckFailCheckBox.isSelected());
+
 
 
         //关闭按钮

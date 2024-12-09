@@ -55,9 +55,9 @@ public class InfiniteLevelManager {
             else if(code == KeyCode.LEFT || code == KeyCode.A) { dx = -1; level.player.setOrientation(3);}
             else if(code == KeyCode.RIGHT || code == KeyCode.D) { dx = 1; level.player.setOrientation(4);}
             else if(code == KeyCode.R){
-                level.stopTimelines();
-                level.init();
-                level.super_init();
+//                level.stopTimelines();
+//                level.init();
+//                level.super_init();
             } else return;
 
             level.player.set_velocity(dx, dy);
@@ -195,7 +195,7 @@ public class InfiniteLevelManager {
                 int x = (last_right + last_left - RoadWidth) / 2;
                 int y = last_down + RoadLength;
                 add_level(x, y, data);
-                level.getMap().set(x + data[0].length / 2, y,0);
+                level.getMap().set(x + data[0].length / 2 - 1, y,0);
             } case UP -> {
                 int x = last_right + last_left - data[0].length/2;
                 int y = last_up - RoadLength;
@@ -221,7 +221,7 @@ public class InfiniteLevelManager {
     public void level_update() {
         if(level.isWin()){
             clear_box();
-            clear_goals();
+            //clear_goals();
             GlowRectangle.glowRectangles.clear();
             win_update();
         }

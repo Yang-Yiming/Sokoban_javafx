@@ -243,4 +243,8 @@ public class Solve {
         return "N";
     }
 
+    public boolean simple_search(){
+        return isFailed(beginBoxes);
+    }
+
 }

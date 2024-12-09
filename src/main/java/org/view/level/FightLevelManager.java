@@ -16,6 +16,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.data.mapdata;
+import org.model.MapMatrix;
+import org.model.Solve.Solve;
 import org.model.config;
 import org.view.menu.Home;
 import org.view.menu.MenuController;
@@ -51,8 +53,18 @@ public class FightLevelManager {
             config.tile_size = 48;
             if(levelRoot == null) levelRoot = new Pane();
             if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
-            //在 0-4 之间随机选择一个地图
-            int id = (int) (Math.random() * 5);
+
+            int id;
+            while(true){
+                //在 0-4 之间随机选择一个地图
+                id = (int) (Math.random() * mapdata.maps.length);
+                double startTime = System.currentTimeMillis();
+                Solve solve = new Solve(new MapMatrix(mapdata.maps[id]));
+                solve.aStarSearch();
+                double solveTime = System.currentTimeMillis() - startTime;
+                if(solveTime < 50) break;
+            }
+
             level.setId(id);
             for(Timeline timeline : config.timelines){
                 if(timeline != null) timeline.stop();
