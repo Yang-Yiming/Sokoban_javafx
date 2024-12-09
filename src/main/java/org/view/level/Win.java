@@ -93,6 +93,7 @@ public class Win {
     }
 
     public void lose() {
+
         get_size();
 
         Rectangle rectangle = new Rectangle(0, 0, ScreenWidth, ScreenHeight);

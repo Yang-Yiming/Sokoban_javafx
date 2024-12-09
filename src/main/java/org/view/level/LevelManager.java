@@ -1,6 +1,8 @@
 package org.view.level;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -81,6 +83,34 @@ public class LevelManager {
         InLevel(id);
     }
 
+    ImageView item_hint;
+    boolean isDraggingItem = false;
+    private void addItem_hint(Pane root){
+        item_hint = new ImageView(new Image(getClass().getResourceAsStream("/images/hint.png"), 40, 40, false, false));
+        item_hint.setLayoutX(45);
+        item_hint.setLayoutY(primaryStage.getHeight() - 135);
+        item_hint.setOnMouseDragged(event -> {
+            item_hint.setX(event.getX() - 20);
+            item_hint.setY(event.getY() - 20);
+        });
+        item_hint.setOnMousePressed(event -> {
+            isDraggingItem = true;
+        });
+        item_hint.setOnMouseReleased(event -> {
+            if(item_hint.getY() < -50){
+                Hint hint = new Hint(level);
+                hint.autoMoveOnce();
+            }
+            isDraggingItem = false;
+            //回到原来的位置
+            item_hint.setX(0);
+            item_hint.setY(0);
+        });
+        root.getChildren().add(item_hint);
+    }
+
+    ImageView itemsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/items.png"), 190, 70, false, false));
+
     private void InLevel(int id) {
         createDirectionButtons();
         createSettingsButton();
@@ -88,6 +118,13 @@ public class LevelManager {
         drawDirectionButtons(root);
         drawSettingsButton(root);
         drawHomeButton(root);
+
+        //道具栏
+        itemsImageView.setLayoutX(30);
+        itemsImageView.setLayoutY(primaryStage.getHeight() - 150);
+        root.getChildren().add(itemsImageView);
+        addItem_hint(root);
+
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -123,8 +160,8 @@ public class LevelManager {
                 Hint hint = new Hint(level);
                 hint.autoMove();
             } else if(code == KeyCode.J) {
-                Hint hint = new Hint(level);
-                hint.autoMoveOnce();
+//                Hint hint = new Hint(level);
+//                hint.autoMoveOnce();
             }
             else return;
             keyPressedEvent(dx, dy, id);
@@ -146,11 +183,13 @@ public class LevelManager {
         });
 
         scene.setOnMouseDragged(event -> {
-            level.player.stopCameraTimeline();
-            level.setAnchor_posx(event.getSceneX() + del_posx.get());
-            level.setAnchor_posy(event.getSceneY() + del_posy.get());
-            level.updateAllRadiatingEffect();
-            level.drawMap();
+            if(!isDraggingItem){
+                level.player.stopCameraTimeline();
+                level.setAnchor_posx(event.getSceneX() + del_posx.get());
+                level.setAnchor_posy(event.getSceneY() + del_posy.get());
+                level.updateAllRadiatingEffect();
+                level.drawMap();
+            }
         });
 
         // 监听大小改变
@@ -168,6 +207,7 @@ public class LevelManager {
             level.getCanvas().setHeight(newValue.doubleValue());
             level.drawMap();
             setDirectionButtons();
+            itemsImageView.setLayoutY(newValue.doubleValue() - 112);
         });
     }
 
