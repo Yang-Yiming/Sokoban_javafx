@@ -266,8 +266,10 @@ public class LevelManager {
 
     public void keyPressedEvent(int dx, int dy, int id){
         if(level.getStep() >= level.getStepLimit()){
-            Win out_anim = new Win(primaryStage, root);
-            out_anim.outOfLimit();
+            if(!level.isEnd){
+                Win out_anim = new Win(primaryStage, root);
+                out_anim.outOfLimit();
+            }
             level.isEnd = true;
             return;
         }

@@ -25,7 +25,7 @@ public class Main extends Application{
             controller = new MenuController();
         }
         try {
-//            controller = loader.getController(); 
+//            controller = loader.getController();
             controller = new MenuController();
         } catch (Exception e) {
             throw new RuntimeException(e);
