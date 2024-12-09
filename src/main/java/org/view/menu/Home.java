@@ -1,5 +1,6 @@
 package org.view.menu;
 
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,6 +18,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.model.config;
+
+import java.sql.Time;
 
 import static org.view.menu.MenuView.mediaPlayer;
 
@@ -77,6 +80,10 @@ public class Home {
             Pane menuView = new MenuView(controller);
             primaryStage.setScene(new Scene(menuView));
             primaryStage.show();
+            //停止所有 timeline
+            for(Timeline timeline : config.timelines){
+                if(timeline != null) timeline.stop();
+            }
         });
 
         //关闭按钮

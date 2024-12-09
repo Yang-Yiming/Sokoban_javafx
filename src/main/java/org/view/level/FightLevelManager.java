@@ -1,5 +1,6 @@
 package org.view.level;
 
+import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MultipleSelectionModel;
@@ -46,6 +47,9 @@ public class FightLevelManager {
             //在 0-4 之间随机选择一个地图
             int id = (int) (Math.random() * 5);
             level.setId(id);
+            for(Timeline timeline : config.timelines){
+                if(timeline != null) timeline.stop();
+            }
             level.init();
             root.getChildren().add(levelRoot);
             inLevel(level);

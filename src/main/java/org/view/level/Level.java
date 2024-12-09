@@ -109,6 +109,7 @@ public abstract class Level {
         }));
         fadeTimeline.setCycleCount(Animation.INDEFINITE);
         fadeTimeline.play();
+        config.timelines.add(fadeTimeline);
     }
 
     public void generate_glow_rects() {
@@ -131,11 +132,15 @@ public abstract class Level {
             }));
         butterflyTimeline.setCycleCount(Animation.INDEFINITE);
         butterflyTimeline.play();
+        config.timelines.add(butterflyTimeline);
     }
     public void stopTimelines(){
-        butterflyTimeline.stop();
-        this.player.stopCameraTimeline();
-        GlowRectangle.timeline.stop();
+//        butterflyTimeline.stop();
+//        this.player.stopCameraTimeline();
+//        GlowRectangle.timeline.stop();
+        for(Timeline timeline : config.timelines){
+            if(timeline != null) timeline.stop();
+        }
         //GlowRectangle.timeline = null;
     }
 

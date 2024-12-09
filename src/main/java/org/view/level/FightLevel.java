@@ -127,10 +127,13 @@ public class FightLevel extends Level {
 
     @Override
     public void stopTimelines(){
-        butterflyTimeline.stop();
-        this.player1.stopCameraTimeline();
-        this.player2.stopCameraTimeline();
-        GlowRectangle.timeline.stop();
+//        butterflyTimeline.stop();
+//        this.player1.stopCameraTimeline();
+//        this.player2.stopCameraTimeline();
+//        GlowRectangle.timeline.stop();
+        for(Timeline timeline : config.timelines){
+            if(timeline != null) timeline.stop();
+        }
     }
 
 }

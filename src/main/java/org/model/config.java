@@ -1,6 +1,9 @@
 package org.model;
 
+import javafx.animation.Timeline;
+
 import java.lang.Math;
+import java.util.ArrayList;
 
 public class config {
     //Constants
@@ -31,6 +34,7 @@ public class config {
     public static int mode = 0;
     public static double volume = 0.5;
     public static boolean auto_check_fail = true; // 自动检查失败 如果性能太低可以关掉）
+    public static ArrayList<Timeline> timelines = new ArrayList<>();
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例

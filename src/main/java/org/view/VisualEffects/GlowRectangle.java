@@ -55,6 +55,7 @@ public class GlowRectangle {
                 }
             }));
             timeline.setCycleCount(Animation.INDEFINITE);
+            config.timelines.add(timeline);
             timeline.play();
         }
         if(timeline.getStatus() != Animation.Status.RUNNING){

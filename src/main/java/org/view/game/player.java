@@ -98,6 +98,7 @@ public class player extends entity {
             level.drawMap();
             level.updateAllRadiatingEffect();
         }));
+        config.timelines.add(cameraTimeline);
         cameraTimeline.setCycleCount(Timeline.INDEFINITE);
         cameraTimeline.play();
     }
