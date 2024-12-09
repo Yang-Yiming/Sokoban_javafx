@@ -141,6 +141,8 @@ public class FightLevel extends Level {
     }
     public String solve_moves(MapMatrix map) {
         solve = new Solve(map);
+        if(!config.auto_check_fail && !config.this_is_hint)
+            return solve.simple_search()? "N":" ";
         return solve.aStarSearch();
     }
 
@@ -175,9 +177,11 @@ public class FightLevel extends Level {
 //            }
 //            System.out.println();
 //        }
-        if(!config.auto_check_fail) return false;
+        boolean originData = config.auto_check_fail;
+        config.auto_check_fail = false;
         String leftSolve = solve_moves(lMap);
         String rightSolve = solve_moves(rMap);
+        config.auto_check_fail = originData;
         if(leftSolve.charAt(0) == 'N' && rightSolve.charAt(0) == 'N') return true;
         else return false;
     }
