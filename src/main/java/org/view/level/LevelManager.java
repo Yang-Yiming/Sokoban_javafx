@@ -192,7 +192,7 @@ public class LevelManager {
 
             Win_anim.sequentialTransition.setOnFinished(ev -> {
                 level.stopTimelines();
-                user.setLevelAt(++currentLevel);
+                user.setLevelAt(Math.max(++currentLevel, user.getLevelAt()));
                 user.setMoveCount(0);
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
 
