@@ -55,9 +55,9 @@ public class InfiniteLevelManager {
             else if(code == KeyCode.LEFT || code == KeyCode.A) { dx = -1; level.player.setOrientation(3);}
             else if(code == KeyCode.RIGHT || code == KeyCode.D) { dx = 1; level.player.setOrientation(4);}
             else if(code == KeyCode.R){
-                level.stopTimelines();
-                level.init();
-                level.super_init();
+//                level.stopTimelines();
+//                level.init();
+//                level.super_init();
             } else return;
 
             level.player.set_velocity(dx, dy);
