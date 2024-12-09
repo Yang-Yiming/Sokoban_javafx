@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.data.mapdata;
 import org.model.MapMatrix;
+import org.model.Solve.Solve;
 import org.model.User;
 import org.model.config;
 import org.view.VisualEffects.GlowRectangle;
@@ -18,6 +19,7 @@ import org.view.game.box;
 import org.view.game.player;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class FightLevel extends Level {
 
@@ -107,16 +109,16 @@ public class FightLevel extends Level {
 
     public int oneIsWin(){
         boolean player1Win = true, player2Win = true;
-        for(int y = 0; y < map.getHeight(); y++){
-            for(int x = 0; x < map.getWidth() / 2; x++){
+        for(int y = 0; y < map.getHeight(); ++y){
+            for(int x = 0; x < map.getWidth() / 2; ++x){
                 if(map.hasGoal(x, y) && !map.hasBox(x, y)){
                     player1Win = false;
                     break;
                 }
             }
         }
-        for(int y = 0; y < map.getHeight(); y++){
-            for(int x = map.getWidth() / 2; x < map.getWidth(); x++){
+        for(int y = 0; y < map.getHeight(); ++y){
+            for(int x = map.getWidth() / 2; x < map.getWidth(); ++x){
                 if(map.hasGoal(x, y) && !map.hasBox(x, y)){
                     player2Win = false;
                     break;
@@ -137,5 +139,48 @@ public class FightLevel extends Level {
             if(timeline != null) timeline.stop();
         }
     }
+    public String solve_moves(MapMatrix map) {
+        solve = new Solve(map);
+        return solve.aStarSearch();
+    }
+
+    public boolean checkDraw() {
+        int[][] leftMap = new int[mapdata.maps[id].length][mapdata.maps[id][0].length];
+        int[][] rightMap = new int[mapdata.maps[id].length][mapdata.maps[id][0].length];
+        for(int y = 0; y < map.getHeight(); ++y){
+            for(int x = 0; x < map.getWidth() / 2; ++x){
+                leftMap[y][x] = map.get(x, y);
+            }
+        }
+        for(int y = 0; y < map.getHeight(); ++y){
+            for(int x = map.getWidth() / 2 + 1; x < map.getWidth(); x++){
+                rightMap[y][x - map.getWidth() / 2 - 1] = map.get(x, y);
+            }
+        }
+//        if(true) return false;
+        MapMatrix lMap = new MapMatrix(leftMap);
+        MapMatrix rMap = new MapMatrix(rightMap);
+        //输出左右两个地图
+//        System.out.println("leftMap:");
+//        for (int y = 0; y < lMap.getHeight(); ++y) {
+//            for (int x = 0; x < lMap.getWidth(); ++x) {
+//                System.out.print(lMap.get(x, y) + " ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println("rightMap:");
+//        for (int y = 0; y < rMap.getHeight(); ++y) {
+//            for (int x = 0; x < rMap.getWidth(); ++x) {
+//                System.out.print(rMap.get(x, y) + " ");
+//            }
+//            System.out.println();
+//        }
+        if(!config.auto_check_fail) return false;
+        String leftSolve = solve_moves(lMap);
+        String rightSolve = solve_moves(rMap);
+        if(leftSolve.charAt(0) == 'N' && rightSolve.charAt(0) == 'N') return true;
+        else return false;
+    }
+
 
 }

@@ -62,7 +62,6 @@ public class FightLevelManager {
             inLevel(level);
         });
         root.getChildren().add(startButton);
-        checkSize();
     }
 
     Button settingsButton;
@@ -114,6 +113,7 @@ public class FightLevelManager {
             } else return;
             keyPressedEvent(dx1, dy1, dx2, dy2, level);
         });
+        checkSize();
     }
     Button restartButton, backButton;
     public void keyPressedEvent(int dx1, int dy1, int dx2, int dy2, FightLevel level) {
@@ -129,12 +129,13 @@ public class FightLevelManager {
 //        }
         level.drawMap();
         int whoWin = level.oneIsWin();
-        if (whoWin != 0) {
+        if (whoWin != 0 || level.checkDraw()) {
             level.stopTimelines();
             //移除监听器
             scene.setOnKeyPressed(null);
             //让胜利的文字显示在屏幕中间
-            showWinText("Player" + whoWin + " Win!");
+            if(whoWin != 0) showWinText("Player" + whoWin + " Win!");
+            else showWinText("Draw!");
             //再来一局按钮
             restartButton = new Button("再来一局");
             restartButton.setLayoutX(primaryStage.getWidth() / 2 - 65);
@@ -211,18 +212,30 @@ public class FightLevelManager {
     public void checkSize() {
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
 //            primaryStage.setWidth((double) newValue);
+            level.getCanvas().setWidth(newValue.doubleValue());
+            level.drawMap();
+//            level.setAnchor_posx(level.getanchor_posx() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
+            //玩家
+
             if(vbox != null) vbox.setPadding(new Insets(primaryStage.getHeight() / 2 - 110,0,0,0));
             if(topLine != null) topLine.setEndX(primaryStage.getWidth());
             if(bottomLine != null) bottomLine.setEndX(primaryStage.getWidth());
             if(restartButton != null) restartButton.setLayoutX(primaryStage.getWidth() / 2 - 65);
             if(backButton != null) backButton.setLayoutX(primaryStage.getWidth() / 2 - 45);
+            //设置和主界面图标
+            if(settingsButton != null) settingsButton.setLayoutX(primaryStage.getWidth() - 80);
+            if(homeButton != null) homeButton.setLayoutX(primaryStage.getWidth() - 150);
         });
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
 //            primaryStage.setHeight((double) newValue);
+            level.getCanvas().setHeight(newValue.doubleValue());
+            level.drawMap();
+
             if(restartButton != null) restartButton.setLayoutY(primaryStage.getHeight() / 2 + 50);
             if(backButton != null) backButton.setLayoutY(primaryStage.getHeight() / 2 + 120);
         });
     }
+
 
 }
 
