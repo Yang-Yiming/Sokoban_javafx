@@ -55,6 +55,8 @@ public abstract class Level {
     protected Timeline fadeTimeline;
     protected Grass grass = new Grass();
     public void init() {
+        //用 a* 跑出步数限制 先 +5
+        if(stepLimit == 0) stepLimit = solve_moves().length() + 5;
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
 
@@ -153,8 +155,18 @@ public abstract class Level {
         //load_gui(user);
     }
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 20);
-    Text stepText;
-    private int step;
+    Text stepText, stepLimitText;
+    private int step, stepLimit = 0;
+    public int getStep(){
+        return step;
+    }
+    public int getStepLimit(){
+        return stepLimit;
+    }
+    public void setStepLimit(int stepLimit){
+        this.stepLimit = stepLimit;
+        stepLimitText.setText("步数限制: " + stepLimit);
+    }
     public void addStep(){
         ++step;
         stepText.setText("移动步数: " + step);
@@ -168,6 +180,14 @@ public abstract class Level {
         stepText.setFill(Color.web("#55371d"));
         stepText.setFont(pixelFont);
         root.getChildren().add(stepText);
+
+        stepLimitText = new Text("步数限制: " + stepLimit);
+        stepLimitText.setX(40);
+        stepLimitText.setY(100);
+        //棕色
+        stepLimitText.setFill(Color.web("#55371d"));
+        stepLimitText.setFont(pixelFont);
+        root.getChildren().add(stepLimitText);
 
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
 //        try {
@@ -290,6 +310,7 @@ public abstract class Level {
 //    Button settingsButton;
     public void drawGUI() {
         root.getChildren().add(stepText);
+        root.getChildren().add(stepLimitText);
 //        if(settingsButton == null) {
 //            Settings settings = new Settings();
 //            settingsButton = settings.createButton(root);
@@ -325,7 +346,7 @@ public abstract class Level {
 
     public String solve_moves() {
         solve = new Solve(map);
-        if(!config.auto_check_fail)
+        if(!config.auto_check_fail && !config.this_is_hint)
             return solve.simple_search()? "N":" ";
 
         return solve.aStarSearch();

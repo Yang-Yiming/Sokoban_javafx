@@ -83,7 +83,7 @@ public class LevelManager {
         InLevel(id);
     }
 
-    ImageView item_hint;
+    ImageView item_hint, item_plus;
     boolean isDraggingItem = false;
     private void addItem_hint(Pane root){
         item_hint = new ImageView(new Image(getClass().getResourceAsStream("/images/hint.png"), 40, 40, false, false));
@@ -99,7 +99,9 @@ public class LevelManager {
         item_hint.setOnMouseReleased(event -> {
             if(item_hint.getY() < -50){
                 Hint hint = new Hint(level);
+                config.this_is_hint = true;
                 hint.autoMoveOnce();
+                config.this_is_hint = false;
             }
             isDraggingItem = false;
             //回到原来的位置
@@ -107,6 +109,29 @@ public class LevelManager {
             item_hint.setY(0);
         });
         root.getChildren().add(item_hint);
+    }
+
+    private void addItem_plus(Pane root){
+        item_plus = new ImageView(new Image(getClass().getResourceAsStream("/images/plus.png"), 40, 40, false, false));
+        item_plus.setLayoutX(105);
+        item_plus.setLayoutY(primaryStage.getHeight() - 135);
+        item_plus.setOnMouseDragged(event -> {
+            item_plus.setX(event.getX() - 20);
+            item_plus.setY(event.getY() - 20);
+        });
+        item_plus.setOnMousePressed(event -> {
+            isDraggingItem = true;
+        });
+        item_plus.setOnMouseReleased(event -> {
+            if(item_plus.getY() < -50){
+                level.setStepLimit(level.getStepLimit() + 5);
+            }
+            isDraggingItem = false;
+            //回到原来的位置
+            item_plus.setX(0);
+            item_plus.setY(0);
+        });
+        root.getChildren().add(item_plus);
     }
 
     ImageView itemsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/items.png"), 190, 70, false, false));
@@ -124,6 +149,7 @@ public class LevelManager {
         itemsImageView.setLayoutY(primaryStage.getHeight() - 150);
         root.getChildren().add(itemsImageView);
         addItem_hint(root);
+        addItem_plus(root);
 
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
@@ -212,6 +238,11 @@ public class LevelManager {
     }
 
     public void keyPressedEvent(int dx, int dy, int id){
+        if(level.getStep() >= level.getStepLimit()){
+            Win out_anim = new Win(primaryStage, root);
+            out_anim.outOfLimit();
+            return;
+        }
 
         if(level.isWin()) return; // 目前来看表现正常
         level.player.set_velocity(dx, dy);

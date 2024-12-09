@@ -34,6 +34,7 @@ public class config {
     public static int mode = 0;
     public static double volume = 0.5;
     public static boolean auto_check_fail = true; // 自动检查失败 如果性能太低可以关掉）
+    public static boolean this_is_hint = false; // 懒了
     public static ArrayList<Timeline> timelines = new ArrayList<>();
 
     //Methods
