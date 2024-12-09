@@ -109,7 +109,7 @@ public class Win {
         VBox vbox = new VBox(label, small_label);
         vbox.setSpacing(10);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
-        vbox.setPadding(new Insets(ScreenHeight / 2 - 110,0,0,ScreenWidth/2-80));
+        vbox.setPadding(new Insets(ScreenHeight / 2 - 110,0,0,ScreenWidth/2-90));
         vbox.setOpacity(0);
 
         FadeTransition fadeTransition = new FadeTransition(Duration.millis(400), rectangle);
@@ -142,14 +142,14 @@ public class Win {
         label.setFont(pixelFont);
         label.setTextFill(Color.WHITE);
 
-        Label small_label = new Label("命运的步数已经耗尽");
+        Label small_label = new Label("前面的路以后再来探索吧");
         small_label.setFont(pixelFont(30));
         small_label.setTextFill(Color.WHITE);
 
         VBox vbox = new VBox(label, small_label);
         vbox.setSpacing(10);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
-        vbox.setPadding(new Insets(ScreenHeight / 2 - 110,0,0,ScreenWidth/2-80));
+        vbox.setPadding(new Insets(ScreenHeight / 2 - 110,0,0,ScreenWidth/2-180));
         vbox.setOpacity(0);
 
         FadeTransition fadeTransition = new FadeTransition(Duration.millis(400), rectangle);

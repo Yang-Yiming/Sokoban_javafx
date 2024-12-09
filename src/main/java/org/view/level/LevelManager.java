@@ -243,9 +243,10 @@ public class LevelManager {
         if(level.getStep() >= level.getStepLimit()){
             Win out_anim = new Win(primaryStage, root);
             out_anim.outOfLimit();
+            level.isEnd = true;
             return;
         }
-
+        if(level.isEnd) return;
         if(level.isWin()) return; // 目前来看表现正常
         level.player.set_velocity(dx, dy);
         if(!level.player.is_moving){
@@ -280,6 +281,7 @@ public class LevelManager {
         }
 
         if(level.solve_next_move() == 'N'){
+            level.isEnd = true;
             Win lose_anim = new Win(primaryStage, root);
             lose_anim.lose();
         }

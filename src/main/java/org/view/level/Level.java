@@ -54,7 +54,9 @@ public abstract class Level {
     protected Rectangle fadeRectangle;
     protected Timeline fadeTimeline;
     protected Grass grass = new Grass();
+    public boolean isEnd = false;
     public void init() {
+        isEnd = false;
         //用 a* 跑出步数限制 先 +5
         if(stepLimit == 0) stepLimit = solve_moves().length() + 5;
         if(canvas == null)
