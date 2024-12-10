@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.data.mapdata;
 import org.model.config;
 
 import org.view.level.LevelManager;
@@ -77,7 +78,7 @@ public class node {
             load_level();
     }
     public void load_level(){
-        levelManager.loadLevel(target_level);
+        levelManager.loadLevel(target_level, mapdata.maps);
     }
 
     public static void clear_all_nodes() {

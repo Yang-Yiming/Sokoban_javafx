@@ -18,22 +18,14 @@ import static javafx.application.Application.launch;
 public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
-//        Pane fxmlroot = loader.load();
         MenuController controller = null;{
-//            controller = loader.getController();
             controller = new MenuController();
         }
         try {
-//            controller = loader.getController();
             controller = new MenuController();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-//        Pane root = new Pane();
-//        primaryStage.setScene(new Scene(fxmlroot));
-//        primaryStage.show();
 
         Pane menuView = new MenuView(controller);
         Pane root = new Pane();

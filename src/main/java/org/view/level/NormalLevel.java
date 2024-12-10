@@ -42,10 +42,10 @@ public class NormalLevel extends Level {
         }
     }
 
-    public NormalLevel(Pane root, int id, Stage primaryStage, User user) {
+    public NormalLevel(Pane root, int id, int[][][] maps, Stage primaryStage, User user) {
         super(root, primaryStage, user);
         this.id = id;
-        map = new MapMatrix(mapdata.maps[id]);
+        map = new MapMatrix(maps[id]);
         init();
     }
 

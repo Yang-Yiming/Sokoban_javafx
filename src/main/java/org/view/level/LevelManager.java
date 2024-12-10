@@ -60,12 +60,12 @@ public class LevelManager {
         node.levelManager = this;
     }
 
-    public void loadLevel(int id){
+    public void loadLevel(int id, int[][][] maps){
         root.getChildren().clear();
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
-        level = new NormalLevel(rootLevel, currentLevel, primaryStage, user);
+        level = new NormalLevel(rootLevel, currentLevel, maps, primaryStage, user);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 
@@ -297,7 +297,7 @@ public class LevelManager {
                 user.setMoveCount(0);
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
 
-                loadLevel(id + 1);
+                loadLevel(id + 1, mapdata.maps);
 
                 try {
                     save("自动保存成功");
