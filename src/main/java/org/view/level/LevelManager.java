@@ -25,6 +25,8 @@ import org.data.mapdata;
 import org.model.SavingManager;
 import org.model.User;
 import org.model.config;
+import org.view.LevelSelect.MapNode;
+import org.view.LevelSelect.SelectMap;
 import org.view.LevelSelect.map;
 
 import java.io.FileNotFoundException;
@@ -452,9 +454,10 @@ public class LevelManager {
     }
 
     public void showLevelMenu() {
-        node.clear_all_nodes();
-        level_menu.linear_generate_map(user); // 太不优雅了 但我想不到其他的方法
-        level_menu.draw_map(config.is_vertical);
+        SelectMap level_menu = new SelectMap(primaryStage);
+        MapNode.levelManager = this;
+        level_menu.add_levels(mapdata.maps, user);
+        level_menu.draw(); level_menu.Move();
         primaryStage.setScene(level_menu.getScene());
     }
 
