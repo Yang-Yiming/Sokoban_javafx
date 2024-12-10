@@ -5,44 +5,61 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class Client {
-    public void start(String serverIp, int serverPort) {
+    String receive(Socket socket) {
         try {
-            Socket socket = new Socket(serverIp, serverPort);
-            System.out.println("Connect to the server " + socket.getRemoteSocketAddress());
-
             //接收服务端发送的消息
             InputStream in = socket.getInputStream();
             byte[] buf = new byte[1024];
             int len = in.read(buf);
             String str = new String(buf, 0, len, StandardCharsets.UTF_8);
-            System.out.println("Received message from the server: " + str);
-
-            //监听服务端发送的消息
-            new Thread(() -> {
-                while (true) {
-                    try {
-                        byte[] buf1 = new byte[1024];
-                        int len1 = socket.getInputStream().read(buf1);
-                        String str1 = new String(buf1, 0, len1, StandardCharsets.UTF_8);
-                        System.out.println("Received message from the server: " + str1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-
-            while(true){
-                //输入消息
-                byte[] buf1 = new byte[1024];
-                int len1 = System.in.read(buf1);
-                //向服务端发送消息
-                socket.getOutputStream().write(buf1, 0, len1);
-                socket.getOutputStream().flush();
-            }
-
-            //关闭连接
+            return str;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    void send(Socket socket, String message) {
+        try {
+            //向服务端发送消息
+            socket.getOutputStream().write(message.getBytes(StandardCharsets.UTF_8));
+            socket.getOutputStream().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void start(String serverIp, int serverPort) {
+        boolean connected = false;
+        while(!connected) {
+            try {
+                Socket socket = new Socket(serverIp, serverPort);
+                System.out.println("Connect to the server " + socket.getRemoteSocketAddress());
+                connected = true;
+
+                //监听服务端发送的消息
+                new Thread(() -> {
+                    while (true) {
+                        System.out.println("Received message from the server: " + receive(socket));
+                    }
+                }).start();
+
+                while (true) {
+                    //输入消息
+                    byte[] buf1 = new byte[1024];
+                    int len1 = System.in.read(buf1);
+                    //向服务端发送消息
+                    send(socket, new String(buf1, 0, len1, StandardCharsets.UTF_8));
+                }
+                //关闭连接
+            } catch (IOException e) {
+                try {
+                    Thread.sleep(1000); // 等待1秒后重试
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+//                e.printStackTrace();
+            }
         }
     }
 

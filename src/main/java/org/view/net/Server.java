@@ -7,6 +7,27 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class Server {
+    String receive(Socket socket) {
+        try {
+            byte[] buf = new byte[1024];
+            int len = socket.getInputStream().read(buf);
+            String str = new String(buf, 0, len, StandardCharsets.UTF_8);
+            return str;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    void send(Socket socket, String message) {
+        try {
+            socket.getOutputStream().write(message.getBytes(StandardCharsets.UTF_8));
+            socket.getOutputStream().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void start(int port, int num, String ipAddress) {
         try {
             ServerSocket serverSocket = new ServerSocket(port, num, InetAddress.getByName(ipAddress));
@@ -18,32 +39,22 @@ public class Server {
                 System.out.println("Client " + client.getInetAddress() + " connected.");
 
                 //向当前客户端发送消息
-                OutputStream out = client.getOutputStream();
-                out.write("Hello World!".getBytes(StandardCharsets.UTF_8));
-                out.flush();   //作用是强制将缓冲区的数据输出到目的地,确保数据能够及时发送
+                send(client, "Hello World!");
                 //监听客户端发送的消息
                 new Thread(() -> {
                     while (true) {
-                        try {
-                            byte[] buf = new byte[1024];
-                            int len = client.getInputStream().read(buf);
-                            String str = new String(buf, 0, len, StandardCharsets.UTF_8);
-                            System.out.println("Received message from the client: " + str);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        System.out.println("Received message from the client: " + receive(client));
                     }
                 }).start();
                 //向客户端发送消息
                 while (true) {
                     byte[] buf = new byte[1024];
                     int len = System.in.read(buf);
-                    client.getOutputStream().write(buf, 0, len);
-                    client.getOutputStream().flush();
+                    send(client, new String(buf, 0, len, StandardCharsets.UTF_8));
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
