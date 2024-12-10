@@ -1,6 +1,7 @@
 package org.view.level;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +29,7 @@ import org.view.net.LocalIPAddress;
 import org.view.net.Server;
 
 import java.io.FileNotFoundException;
+import java.net.Socket;
 
 public class FightLevelManager {
     private Pane root;
@@ -43,7 +45,7 @@ public class FightLevelManager {
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
     }
     Pane levelRoot;
-    FightLevel level;
+    public FightLevel level;
     public void start() {
         //背景颜色
         root.setStyle("-fx-background-color: #8e804b");
@@ -112,19 +114,14 @@ public class FightLevelManager {
     }
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
     Text waitingText;
+    public int FightLevelID;
     void startButton2Action(){ //房主
-
-
         config.tile_size = 48;
-        if(levelRoot == null) levelRoot = new Pane();
-        if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
-
-        int id;
         while(true){
             //在 0-4 之间随机选择一个地图
-            id = (int) (Math.random() * mapdata.maps.length);
+            FightLevelID = (int) (Math.random() * mapdata.maps.length);
             double startTime = System.currentTimeMillis();
-            Solve solve = new Solve(new MapMatrix(mapdata.maps[id]));
+            Solve solve = new Solve(new MapMatrix(mapdata.maps[FightLevelID]));
             solve.aStarSearch();
             double solveTime = System.currentTimeMillis() - startTime;
             if(solveTime < 50) break;
@@ -137,27 +134,44 @@ public class FightLevelManager {
         root.getChildren().add(waitingText);
 
         new Thread(() -> {
-            Server server = new Server();
+            Server server = new Server(this);
             server.start(8888, 2, LocalIPAddress.getLocalIP());
-//            server.send(server.socket, IDtoString(id));
-//          root.getChildren().add(levelRoot);
+            server.send(server.socket, IDtoString(FightLevelID));
         }).start();
+//        Platform.runLater(() -> {
+//            root.getChildren().add(levelRoot);
+////            inLevel(level);
+//        });
     }
-//    String IDtoString(int id){
-//        String
-//    }
+    String IDtoString(int id){
+        return "M" + Integer.toString(id);
+    }
     void startButton3Action(){
+        config.tile_size = 48;
         //显示文字
         waitingText = new Text(230, 280, "正在寻找房间……");
         waitingText.setFont(new Font(pixelFont.getName(), 45));
         waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
         root.getChildren().add(waitingText);
+        FightLevelID = -1;
 
         new Thread(() -> {
-            Client client = new Client();
+            Client client = new Client(this);
             client.start(LocalIPAddress.getLocalIP(), 8888);
-//          root.getChildren().add(levelRoot);
         }).start();
+    }
+    public void button2LoadLevel(Socket socket){
+        System.out.println("房主真 load 了");
+        if(levelRoot == null) levelRoot = new Pane();
+        if(level == null) level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
+        root.getChildren().add(levelRoot);
+//        inLevel2(level, socket);
+    }
+    public void button3LoadLevel(Socket socket){
+        if(levelRoot == null) levelRoot = new Pane();
+        if(level == null) level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
+        root.getChildren().add(levelRoot);
+//        inLevel3(level, socket);
     }
 
     Button settingsButton;
@@ -169,6 +183,49 @@ public class FightLevelManager {
     public void createHomeButton(){
         Home home = new Home();
         homeButton = home.createButton(root, primaryStage, controller);
+    }
+    private void inLevel2(FightLevel level){
+        createSettingsButton();
+        createHomeButton();
+        root.getChildren().add(settingsButton);
+        root.getChildren().add(homeButton);
+        // 添加键盘监听功能
+        scene.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+//             System.out.println(code);
+            level.player1.set_velocity(0, 0);
+            level.player2.set_velocity(0, 0);
+            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+            if (code == KeyCode.W) {
+                dy1 = -1;
+                level.player1.setOrientation(1);
+
+            } else if (code == KeyCode.S) {
+                dy1 = 1;
+                level.player1.setOrientation(2);
+            } else if (code == KeyCode.A) {
+                dx1 = -1;
+                level.player1.setOrientation(3);
+            } else if (code == KeyCode.D) {
+                dx1 = 1;
+                level.player1.setOrientation(4);
+            }
+            else if (code == KeyCode.UP) {
+                dy2 = -1;
+                level.player2.setOrientation(1);
+            } else if (code == KeyCode.DOWN) {
+                dy2 = 1;
+                level.player2.setOrientation(2);
+            } else if (code == KeyCode.LEFT) {
+                dx2 = -1;
+                level.player2.setOrientation(3);
+            } else if (code == KeyCode.RIGHT) {
+                dx2 = 1;
+                level.player2.setOrientation(4);
+            } else return;
+            keyPressedEvent(dx1, dy1, dx2, dy2, level);
+        });
+        checkSize();
     }
     private void inLevel(FightLevel level) {
         createSettingsButton();

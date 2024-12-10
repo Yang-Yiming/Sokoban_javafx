@@ -1,4 +1,7 @@
 package org.view.net;
+import javafx.application.Platform;
+import org.view.level.FightLevelManager;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -9,6 +12,10 @@ import java.nio.charset.StandardCharsets;
 public class Server {
     ServerSocket serverSocket;
     public Socket socket;
+    FightLevelManager fightLevelManager;
+    public Server(FightLevelManager fightLevelManager){
+        this.fightLevelManager = fightLevelManager;
+    }
     public String receive(Socket socket) {
         try {
             byte[] buf = new byte[1024];
@@ -44,7 +51,14 @@ public class Server {
                 //监听客户端发送的消息
                 new Thread(() -> {
                     while (true) {
-                        System.out.println("Received message from the client: " + receive(socket));
+                        String s = receive(socket);
+                        if(s.startsWith("!")){
+                            Platform.runLater(() -> {
+//                                System.out.println("啊啊啊让我 load");
+                                fightLevelManager.button2LoadLevel(socket);
+                            });
+                        }
+//                        System.out.println("Received message from the client: " + s);
                     }
                 }).start();
 //                return;
@@ -61,11 +75,11 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        Server server = new Server();
-        server.start(8888, 2, LocalIPAddress.getLocalIP());
-        //在Server这个函数中，第二个参数为backlog：指定连接请求队列的长度，如果连接请求队列已满，将拒绝新的连接请求。
-        System.out.println("qwq");
-        server.send(server.socket, "再说一遍");
+//        Server server = new Server();
+//        server.start(8888, 2, LocalIPAddress.getLocalIP());
+//        //在Server这个函数中，第二个参数为backlog：指定连接请求队列的长度，如果连接请求队列已满，将拒绝新的连接请求。
+//        System.out.println("qwq");
+//        server.send(server.socket, "再说一遍");
     }
 }
 
