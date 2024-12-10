@@ -45,9 +45,9 @@ public class Client {
     int IDtoInt(String idWithM) {
         return Integer.parseInt(idWithM.substring(1));
     }
-
+    public boolean connected = false;
     public void start(String serverIp, int serverPort) {
-        boolean connected = false;
+        connected = false;
         while (!connected) {
             try {
                 socket = new Socket(serverIp, serverPort);

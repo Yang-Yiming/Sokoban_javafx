@@ -193,6 +193,8 @@ public class FightLevelManager {
         root.getChildren().add(waitingText);
         //添加返回按钮
         backButton0 = new Button("返回");
+        backButton0.setFont(new Font(pixelFont.getName(), 15));
+        backButton0.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
         backButton0.setLayoutX(230);
         backButton0.setLayoutY(330);
         backButton0.setFocusTraversable(false);
@@ -230,14 +232,15 @@ public class FightLevelManager {
 //        waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
 //        root.getChildren().add(waitingText);
         //输入框
-        Text text = new Text(230, 230, "请输入房主的IP地址：");
+        Text text = new Text(230, 230, "请输入房主的 IP 地址：");
         text.setFont(new Font(pixelFont.getName(), 30));
         text.setFill(javafx.scene.paint.Color.web("#55371d"));
         root.getChildren().add(text);
         //输入框
         javafx.scene.control.TextField textField = new javafx.scene.control.TextField();
+        textField.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px;");
         textField.setLayoutX(230);
-        textField.setLayoutY(240);
+        textField.setLayoutY(260);
         textField.setPrefWidth(200);
         textField.setPrefHeight(30);
         textField.setFocusTraversable(false);
@@ -245,16 +248,28 @@ public class FightLevelManager {
         //取消输入框对上下左右键的监听
         //确认按钮
         Button confirmButton = new Button("确认");
+        //字体
+        confirmButton.setFont(new Font(pixelFont.getName(), 15));
+        //设置为透明棕色边框棕色文字
+        confirmButton.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
         confirmButton.setLayoutX(230);
-        confirmButton.setLayoutY(280);
+        confirmButton.setLayoutY(320);
         confirmButton.setFocusTraversable(false);
         root.getChildren().add(confirmButton);
         //返回按钮
         backButton0 = new Button("返回");
-        backButton0.setLayoutX(230);
-        backButton0.setLayoutY(330);
+        //字体
+        backButton0.setFont(new Font(pixelFont.getName(), 15));
+        //设置为透明棕色边框棕色文字
+        backButton0.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
+        backButton0.setLayoutX(300);
+        backButton0.setLayoutY(320);
         backButton0.setFocusTraversable(false);
         backButton0.setOnAction(event -> {
+            //取消 client 通信
+            if(client != null){
+                client.connected = true;
+            }
             root.getChildren().remove(text);
             root.getChildren().remove(textField);
             root.getChildren().remove(confirmButton);
