@@ -2,6 +2,7 @@ package org.view.net;
 
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
+import org.data.mapdata;
 import org.view.level.FightLevelManager;
 
 import java.io.IOException;
@@ -79,11 +80,21 @@ public class Client {
                             Platform.runLater(() -> {
                                 fightLevelManager.keyCodeEvent(KeyCode.D);
                             });
+                        }else if(s.startsWith("B")){
+                            Platform.runLater(() -> {
+                                fightLevelManager.level.root.getChildren().clear();
+                            });
+                        }else if(s.startsWith("R")){
+                            int fightLevelID = IDtoInt(s);
+                            Platform.runLater(() -> {
+                                fightLevelManager.inLevel3(fightLevelManager.level, socket);
+                                fightLevelManager.FightLevelID = fightLevelID;
+                                fightLevelManager.level.init();
+                            });
                         }
 //                        System.out.println("Received message from the server: " + receive(socket));
                     }
                 }).start();
-
                 return;
             } catch (IOException e) {
                 try {
