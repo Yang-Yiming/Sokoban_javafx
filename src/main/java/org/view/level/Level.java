@@ -191,15 +191,6 @@ public abstract class Level {
         stepLimitText.setFont(pixelFont);
         root.getChildren().add(stepLimitText);
 
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GUI.fxml"));
-//        try {
-//            gui_root = loader.load();
-//            guiController = loader.getController();
-//            guiController.initialize(primaryStage);
-//        } catch (IOException e) {
-//            System.out.println("Failed to load FXML file: " + e.getMessage());
-//            throw new RuntimeException(e);
-//        }
         this.user = user;
     }
     public void drawGrass(){
