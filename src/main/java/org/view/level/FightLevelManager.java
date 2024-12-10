@@ -89,6 +89,7 @@ public class FightLevelManager {
     }
 
     void startButtonAction(){
+        type = 1;
         config.tile_size = 48;
         if(levelRoot == null) levelRoot = new Pane();
         if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
@@ -117,7 +118,9 @@ public class FightLevelManager {
     public int FightLevelID;
     Server server;
     Client client;
+    int type = 0;
     void startButton2Action(){ //房主
+        type = 2;
         config.tile_size = 48;
         while(true){
             //在 0-4 之间随机选择一个地图
@@ -138,17 +141,18 @@ public class FightLevelManager {
         new Thread(() -> {
             server = new Server(this);
             server.start(8888, 2, LocalIPAddress.getLocalIP());
-            server.send(server.socket, IDtoString(FightLevelID));
+            server.send(server.socket, IDtoString("M", FightLevelID));
         }).start();
 //        Platform.runLater(() -> {
 //            root.getChildren().add(levelRoot);
 ////            inLevel(level);
 //        });
     }
-    String IDtoString(int id){
-        return "M" + Integer.toString(id);
+    String IDtoString(String s, int id){
+        return s + Integer.toString(id);
     }
     void startButton3Action(){
+        type = 3;
         config.tile_size = 48;
 //        //显示文字
 //        waitingText = new Text(230, 280, "正在寻找房间……");
@@ -156,14 +160,14 @@ public class FightLevelManager {
 //        waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
 //        root.getChildren().add(waitingText);
         //输入框
-        Text text = new Text(230, 330, "请输入房主的IP地址：");
+        Text text = new Text(230, 230, "请输入房主的IP地址：");
         text.setFont(new Font(pixelFont.getName(), 30));
         text.setFill(javafx.scene.paint.Color.web("#55371d"));
         root.getChildren().add(text);
         //输入框
         javafx.scene.control.TextField textField = new javafx.scene.control.TextField();
         textField.setLayoutX(230);
-        textField.setLayoutY(340);
+        textField.setLayoutY(240);
         textField.setPrefWidth(200);
         textField.setPrefHeight(30);
         textField.setFocusTraversable(false);
@@ -172,7 +176,7 @@ public class FightLevelManager {
         //确认按钮
         Button confirmButton = new Button("确认");
         confirmButton.setLayoutX(230);
-        confirmButton.setLayoutY(380);
+        confirmButton.setLayoutY(280);
         confirmButton.setFocusTraversable(false);
 
         root.getChildren().add(confirmButton);
@@ -246,7 +250,7 @@ public class FightLevelManager {
         });
         checkSize();
     }
-    private void inLevel3(FightLevel level, Socket socket) {
+    public void inLevel3(FightLevel level, Socket socket) {
         createSettingsButton();
         createHomeButton();
         root.getChildren().add(settingsButton);
@@ -372,42 +376,50 @@ public class FightLevelManager {
             //让胜利的文字显示在屏幕中间
             if(whoWin != 0) showWinText("Player" + whoWin + " Win!");
             else showWinText("Draw!");
-            //再来一局按钮
-            restartButton = new Button("再来一局");
-            restartButton.setLayoutX(primaryStage.getWidth() / 2 - 65);
-            restartButton.setLayoutY(primaryStage.getHeight() / 2 + 50);
-            //取消 restartButton 对上下左右键的监听
-            restartButton.setFocusTraversable(false);
-            //设置为透明白色边框白色文字
-            restartButton.setStyle("-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2px; -fx-text-fill: white;");
-            restartButton.setFont(new Font(pixelFont.getName(), 25));
-            //返回按钮
-            backButton = new Button("返回");
-            backButton.setLayoutX(primaryStage.getWidth() / 2 - 45);
-            backButton.setLayoutY(primaryStage.getHeight() / 2 + 120);
-            //取消 backButton 对上下左右键的监听
-            backButton.setFocusTraversable(false);
-            //设置为透明白色边框白色文字
-            backButton.setStyle("-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2px; -fx-text-fill: white;");
-            backButton.setFont(new Font(pixelFont.getName(), 25));
-            backButton.setOnAction(event -> {
-                root.getChildren().remove(vbox);
-                root.getChildren().remove(restartButton);
-                root.getChildren().remove(backButton);
-                root.getChildren().remove(levelRoot);
-                level.root.getChildren().clear();
-                start();
-            });
-            restartButton.setOnAction(event -> {
-                root.getChildren().remove(vbox);
-                root.getChildren().remove(restartButton);
-                root.getChildren().remove(backButton);
-                inLevel(level);
-                level.setId((int) (Math.random() * 5));
-                level.init();
-            });
-            root.getChildren().add(restartButton);
-            root.getChildren().add(backButton);
+            if(type != 3) {
+                //再来一局按钮
+                restartButton = new Button("再来一局");
+                restartButton.setLayoutX(primaryStage.getWidth() / 2 - 65);
+                restartButton.setLayoutY(primaryStage.getHeight() / 2 + 50);
+                //取消 restartButton 对上下左右键的监听
+                restartButton.setFocusTraversable(false);
+                //设置为透明白色边框白色文字
+                restartButton.setStyle("-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2px; -fx-text-fill: white;");
+                restartButton.setFont(new Font(pixelFont.getName(), 25));
+                //返回按钮
+                backButton = new Button("返回");
+                backButton.setLayoutX(primaryStage.getWidth() / 2 - 45);
+                backButton.setLayoutY(primaryStage.getHeight() / 2 + 120);
+                //取消 backButton 对上下左右键的监听
+                backButton.setFocusTraversable(false);
+                //设置为透明白色边框白色文字
+                backButton.setStyle("-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 2px; -fx-text-fill: white;");
+                backButton.setFont(new Font(pixelFont.getName(), 25));
+                backButton.setOnAction(event -> {
+                    root.getChildren().remove(vbox);
+                    root.getChildren().remove(restartButton);
+                    root.getChildren().remove(backButton);
+                    root.getChildren().remove(levelRoot);
+                    level.root.getChildren().clear();
+                    if(type == 2){
+                        server.send(server.socket, "B");
+                    }
+                    start();
+                });
+                restartButton.setOnAction(event -> {
+                    root.getChildren().remove(vbox);
+                    root.getChildren().remove(restartButton);
+                    root.getChildren().remove(backButton);
+                    inLevel(level);
+                    level.setId((int) (Math.random() * mapdata.maps.length));
+                    level.init();
+                    if(type == 2){
+                        server.send(server.socket, IDtoString("R", level.getId()));
+                    }
+                });
+                root.getChildren().add(restartButton);
+                root.getChildren().add(backButton);
+            }
         }
     }
 //    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 90);

@@ -41,6 +41,9 @@ public class FightLevel extends Level {
     public void setId(int id){
         this.id = id;
     }
+    public int getId(){
+        return id;
+    }
     @Override
     public void init() {
         //将 mapdata.maps[id] 对称复制一份，然后赋值给 map

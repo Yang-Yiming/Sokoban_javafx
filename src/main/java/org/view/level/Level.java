@@ -32,7 +32,7 @@ public abstract class Level {
 
     protected GameMap map;
     
-    protected Pane root;
+    public Pane root;
     org.view.game.player player;
     ArrayList<box> boxes;
     protected Stage primaryStage;
