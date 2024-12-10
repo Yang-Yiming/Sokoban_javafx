@@ -2,6 +2,7 @@ package org.view.net;
 
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import org.data.mapdata;
 import org.view.level.FightLevelManager;
 
@@ -82,13 +83,16 @@ public class Client {
                             });
                         }else if(s.startsWith("B")){
                             Platform.runLater(() -> {
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
                                 fightLevelManager.level.root.getChildren().clear();
                             });
                         }else if(s.startsWith("R")){
                             int fightLevelID = IDtoInt(s);
                             Platform.runLater(() -> {
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
                                 fightLevelManager.inLevel3(fightLevelManager.level, socket);
                                 fightLevelManager.FightLevelID = fightLevelID;
+                                fightLevelManager.level.setId(fightLevelID);
                                 fightLevelManager.level.init();
                             });
                         }

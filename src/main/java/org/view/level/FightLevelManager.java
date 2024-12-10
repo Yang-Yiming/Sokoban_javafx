@@ -32,7 +32,7 @@ import java.io.FileNotFoundException;
 import java.net.Socket;
 
 public class FightLevelManager {
-    private Pane root;
+    public Pane root;
     private Stage primaryStage;
     private Scene scene;
     private MenuController controller;
@@ -400,6 +400,7 @@ public class FightLevelManager {
                     root.getChildren().remove(restartButton);
                     root.getChildren().remove(backButton);
                     root.getChildren().remove(levelRoot);
+                    root.getChildren().remove(waitingText);
                     level.root.getChildren().clear();
                     if(type == 2){
                         server.send(server.socket, "B");
@@ -410,7 +411,8 @@ public class FightLevelManager {
                     root.getChildren().remove(vbox);
                     root.getChildren().remove(restartButton);
                     root.getChildren().remove(backButton);
-                    inLevel(level);
+                    if(type == 2) inLevel2(level, server.socket);
+                    if(type == 1) inLevel(level);
                     level.setId((int) (Math.random() * mapdata.maps.length));
                     level.init();
                     if(type == 2){
@@ -423,7 +425,7 @@ public class FightLevelManager {
         }
     }
 //    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 90);
-    VBox vbox;
+    public VBox vbox;
     Line topLine, bottomLine;
     Label label;
     public void showWinText(String text) {
