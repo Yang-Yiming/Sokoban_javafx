@@ -5,7 +5,8 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class Client {
-    String receive(Socket socket) {
+    public Socket socket;
+    public String receive(Socket socket) {
         try {
             //接收服务端发送的消息
             InputStream in = socket.getInputStream();
@@ -19,7 +20,7 @@ public class Client {
         }
     }
 
-    void send(Socket socket, String message) {
+    public void send(Socket socket, String message) {
         try {
             //向服务端发送消息
             socket.getOutputStream().write(message.getBytes(StandardCharsets.UTF_8));
@@ -33,38 +34,43 @@ public class Client {
         boolean connected = false;
         while(!connected) {
             try {
-                Socket socket = new Socket(serverIp, serverPort);
+                socket = new Socket(serverIp, serverPort);
                 System.out.println("Connect to the server " + socket.getRemoteSocketAddress());
                 connected = true;
 
                 //监听服务端发送的消息
                 new Thread(() -> {
                     while (true) {
+                        String s = receive(socket);
+//                        if(s[0] == 'M')
                         System.out.println("Received message from the server: " + receive(socket));
                     }
                 }).start();
 
-                while (true) {
-                    //输入消息
-                    byte[] buf1 = new byte[1024];
-                    int len1 = System.in.read(buf1);
-                    //向服务端发送消息
-                    send(socket, new String(buf1, 0, len1, StandardCharsets.UTF_8));
-                }
+//                while (true) {
+//                    //输入消息
+//                    byte[] buf1 = new byte[1024];
+//                    int len1 = System.in.read(buf1);
+//                    //向服务端发送消息
+//                    send(socket, new String(buf1, 0, len1, StandardCharsets.UTF_8));
+//                }
+                return;
                 //关闭连接
             } catch (IOException e) {
                 try {
-                    Thread.sleep(1000); // 等待1秒后重试
+                    Thread.sleep(3000); // 等待3秒后重试
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
 //                e.printStackTrace();
             }
+            System.out.println("Reconnecting..."); //可以显示
         }
     }
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.start(LocalIPAddress.getLocalIP(), 8888);   //监听IP地址192.168.202.31 的8888端口
+        client.start(LocalIPAddress.getLocalIP(), 8888);   //监听8888端口
+        client.send(client.socket, "Hello World!");
     }
 }

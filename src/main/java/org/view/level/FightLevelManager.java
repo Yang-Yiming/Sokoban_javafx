@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.data.mapdata;
@@ -22,6 +23,9 @@ import org.model.config;
 import org.view.menu.Home;
 import org.view.menu.MenuController;
 import org.view.menu.Settings;
+import org.view.net.Client;
+import org.view.net.LocalIPAddress;
+import org.view.net.Server;
 
 import java.io.FileNotFoundException;
 
@@ -44,36 +48,116 @@ public class FightLevelManager {
         //背景颜色
         root.setStyle("-fx-background-color: #8e804b");
         //添加开始游戏按钮
-        Button startButton = new Button("不知道该做什么先放个 button");
+        Button startButton = new Button("只有一个电脑");
         startButton.setLayoutX(100);
         startButton.setLayoutY(100);
+        //
+        Button startButton2 = new Button("创建房间");
+        startButton2.setLayoutX(100);
+        startButton2.setLayoutY(200);
+        //
+        Button startButton3 = new Button("加入房间");
+        startButton3.setLayoutX(100);
+        startButton3.setLayoutY(300);
         //取消 startButton 对上下左右键的监听
         startButton.setFocusTraversable(false);
+        startButton2.setFocusTraversable(false);
+        startButton3.setFocusTraversable(false);
         startButton.setOnAction(event -> {
-            config.tile_size = 48;
-            if(levelRoot == null) levelRoot = new Pane();
-            if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
-
-            int id;
-            while(true){
-                //在 0-4 之间随机选择一个地图
-                id = (int) (Math.random() * mapdata.maps.length);
-                double startTime = System.currentTimeMillis();
-                Solve solve = new Solve(new MapMatrix(mapdata.maps[id]));
-                solve.aStarSearch();
-                double solveTime = System.currentTimeMillis() - startTime;
-                if(solveTime < 50) break;
-            }
-
-            level.setId(id);
-            for(Timeline timeline : config.timelines){
-                if(timeline != null) timeline.stop();
-            }
-            level.init();
-            root.getChildren().add(levelRoot);
-            inLevel(level);
+            startButtonAction();
+            root.getChildren().remove(startButton);
+            root.getChildren().remove(startButton2);
+            root.getChildren().remove(startButton3);
+        });
+        startButton2.setOnAction(event -> {
+            startButton2Action();
+            root.getChildren().remove(startButton);
+            root.getChildren().remove(startButton2);
+            root.getChildren().remove(startButton3);
+        });
+        startButton3.setOnAction(event -> {
+            startButton3Action();
+            root.getChildren().remove(startButton);
+            root.getChildren().remove(startButton2);
+            root.getChildren().remove(startButton3);
         });
         root.getChildren().add(startButton);
+        root.getChildren().add(startButton2);
+        root.getChildren().add(startButton3);
+    }
+
+    void startButtonAction(){
+        config.tile_size = 48;
+        if(levelRoot == null) levelRoot = new Pane();
+        if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
+
+        int id;
+        while(true){
+            //在 0-4 之间随机选择一个地图
+            id = (int) (Math.random() * mapdata.maps.length);
+            double startTime = System.currentTimeMillis();
+            Solve solve = new Solve(new MapMatrix(mapdata.maps[id]));
+            solve.aStarSearch();
+            double solveTime = System.currentTimeMillis() - startTime;
+            if(solveTime < 50) break;
+        }
+
+        level.setId(id);
+        for(Timeline timeline : config.timelines){
+            if(timeline != null) timeline.stop();
+        }
+        level.init();
+        root.getChildren().add(levelRoot);
+        inLevel(level);
+    }
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
+    Text waitingText;
+    void startButton2Action(){ //房主
+
+
+        config.tile_size = 48;
+        if(levelRoot == null) levelRoot = new Pane();
+        if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
+
+        int id;
+        while(true){
+            //在 0-4 之间随机选择一个地图
+            id = (int) (Math.random() * mapdata.maps.length);
+            double startTime = System.currentTimeMillis();
+            Solve solve = new Solve(new MapMatrix(mapdata.maps[id]));
+            solve.aStarSearch();
+            double solveTime = System.currentTimeMillis() - startTime;
+            if(solveTime < 50) break;
+        }
+
+        //显示文字
+        waitingText = new Text(230, 280, "等待玩家加入……");
+        waitingText.setFont(new Font(pixelFont.getName(), 45));
+        waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        root.getChildren().add(waitingText);
+
+        new Thread(() -> {
+            Server server = new Server();
+            server.start(8888, 2, LocalIPAddress.getLocalIP());
+//            server.send(server.socket, IDtoString(id));
+//          root.getChildren().add(levelRoot);
+        }).start();
+    }
+//    String IDtoString(int id){
+//        String
+//    }
+    void startButton3Action(){
+        //显示文字
+        waitingText = new Text(230, 280, "正在寻找房间……");
+        waitingText.setFont(new Font(pixelFont.getName(), 45));
+        waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        root.getChildren().add(waitingText);
+
+        new Thread(() -> {
+            Client client = new Client();
+            client.start(LocalIPAddress.getLocalIP(), 8888);
+//          root.getChildren().add(levelRoot);
+        }).start();
     }
 
     Button settingsButton;
@@ -186,7 +270,7 @@ public class FightLevelManager {
             root.getChildren().add(backButton);
         }
     }
-    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 90);
+//    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 90);
     VBox vbox;
     Line topLine, bottomLine;
     Label label;
