@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -53,22 +55,59 @@ public class FightLevelManager {
     public FightLevel level;
     public void start() {
         //背景颜色
-        root.setStyle("-fx-background-color: #8e804b");
+        root.setStyle("-fx-background-color: #e9ddb6");
+        //添加图片
+        Image choice1 = new Image(getClass().getResourceAsStream("/images/choice1.png"), 130, 200, false, false);
+        Image choice2 = new Image(getClass().getResourceAsStream("/images/choice2.png"), 130, 200, false, false);
+        Image choice3 = new Image(getClass().getResourceAsStream("/images/choice3.png"), 130, 200, false, false);
+
         //添加开始游戏按钮
-        Button startButton = new Button("只有一个电脑");
+        Button startButton = new Button("只有一台电脑");
         startButton.setLayoutX(100);
         startButton.setLayoutY(100);
+        //将按钮设置为 choice1 的图片
+        startButton.setGraphic(new ImageView(choice1));
+        startButton.setStyle("-fx-background-color: transparent;");
+        //将文字置于图片下方
+        startButton.setContentDisplay(javafx.scene.control.ContentDisplay.TOP);
+        //字体
+        startButton.setFont(new Font(pixelFont.getName(), 20));
+        //颜色
+        startButton.setTextFill(javafx.scene.paint.Color.web("#55371d"));
         //
         Button startButton2 = new Button("创建房间");
-        startButton2.setLayoutX(100);
-        startButton2.setLayoutY(200);
+        startButton2.setLayoutX(320);
+        startButton2.setLayoutY(100);
+        //将按钮设置为 choice2 的图片
+        startButton2.setGraphic(new ImageView(choice2));
+        startButton2.setStyle("-fx-background-color: transparent;");
+        //将文字置于图片下方
+        startButton2.setContentDisplay(javafx.scene.control.ContentDisplay.TOP);
+        //字体
+        startButton2.setFont(new Font(pixelFont.getName(), 20));
+        //颜色
+        startButton2.setTextFill(javafx.scene.paint.Color.web("#55371d"));
+
         //
         Button startButton3 = new Button("加入房间");
-        startButton3.setLayoutX(100);
-        startButton3.setLayoutY(300);
+        startButton3.setLayoutX(540);
+        startButton3.setLayoutY(100);
+        //将按钮设置为 choice3 的图片
+        startButton3.setGraphic(new ImageView(choice3));
+        startButton3.setStyle("-fx-background-color: transparent;");
+        //将文字置于图片下方
+        startButton3.setContentDisplay(javafx.scene.control.ContentDisplay.TOP);
+        //字体
+        startButton3.setFont(new Font(pixelFont.getName(), 20));
+        //颜色
+        startButton3.setTextFill(javafx.scene.paint.Color.web("#55371d"));
         //返回
         Button backHomeButton = new Button("返回");
-        backHomeButton.setLayoutX(100);
+        //字体
+        backHomeButton.setFont(new Font(pixelFont.getName(), 20));
+        //设置为透明棕色边框棕色文字
+        backHomeButton.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
+        backHomeButton.setLayoutX(120);
         backHomeButton.setLayoutY(400);
         backHomeButton.setOnAction(event -> {
             mediaPlayer.stop();
