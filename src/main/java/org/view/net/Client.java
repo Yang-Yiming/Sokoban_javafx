@@ -1,6 +1,7 @@
 package org.view.net;
 
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
 import org.view.level.FightLevelManager;
 
 import java.io.IOException;
@@ -61,6 +62,22 @@ public class Client {
                                 fightLevelManager.FightLevelID = fightLevelID;
                                 fightLevelManager.button3LoadLevel(socket);
                                 send(socket, "!");
+                            });
+                        }else if(s.startsWith("W")){
+                            Platform.runLater(() -> {
+                                fightLevelManager.keyCodeEvent(KeyCode.W);
+                            });
+                        }else if(s.startsWith("A")){
+                            Platform.runLater(() -> {
+                                fightLevelManager.keyCodeEvent(KeyCode.A);
+                            });
+                        }else if(s.startsWith("S")){
+                            Platform.runLater(() -> {
+                                fightLevelManager.keyCodeEvent(KeyCode.S);
+                            });
+                        }else if(s.startsWith("D")){
+                            Platform.runLater(() -> {
+                                fightLevelManager.keyCodeEvent(KeyCode.D);
                             });
                         }
 //                        System.out.println("Received message from the server: " + receive(socket));

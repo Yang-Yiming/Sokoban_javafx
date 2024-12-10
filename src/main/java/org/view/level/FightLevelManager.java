@@ -115,6 +115,8 @@ public class FightLevelManager {
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
     Text waitingText;
     public int FightLevelID;
+    Server server;
+    Client client;
     void startButton2Action(){ //房主
         config.tile_size = 48;
         while(true){
@@ -134,7 +136,7 @@ public class FightLevelManager {
         root.getChildren().add(waitingText);
 
         new Thread(() -> {
-            Server server = new Server(this);
+            server = new Server(this);
             server.start(8888, 2, LocalIPAddress.getLocalIP());
             server.send(server.socket, IDtoString(FightLevelID));
         }).start();
@@ -164,16 +166,19 @@ public class FightLevelManager {
         textField.setLayoutY(340);
         textField.setPrefWidth(200);
         textField.setPrefHeight(30);
+        textField.setFocusTraversable(false);
         root.getChildren().add(textField);
+        //取消输入框对上下左右键的监听
         //确认按钮
         Button confirmButton = new Button("确认");
         confirmButton.setLayoutX(230);
         confirmButton.setLayoutY(380);
         confirmButton.setFocusTraversable(false);
+
         root.getChildren().add(confirmButton);
         confirmButton.setOnAction(event -> {
             new Thread(() -> {
-                Client client = new Client(this);
+                client = new Client(this);
                 client.start(textField.getText(), 8888);
             }).start();
             root.getChildren().remove(text);
@@ -184,17 +189,17 @@ public class FightLevelManager {
         FightLevelID = -1;
     }
     public void button2LoadLevel(Socket socket){
-        System.out.println("房主真 load 了");
+//        System.out.println("房主真 load 了");
         if(levelRoot == null) levelRoot = new Pane();
         if(level == null) level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
         root.getChildren().add(levelRoot);
-//        inLevel2(level, socket);
+        inLevel2(level, socket);
     }
     public void button3LoadLevel(Socket socket){
         if(levelRoot == null) levelRoot = new Pane();
         if(level == null) level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
         root.getChildren().add(levelRoot);
-//        inLevel3(level, socket);
+        inLevel3(level, socket);
     }
 
     Button settingsButton;
@@ -207,7 +212,8 @@ public class FightLevelManager {
         Home home = new Home();
         homeButton = home.createButton(root, primaryStage, controller);
     }
-    private void inLevel2(FightLevel level){
+    public int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+    private void inLevel2(FightLevel level, Socket socket) {
         createSettingsButton();
         createHomeButton();
         root.getChildren().add(settingsButton);
@@ -218,37 +224,91 @@ public class FightLevelManager {
 //             System.out.println(code);
             level.player1.set_velocity(0, 0);
             level.player2.set_velocity(0, 0);
-            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
-            if (code == KeyCode.W) {
+            dx1 = 0; dy1 = 0; dx2 = 0; dy2 = 0;
+            if (code == KeyCode.W || code == KeyCode.UP) {
                 dy1 = -1;
                 level.player1.setOrientation(1);
-
-            } else if (code == KeyCode.S) {
+                server.send(socket, "W");
+            } else if (code == KeyCode.S || code == KeyCode.DOWN) {
                 dy1 = 1;
                 level.player1.setOrientation(2);
-            } else if (code == KeyCode.A) {
+                server.send(socket, "S");
+            } else if (code == KeyCode.A || code == KeyCode.LEFT) {
                 dx1 = -1;
                 level.player1.setOrientation(3);
-            } else if (code == KeyCode.D) {
+                server.send(socket, "A");
+            } else if (code == KeyCode.D || code == KeyCode.RIGHT) {
                 dx1 = 1;
                 level.player1.setOrientation(4);
-            }
-            else if (code == KeyCode.UP) {
-                dy2 = -1;
-                level.player2.setOrientation(1);
-            } else if (code == KeyCode.DOWN) {
-                dy2 = 1;
-                level.player2.setOrientation(2);
-            } else if (code == KeyCode.LEFT) {
-                dx2 = -1;
-                level.player2.setOrientation(3);
-            } else if (code == KeyCode.RIGHT) {
-                dx2 = 1;
-                level.player2.setOrientation(4);
+                server.send(socket, "D");
             } else return;
             keyPressedEvent(dx1, dy1, dx2, dy2, level);
         });
         checkSize();
+    }
+    private void inLevel3(FightLevel level, Socket socket) {
+        createSettingsButton();
+        createHomeButton();
+        root.getChildren().add(settingsButton);
+        root.getChildren().add(homeButton);
+        // 添加键盘监听功能
+        scene.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+//             System.out.println(code);
+            level.player1.set_velocity(0, 0);
+            level.player2.set_velocity(0, 0);
+            dx1 = 0; dy1 = 0; dx2 = 0; dy2 = 0;
+            if (code == KeyCode.W || code == KeyCode.UP) {
+                dy2 = -1;
+                level.player2.setOrientation(1);
+                client.send(socket, "W");
+            } else if (code == KeyCode.S || code == KeyCode.DOWN) {
+                dy2 = 1;
+                level.player2.setOrientation(2);
+                client.send(socket, "S");
+            } else if (code == KeyCode.A || code == KeyCode.LEFT) {
+                dx2 = -1;
+                level.player2.setOrientation(3);
+                client.send(socket, "A");
+            } else if (code == KeyCode.D || code == KeyCode.RIGHT) {
+                dx2 = 1;
+                level.player2.setOrientation(4);
+                client.send(socket, "D");
+            } else return;
+            keyPressedEvent(dx1, dy1, dx2, dy2, level);
+        });
+        checkSize();
+    }
+    public void keyCodeEvent(KeyCode code){
+        level.player1.set_velocity(0, 0);
+        level.player2.set_velocity(0, 0);
+        dx1 = 0; dy1 = 0; dx2 = 0; dy2 = 0;
+        if (code == KeyCode.W) {
+            dy1 = -1;
+            level.player1.setOrientation(1);
+        } else if (code == KeyCode.S) {
+            dy1 = 1;
+            level.player1.setOrientation(2);
+        } else if (code == KeyCode.A) {
+            dx1 = -1;
+            level.player1.setOrientation(3);
+        } else if (code == KeyCode.D) {
+            dx1 = 1;
+            level.player1.setOrientation(4);
+        } else if (code == KeyCode.UP) {
+            dy2 = -1;
+            level.player2.setOrientation(1);
+        } else if (code == KeyCode.DOWN) {
+            dy2 = 1;
+            level.player2.setOrientation(2);
+        } else if (code == KeyCode.LEFT) {
+            dx2 = -1;
+            level.player2.setOrientation(3);
+        } else if (code == KeyCode.RIGHT) {
+            dx2 = 1;
+            level.player2.setOrientation(4);
+        } else return;
+        keyPressedEvent(dx1, dy1, dx2, dy2, level);
     }
     private void inLevel(FightLevel level) {
         createSettingsButton();
@@ -261,7 +321,7 @@ public class FightLevelManager {
 //             System.out.println(code);
             level.player1.set_velocity(0, 0);
             level.player2.set_velocity(0, 0);
-            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+            dx1 = 0; dy1 = 0; dx2 = 0; dy2 = 0;
             if (code == KeyCode.W) {
                 dy1 = -1;
                 level.player1.setOrientation(1);
