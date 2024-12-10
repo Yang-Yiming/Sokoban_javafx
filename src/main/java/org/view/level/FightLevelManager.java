@@ -128,7 +128,7 @@ public class FightLevelManager {
         }
 
         //显示文字
-        waitingText = new Text(230, 280, "等待玩家加入……");
+        waitingText = new Text(230, 280, LocalIPAddress.getLocalIP());
         waitingText.setFont(new Font(pixelFont.getName(), 45));
         waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
         root.getChildren().add(waitingText);
@@ -148,17 +148,40 @@ public class FightLevelManager {
     }
     void startButton3Action(){
         config.tile_size = 48;
-        //显示文字
-        waitingText = new Text(230, 280, "正在寻找房间……");
-        waitingText.setFont(new Font(pixelFont.getName(), 45));
-        waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
-        root.getChildren().add(waitingText);
-        FightLevelID = -1;
+//        //显示文字
+//        waitingText = new Text(230, 280, "正在寻找房间……");
+//        waitingText.setFont(new Font(pixelFont.getName(), 45));
+//        waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
+//        root.getChildren().add(waitingText);
+        //输入框
+        Text text = new Text(230, 330, "请输入房主的IP地址：");
+        text.setFont(new Font(pixelFont.getName(), 30));
+        text.setFill(javafx.scene.paint.Color.web("#55371d"));
+        root.getChildren().add(text);
+        //输入框
+        javafx.scene.control.TextField textField = new javafx.scene.control.TextField();
+        textField.setLayoutX(230);
+        textField.setLayoutY(340);
+        textField.setPrefWidth(200);
+        textField.setPrefHeight(30);
+        root.getChildren().add(textField);
+        //确认按钮
+        Button confirmButton = new Button("确认");
+        confirmButton.setLayoutX(230);
+        confirmButton.setLayoutY(380);
+        confirmButton.setFocusTraversable(false);
+        root.getChildren().add(confirmButton);
+        confirmButton.setOnAction(event -> {
+            new Thread(() -> {
+                Client client = new Client(this);
+                client.start(textField.getText(), 8888);
+            }).start();
+            root.getChildren().remove(text);
+            root.getChildren().remove(textField);
+            root.getChildren().remove(confirmButton);
+        });
 
-        new Thread(() -> {
-            Client client = new Client(this);
-            client.start(LocalIPAddress.getLocalIP(), 8888);
-        }).start();
+        FightLevelID = -1;
     }
     public void button2LoadLevel(Socket socket){
         System.out.println("房主真 load 了");
