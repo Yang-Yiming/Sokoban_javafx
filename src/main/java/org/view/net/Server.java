@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class Server {
-    ServerSocket serverSocket;
+    public ServerSocket serverSocket;
     public Socket socket;
     FightLevelManager fightLevelManager;
     public Server(FightLevelManager fightLevelManager){
@@ -73,6 +73,27 @@ public class Server {
                         }else if(s.startsWith("D")){
                             Platform.runLater(() -> {
                                 fightLevelManager.keyCodeEvent(KeyCode.RIGHT);
+                            });
+                        }else if(s.startsWith("B")){
+                            Platform.runLater(() -> {
+                                //结束 server
+                                try {
+                                    socket.close();
+                                    serverSocket.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.backButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.backButton0);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.levelRoot);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.waitingText);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
+                                fightLevelManager.level.root.getChildren().clear();
+                                fightLevelManager.start();
                             });
                         }
 //                        System.out.println("Received message from the client: " + s);

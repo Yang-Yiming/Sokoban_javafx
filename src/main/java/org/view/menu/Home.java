@@ -18,7 +18,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.model.config;
+import org.view.level.FightLevelManager;
 
+import java.io.IOException;
 import java.sql.Time;
 
 import static org.view.menu.MenuView.mediaPlayer;
@@ -93,6 +95,32 @@ public class Home {
             for(Timeline timeline : config.timelines){
                 if(timeline != null) timeline.stop();
             }
+            //停止所有 server
+            if(FightLevelManager.server != null){
+                //如果 server 正在运行
+                if(!FightLevelManager.server.socket.isClosed()) {
+                    FightLevelManager.server.send(FightLevelManager.server.socket, "B");
+                    try {
+                        FightLevelManager.server.serverSocket.close();
+                        FightLevelManager.server.socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            //停止所有 client
+            if(FightLevelManager.client != null){
+                //如果 client 正在运行
+                if(!FightLevelManager.client.socket.isClosed()) {
+                    FightLevelManager.client.send(FightLevelManager.client.socket, "B");
+                    try {
+                        FightLevelManager.client.socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
         });
 
         //关闭按钮

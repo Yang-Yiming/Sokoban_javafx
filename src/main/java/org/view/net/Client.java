@@ -83,13 +83,30 @@ public class Client {
                             });
                         }else if(s.startsWith("B")){
                             Platform.runLater(() -> {
+                                //结束 client
+                                try {
+                                    socket.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.backButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.backButton0);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.levelRoot);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.waitingText);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
                                 fightLevelManager.level.root.getChildren().clear();
+                                fightLevelManager.start();
                             });
                         }else if(s.startsWith("R")){
                             int fightLevelID = IDtoInt(s);
                             Platform.runLater(() -> {
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
                                 fightLevelManager.inLevel3(fightLevelManager.level, socket);
                                 fightLevelManager.FightLevelID = fightLevelID;
                                 fightLevelManager.level.setId(fightLevelID);

@@ -23,13 +23,18 @@ import org.model.Solve.Solve;
 import org.model.config;
 import org.view.menu.Home;
 import org.view.menu.MenuController;
+import org.view.menu.MenuView;
 import org.view.menu.Settings;
 import org.view.net.Client;
 import org.view.net.LocalIPAddress;
 import org.view.net.Server;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
+
+import static org.view.menu.MenuView.mediaPlayer;
 
 public class FightLevelManager {
     public Pane root;
@@ -44,7 +49,7 @@ public class FightLevelManager {
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
     }
-    Pane levelRoot;
+    public Pane levelRoot;
     public FightLevel level;
     public void start() {
         //背景颜色
@@ -61,38 +66,86 @@ public class FightLevelManager {
         Button startButton3 = new Button("加入房间");
         startButton3.setLayoutX(100);
         startButton3.setLayoutY(300);
+        //返回
+        Button backHomeButton = new Button("返回");
+        backHomeButton.setLayoutX(100);
+        backHomeButton.setLayoutY(400);
+        backHomeButton.setOnAction(event -> {
+            mediaPlayer.stop();
+            root.getChildren().clear();
+            Pane menuView = new MenuView(controller);
+            primaryStage.setScene(new Scene(menuView));
+            primaryStage.show();
+            //停止所有 timeline
+            for(Timeline timeline : config.timelines){
+                if(timeline != null) timeline.stop();
+            }
+            //停止所有 server
+            if(FightLevelManager.server != null){
+                //如果 server 正在运行
+                if(!FightLevelManager.server.socket.isClosed()) {
+                    FightLevelManager.server.send(FightLevelManager.server.socket, "B");
+                    try {
+                        FightLevelManager.server.serverSocket.close();
+                        FightLevelManager.server.socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            //停止所有 client
+            if(FightLevelManager.client != null){
+                //如果 client 正在运行
+                if(!FightLevelManager.client.socket.isClosed()) {
+                    FightLevelManager.client.send(FightLevelManager.client.socket, "B");
+                    try {
+                        FightLevelManager.client.socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         //取消 startButton 对上下左右键的监听
         startButton.setFocusTraversable(false);
         startButton2.setFocusTraversable(false);
         startButton3.setFocusTraversable(false);
+        backHomeButton.setFocusTraversable(false);
         startButton.setOnAction(event -> {
             startButtonAction();
             root.getChildren().remove(startButton);
             root.getChildren().remove(startButton2);
             root.getChildren().remove(startButton3);
+            root.getChildren().remove(backHomeButton);
         });
         startButton2.setOnAction(event -> {
             startButton2Action();
             root.getChildren().remove(startButton);
             root.getChildren().remove(startButton2);
             root.getChildren().remove(startButton3);
+            root.getChildren().remove(backHomeButton);
         });
         startButton3.setOnAction(event -> {
             startButton3Action();
             root.getChildren().remove(startButton);
             root.getChildren().remove(startButton2);
             root.getChildren().remove(startButton3);
+            root.getChildren().remove(backHomeButton);
         });
         root.getChildren().add(startButton);
         root.getChildren().add(startButton2);
         root.getChildren().add(startButton3);
+        root.getChildren().add(backHomeButton);
     }
 
     void startButtonAction(){
         type = 1;
         config.tile_size = 48;
-        if(levelRoot == null) levelRoot = new Pane();
-        if(level == null) level = new FightLevel(levelRoot, 1, primaryStage, null, true);
+//        if(levelRoot == null)
+        levelRoot = new Pane();
+//        if(level == null)
+        level = new FightLevel(levelRoot, 1, primaryStage, null, true);
 
         int id;
         while(true){
@@ -114,11 +167,12 @@ public class FightLevelManager {
         inLevel(level);
     }
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
-    Text waitingText;
+    public Text waitingText;
     public int FightLevelID;
-    Server server;
-    Client client;
+    public static Server server;
+    public static Client client;
     int type = 0;
+    public Button backButton0;
     void startButton2Action(){ //房主
         type = 2;
         config.tile_size = 48;
@@ -137,6 +191,22 @@ public class FightLevelManager {
         waitingText.setFont(new Font(pixelFont.getName(), 45));
         waitingText.setFill(javafx.scene.paint.Color.web("#55371d"));
         root.getChildren().add(waitingText);
+        //添加返回按钮
+        backButton0 = new Button("返回");
+        backButton0.setLayoutX(230);
+        backButton0.setLayoutY(330);
+        backButton0.setFocusTraversable(false);
+        backButton0.setOnAction(event -> {
+            root.getChildren().remove(waitingText);
+            root.getChildren().remove(backButton0);
+                try {
+                    server.serverSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            start();
+        });
+        root.getChildren().add(backButton0);
 
         new Thread(() -> {
             server = new Server(this);
@@ -178,8 +248,21 @@ public class FightLevelManager {
         confirmButton.setLayoutX(230);
         confirmButton.setLayoutY(280);
         confirmButton.setFocusTraversable(false);
-
         root.getChildren().add(confirmButton);
+        //返回按钮
+        backButton0 = new Button("返回");
+        backButton0.setLayoutX(230);
+        backButton0.setLayoutY(330);
+        backButton0.setFocusTraversable(false);
+        backButton0.setOnAction(event -> {
+            root.getChildren().remove(text);
+            root.getChildren().remove(textField);
+            root.getChildren().remove(confirmButton);
+            root.getChildren().remove(backButton0);
+            start();
+        });
+        root.getChildren().add(backButton0);
+
         confirmButton.setOnAction(event -> {
             new Thread(() -> {
                 client = new Client(this);
@@ -194,24 +277,28 @@ public class FightLevelManager {
     }
     public void button2LoadLevel(Socket socket){
 //        System.out.println("房主真 load 了");
-        if(levelRoot == null) levelRoot = new Pane();
-        if(level == null) level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
+//        if(levelRoot == null)
+        levelRoot = new Pane();
+//        if(level == null)
+        level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
         root.getChildren().add(levelRoot);
         inLevel2(level, socket);
     }
     public void button3LoadLevel(Socket socket){
-        if(levelRoot == null) levelRoot = new Pane();
-        if(level == null) level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
+//        if(levelRoot == null)
+        levelRoot = new Pane();
+//        if(level == null)
+        level = new FightLevel(levelRoot, FightLevelID, primaryStage, null, true);
         root.getChildren().add(levelRoot);
         inLevel3(level, socket);
     }
 
-    Button settingsButton;
+    public Button settingsButton;
     public void createSettingsButton(){
         Settings settings = new Settings();
         settingsButton = settings.createButton(root);
     }
-    Button homeButton;
+    public Button homeButton;
     public void createHomeButton(){
         Home home = new Home();
         homeButton = home.createButton(root, primaryStage, controller);
@@ -355,7 +442,7 @@ public class FightLevelManager {
         });
         checkSize();
     }
-    Button restartButton, backButton;
+    public Button restartButton, backButton;
     public void keyPressedEvent(int dx1, int dy1, int dx2, int dy2, FightLevel level) {
         level.player1.set_velocity(dx1, dy1);
         level.player2.set_velocity(dx2, dy2);
@@ -399,11 +486,21 @@ public class FightLevelManager {
                     root.getChildren().remove(vbox);
                     root.getChildren().remove(restartButton);
                     root.getChildren().remove(backButton);
+                    root.getChildren().remove(backButton0);
                     root.getChildren().remove(levelRoot);
                     root.getChildren().remove(waitingText);
+                    root.getChildren().remove(settingsButton);
+                    root.getChildren().remove(homeButton);
                     level.root.getChildren().clear();
                     if(type == 2){
                         server.send(server.socket, "B");
+                        //结束 server
+                        try {
+                            server.socket.close();
+                            server.serverSocket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     start();
                 });
@@ -411,6 +508,9 @@ public class FightLevelManager {
                     root.getChildren().remove(vbox);
                     root.getChildren().remove(restartButton);
                     root.getChildren().remove(backButton);
+                    root.getChildren().remove(backButton0);
+                    root.getChildren().remove(settingsButton);
+                    root.getChildren().remove(homeButton);
                     if(type == 2) inLevel2(level, server.socket);
                     if(type == 1) inLevel(level);
                     level.setId((int) (Math.random() * mapdata.maps.length));
@@ -486,6 +586,4 @@ public class FightLevelManager {
         });
     }
 
-
 }
-
