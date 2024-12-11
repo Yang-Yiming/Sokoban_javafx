@@ -41,35 +41,32 @@ class Cat {
     boolean is_moving = false;
     public void move(char dir){ // 0 : right 1:down 2:up
         imageView.setFitHeight(config.Map_Node_Width); imageView.setFitWidth(config.Map_Node_Width);
+        int dx = 0, dy = 0;
 
-//        Timeline move_timeline = new Timeline(
-//                new KeyFrame(Duration.ZERO,
-//                        new KeyValue(imageView.layoutXProperty(), imageView.getLayoutX()),
-//                        new KeyValue(imageView.layoutYProperty(), imageView.getLayoutY())),
-//                new KeyFrame(Duration.millis(config.move_anim_duration),
-//                        new KeyValue(imageView.layoutXProperty(), imageView.getLayoutX() + dx),
-//                        new KeyValue(imageView.layoutYProperty(), imageView.getLayoutY() + dy))
-//        );
-
-        TranslateTransition tt = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
         if(dir == 'd') {
             imageView.setImage(cat_run); imageView.setScaleX(1);
-            tt.setFromX(-config.Map_Node_Width);
-            tt.setToX(0); x++;
+            dx = 1;
         } else if (dir == 's'){
             imageView.setImage(cat_run_front);
-            tt.setFromY(-config.Map_Node_Width);
-            tt.setToY(0);y++;
+            dy = 1;
         } else if (dir == 'w'){
             imageView.setImage(cat_run_back);
-            tt.setFromY(config.Map_Node_Width);
-            tt.setToY(0); y--;
+            dy = -1;
         } else if (dir == 'a'){
             imageView.setImage(cat_run); imageView.setScaleX(-1);
-            tt.setFromX(config.Map_Node_Width); x--;
-            tt.setToX(0);
+            dx = -1;
         }
-        tt.setOnFinished(e -> {
+        x += dx; y += dy;
+
+        Timeline move_timeline = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(imageView.layoutXProperty(), imageView.getLayoutX()),
+                        new KeyValue(imageView.layoutYProperty(), imageView.getLayoutY())),
+                new KeyFrame(Duration.millis(config.move_anim_duration),
+                        new KeyValue(imageView.layoutXProperty(), SelectMap.AnchorX + x * config.Map_Node_Width),
+                        new KeyValue(imageView.layoutYProperty(), SelectMap.AnchorY + y * config.Map_Node_Width))
+        );
+        move_timeline.setOnFinished(e -> {
             if(dir == 'd') {imageView.setImage(cat_stand); imageView.setScaleX(1);}
             else if(dir == 's') imageView.setImage(cat_stand_front);
             else if(dir == 'w') imageView.setImage(cat_stand_back);
@@ -81,8 +78,9 @@ class Cat {
             imageView.setLayoutY(SelectMap.AnchorY + y * config.Map_Node_Width);
         });
         is_moving = true;
-        tt.play();
-        tt.setCycleCount(1);
+
+        move_timeline.setCycleCount(1);
+        move_timeline.play();
     }
 }
 
