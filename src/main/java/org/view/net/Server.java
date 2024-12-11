@@ -24,7 +24,7 @@ public class Server {
             String str = new String(buf, 0, len, StandardCharsets.UTF_8);
             return str;
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
     }
@@ -34,7 +34,7 @@ public class Server {
             socket.getOutputStream().write(message.getBytes(StandardCharsets.UTF_8));
             socket.getOutputStream().flush();
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -81,7 +81,7 @@ public class Server {
                                     socket.close();
                                     serverSocket.close();
                                 } catch (IOException e) {
-                                    e.printStackTrace();
+//                                    e.printStackTrace();
                                 }
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
@@ -108,7 +108,7 @@ public class Server {
 //                }
 //            }
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 

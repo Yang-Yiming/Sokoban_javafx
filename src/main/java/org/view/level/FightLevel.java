@@ -105,6 +105,19 @@ public class FightLevel extends Level {
         createFadeTimeline();
         drawMap();
     }
+
+    @Override
+    public void drawMap() {
+        root.getChildren().clear(); // 先清空一下地图
+        drawGrass();
+        drawButterflyShadow();
+        drawBackGround();
+//        drawBoxes();
+        drawPlayer();
+        drawBoxesAndWall();
+        drawButterfly();
+        root.getChildren().add(fadeRectangle);
+    }
     public void drawPlayer() {
         root.getChildren().add(player1.getImageView());
         root.getChildren().add(player2.getImageView());

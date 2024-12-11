@@ -27,7 +27,7 @@ public class Client {
             int len = in.read(buf);
             return new String(buf, 0, len, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
     }
@@ -38,7 +38,7 @@ public class Client {
             socket.getOutputStream().write(message.getBytes(StandardCharsets.UTF_8));
             socket.getOutputStream().flush();
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -87,7 +87,7 @@ public class Client {
                                 try {
                                     socket.close();
                                 } catch (IOException e) {
-                                    e.printStackTrace();
+//                                    e.printStackTrace();
                                 }
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
@@ -121,7 +121,7 @@ public class Client {
                 try {
                     Thread.sleep(3000); // 等待3秒后重试
                 } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
+//                    Thread.currentThread().interrupt();
                 }
             }
             System.out.println("Reconnecting...");

@@ -122,13 +122,13 @@ public class FightLevelManager {
             //停止所有 server
             if(FightLevelManager.server != null){
                 //如果 server 正在运行
-                if(!FightLevelManager.server.socket.isClosed()) {
+                if(FightLevelManager.server.socket != null && !FightLevelManager.server.socket.isClosed()) {
                     FightLevelManager.server.send(FightLevelManager.server.socket, "B");
                     try {
                         FightLevelManager.server.serverSocket.close();
                         FightLevelManager.server.socket.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                 }
             }
@@ -140,7 +140,7 @@ public class FightLevelManager {
                     try {
                         FightLevelManager.client.socket.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                 }
             }
@@ -243,7 +243,7 @@ public class FightLevelManager {
                 try {
                     server.serverSocket.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             start();
         });
@@ -553,7 +553,7 @@ public class FightLevelManager {
                             server.socket.close();
                             server.serverSocket.close();
                         } catch (IOException e) {
-                            e.printStackTrace();
+//                            e.printStackTrace();
                         }
                     }
                     start();
