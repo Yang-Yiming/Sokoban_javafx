@@ -24,7 +24,7 @@ public class config {
     // 可以用设置改变的常量
     public static int tile_size = 55;
     public static boolean is_vertical = false;
-    public static int move_anim_duration = 300; // milliseconds
+    public static int move_anim_duration = 150; // milliseconds
     public static int fade_anim_duration = 250;
     public static int save_text_maintain = 1000;
     public static double wall_angle_amount = 0.5;

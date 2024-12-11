@@ -1,9 +1,6 @@
 package org.view.LevelSelect;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -29,6 +26,10 @@ import java.util.concurrent.atomic.AtomicReference;
 class Cat {
     Image cat_stand = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     Image cat_run = new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image cat_run_front = new Image(getClass().getResourceAsStream("/images/player_cat/cat_run_front.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image cat_run_back = new Image(getClass().getResourceAsStream("/images/player_cat/cat_run_back.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image cat_stand_front = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_front.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image cat_stand_back = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_back.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     ImageView imageView;
     int x, y;
     public Cat() {
@@ -39,22 +40,45 @@ class Cat {
     }
     boolean is_moving = false;
     public void move(char dir){ // 0 : right 1:down 2:up
-        imageView.setImage(cat_run);
         imageView.setFitHeight(config.Map_Node_Width); imageView.setFitWidth(config.Map_Node_Width);
+
+//        Timeline move_timeline = new Timeline(
+//                new KeyFrame(Duration.ZERO,
+//                        new KeyValue(imageView.layoutXProperty(), imageView.getLayoutX()),
+//                        new KeyValue(imageView.layoutYProperty(), imageView.getLayoutY())),
+//                new KeyFrame(Duration.millis(config.move_anim_duration),
+//                        new KeyValue(imageView.layoutXProperty(), imageView.getLayoutX() + dx),
+//                        new KeyValue(imageView.layoutYProperty(), imageView.getLayoutY() + dy))
+//        );
+
         TranslateTransition tt = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
         if(dir == 'd') {
-            tt.setByX(config.Map_Node_Width); x++;
+            imageView.setImage(cat_run); imageView.setScaleX(1);
+            tt.setFromX(-config.Map_Node_Width);
+            tt.setToX(0); x++;
         } else if (dir == 's'){
-            tt.setByY(config.Map_Node_Width); y++;
+            imageView.setImage(cat_run_front);
+            tt.setFromY(-config.Map_Node_Width);
+            tt.setToY(0);y++;
         } else if (dir == 'w'){
-            tt.setByY(-config.Map_Node_Width); y--;
+            imageView.setImage(cat_run_back);
+            tt.setFromY(config.Map_Node_Width);
+            tt.setToY(0); y--;
         } else if (dir == 'a'){
-            tt.setByX(-config.Map_Node_Width); x--;
+            imageView.setImage(cat_run); imageView.setScaleX(-1);
+            tt.setFromX(config.Map_Node_Width); x--;
+            tt.setToX(0);
         }
         tt.setOnFinished(e -> {
-            imageView.setImage(cat_stand);
+            if(dir == 'd') {imageView.setImage(cat_stand); imageView.setScaleX(1);}
+            else if(dir == 's') imageView.setImage(cat_stand_front);
+            else if(dir == 'w') imageView.setImage(cat_stand_back);
+            else if(dir == 'a') {imageView.setImage(cat_stand); imageView.setScaleX(-1);}
             imageView.setFitHeight(config.Map_Node_Width); imageView.setFitWidth(config.Map_Node_Width);
             is_moving = false;
+            imageView.setTranslateX(0); imageView.setTranslateY(0);
+            imageView.setLayoutX(SelectMap.AnchorX + x * config.Map_Node_Width);
+            imageView.setLayoutY(SelectMap.AnchorY + y * config.Map_Node_Width);
         });
         is_moving = true;
         tt.play();
@@ -76,6 +100,7 @@ public class SelectMap {
     public SelectMap(Stage stage) {
         this.stage = stage;
         cat = new Cat();
+        AnchorX = 100; AnchorY = 100;
         if(stage.getScene() != null){
             this.scene = stage.getScene();
             this.root = (Pane) scene.getRoot();
@@ -131,24 +156,32 @@ public class SelectMap {
         root.getChildren().add(cat.imageView);
     }
 
-    public void Move() {
-        // 根据鼠标拖动改变anchor_posx anchor_posy
-        // 鼠标是否在拖动根据鼠标拖动改变anchor_posx
-        AtomicReference<Double> del_posx = new AtomicReference<>((double) 0);
-        AtomicReference<Double> del_posy = new AtomicReference<>((double) 0);
+    Timeline cameraTimeline = null;
 
-        // 添加鼠标按下事件监听器
-        scene.setOnMousePressed(event -> {
-            if (event.isPrimaryButtonDown()) {
-                del_posx.set(AnchorX - event.getSceneX());
-                del_posy.set(AnchorY - event.getSceneY());
-            }
-        });
-        scene.setOnMouseDragged(event -> {
-            AnchorX = event.getSceneX() + del_posx.get();
-            AnchorY = event.getSceneY() + del_posy.get();
+    public void Move() {
+        cameraTimeline = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+            // 得到画面中心的坐标
+            double midx = stage.getWidth() / 2 - (double) config.Map_Node_Width / 2;
+            double midy = stage.getHeight() / 2 - (double) config.Map_Node_Width / 2;
+            // 得到中心的坐标
+            double catx = cat.imageView.getLayoutX() + config.Map_Node_Width / 2;
+            double caty = cat.imageView.getLayoutY() + config.Map_Node_Width/ 2;
+            double dx = midx - catx, dy = midy - caty;
+            int mid_dis = 1;
+            if(dx < -config.Map_Node_Width * mid_dis) dx += config.Map_Node_Width * mid_dis;
+            else if(dx > config.Map_Node_Width * mid_dis) dx -= config.Map_Node_Width * mid_dis;
+            else dx = 0;
+            if(dy < -config.Map_Node_Width * mid_dis) dy += config.Map_Node_Width * mid_dis;
+            else if(dy > config.Map_Node_Width * mid_dis) dy -= config.Map_Node_Width * mid_dis;
+            else dy = 0;
+            //if(Math.abs(dx) < 10 && Math.abs(dy) < 10 && cameraTimeline != null) cameraTimeline.stop();
+            // 移动画面，使人物在中间
+            AnchorX += dx / 30; AnchorY += dy / 30;
             draw();
-        });
+        }));
+        config.timelines.add(cameraTimeline);
+        cameraTimeline.setCycleCount(Timeline.INDEFINITE);
+        cameraTimeline.play();
     }
 
     public void update() {
@@ -156,7 +189,7 @@ public class SelectMap {
         Move();
 
         scene.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 1) return;
+           // if(event.getClickCount() == 1) return;
             int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);
             int y = (int) ((event.getSceneY() - AnchorY) / config.Map_Node_Width);
             final String[] moves = {FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y))};
