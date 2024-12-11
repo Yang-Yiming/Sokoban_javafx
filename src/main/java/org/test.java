@@ -35,14 +35,5 @@ public class test {
 //                "NoSolveMap", 20);
 //        Solve solve = new Solve(new MapMatrix(mapdata.huge_maps[0]));
 
-        String s =FindPath.findPath(new int[][]
-                        {
-                                {0, 0,-1,-1}, //  0  0  0 0
-                                {0, 0, 0,-1}, //  0  0 -1 0
-                                {0,-1, 0, 0}, // -1  0  0 0
-                                {0, 0, 0, 0}  // -1 -1  0 0
-                        },
-                new Coordinate(0,0), new Coordinate(2,2));
-        System.out.println(s);
     }
 }

@@ -1,5 +1,7 @@
 package org.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 // 用于levelselect
@@ -22,6 +24,15 @@ class node implements Comparable<node> {
         return this.f - o.f;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof node) {
+            node n = (node) obj;
+            return this.coordinate.equals(n.coordinate);
+        }
+        return false;
+    }
+
 }
 
 
@@ -32,18 +43,18 @@ public class FindPath {
 
     public static final int OBSTACLE = -1;
 
-    int[][] map;
+    HashMap<Coordinate, Integer> map;
     Coordinate start;
     Coordinate target;
     PriorityQueue<node> openList;
-    boolean[][] closedList;
+    ArrayList<Coordinate> closedList;
 
-    public FindPath(int[][] map, Coordinate start, Coordinate target) {
+    public FindPath(HashMap<Coordinate, Integer> map, Coordinate start, Coordinate target) {
         this.map = map;
         this.start = start;
         this.target = target;
         this.openList = new PriorityQueue<>();
-        this.closedList = new boolean[map.length][map[0].length];
+        this.closedList = new ArrayList<>();
     }
 
     public String findPath() {
@@ -53,17 +64,31 @@ public class FindPath {
             if (current.coordinate.equals(target)) {
                 return constructPath(current);
             }
-            closedList[current.coordinate.x][current.coordinate.y] = true;
+            closedList.add(new Coordinate(current.coordinate.x, current.coordinate.y));
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     if (i + j != 1) continue;
                     int x = current.coordinate.x + i;
                     int y = current.coordinate.y + j;
-                    if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) continue;
-                    if (map[x][y] == OBSTACLE || closedList[x][y]) continue;
+                    //if (x < 0 || y < 0 || y >= map[0].length) continue;
+                    if (map.getOrDefault(new Coordinate(x,y),0) == OBSTACLE || closedList.contains(new Coordinate(x,y))) continue;
                     int g = current.g + 1;
                     int h = manhatten(new Coordinate(x, y), target);
                     node next = new node(new Coordinate(x, y), g, h, current);
+
+                    boolean flag = false;
+                    for(node n: openList){
+                        if(n.equals(next)){
+                            if(n.g > next.g){
+                                n.parent = current;
+                                n.g = next.g;
+                                n.f = n.g + n.h;
+                                flag = true;
+                                break;
+                            }
+                        }
+                    } if(flag) break;
+
                     openList.add(next);
                 }
             }
@@ -75,20 +100,20 @@ public class FindPath {
         String move = "";
         while (node.parent != null) {
             if (node.coordinate.x - node.parent.coordinate.x == 1) {
-                move = "D" + move;
+                move = "d" + move;
             } else if (node.coordinate.x - node.parent.coordinate.x == -1) {
-                move = "A" + move;
+                move = "a" + move;
             } else if (node.coordinate.y - node.parent.coordinate.y == 1) {
-                move = "S" + move;
+                move = "s" + move;
             } else {
-                move = "W" + move;
+                move = "w" + move;
             }
             node = node.parent;
         }
         return move;
     }
 
-    public static String findPath(int[][] map, Coordinate start, Coordinate target) {
+    public static String findPath(HashMap<Coordinate,Integer>map, Coordinate start, Coordinate target) {
         FindPath findPath = new FindPath(map, start, target);
         return findPath.findPath();
     }

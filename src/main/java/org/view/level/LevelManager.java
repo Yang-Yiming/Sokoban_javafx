@@ -451,7 +451,7 @@ public class LevelManager {
     public void showLevelMenu() {
         level_menu = new SelectMap(primaryStage);
         level_menu.add_levels(mapdata.maps, user);
-        level_menu.draw(); level_menu.Move();
+        level_menu.update();
         primaryStage.setScene(level_menu.getScene());
     }
 

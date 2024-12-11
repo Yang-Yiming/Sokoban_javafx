@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -13,11 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.model.User;
-import org.model.config;
+import org.model.*;
 import org.view.level.Grass;
+import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 class Cat {
@@ -32,15 +35,15 @@ class Cat {
         x = 0; y = 0;
     }
 
-    public void move(int dir){ // 0 : right 1:down 2:up
+    public void move(char dir){ // 0 : right 1:down 2:up
         imageView = new ImageView(cat_run);
         imageView.setFitHeight(config.Map_Node_Width); imageView.setFitWidth(config.Map_Node_Width);
         TranslateTransition tt = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
-        if(dir == 0) {
+        if(dir == 'd') {
             tt.setByX(config.Map_Node_Width); x++;
-        } else if (dir == 1){
+        } else if (dir == 's'){
             tt.setByY(config.Map_Node_Width); y++;
-        } else {
+        } else if (dir == 'w'){
             tt.setByY(-config.Map_Node_Width); y--;
         }
         tt.play();
@@ -54,6 +57,7 @@ public class SelectMap {
     private Scene scene;
     private Pane root;
     private Cat cat;
+    private HashMap<Coordinate, Integer> map;
 
     private ArrayList<MapNode> nodes;
 
@@ -78,12 +82,30 @@ public class SelectMap {
             if(nodes == null) nodes = new ArrayList<>();
             nodes.add(node);
         }
+        map = new HashMap<>();
+        map.put(new Coordinate(1,1),1);
     }
 
     public void draw() {
         root.getChildren().clear(); root.setStyle("-fx-background-color: #FFFFFF");
         scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
         root.setLayoutX(0); root.setLayoutY(0); // 设置根节点的位置
+
+        //画背景
+        Rectangle background = new Rectangle(0,0,config.ScreenWidth, config.ScreenHeight);
+        background.setFill(Color.WHITE);
+        root.getChildren().add(background);
+
+//        // 画障碍
+//        for(int i = 0; i < map.length; i++){
+//            for(int j = 0; j < map[0].length; j++){
+//                if(map[i][j] == -1){
+//                    Rectangle rect = new Rectangle(AnchorX + i * config.Map_Node_Width, AnchorY + j * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+//                    rect.setFill(Color.BLACK);
+//                    root.getChildren().add(rect);
+//                }
+//            }
+//        }
 
         // 画goals
         for(MapNode node: nodes) {
@@ -115,6 +137,23 @@ public class SelectMap {
             AnchorY = event.getSceneY() + del_posy.get();
             draw();
         });
+    }
+
+    public void update() {
+        draw();
+        Move();
+
+        scene.setOnMouseClicked(event -> {
+            int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);
+            int y = (int) ((event.getSceneY() - AnchorY) / config.Map_Node_Width);
+            String moves = FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y));
+            while(!moves.isEmpty()){
+                char dir = moves.charAt(0);
+                moves = moves.substring(1);
+                cat.move(dir);
+            }
+        });
+
     }
 
     public Scene getScene() {
