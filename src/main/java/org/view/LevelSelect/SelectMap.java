@@ -1,11 +1,18 @@
 package org.view.LevelSelect;
 
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.model.User;
 import org.model.config;
 import org.view.level.Grass;
@@ -13,18 +20,46 @@ import org.view.level.Grass;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
+class Cat {
+    Image cat_stand = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image cat_run = new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    ImageView imageView;
+    int x, y;
+    public Cat() {
+        imageView = new ImageView(cat_stand);
+        imageView.setFitHeight(config.Map_Node_Width);
+        imageView.setFitWidth(config.Map_Node_Width);
+        x = 0; y = 0;
+    }
+
+    public void move(int dir){ // 0 : right 1:down 2:up
+        imageView = new ImageView(cat_run);
+        imageView.setFitHeight(config.Map_Node_Width); imageView.setFitWidth(config.Map_Node_Width);
+        TranslateTransition tt = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
+        if(dir == 0) {
+            tt.setByX(config.Map_Node_Width); x++;
+        } else if (dir == 1){
+            tt.setByY(config.Map_Node_Width); y++;
+        } else {
+            tt.setByY(-config.Map_Node_Width); y--;
+        }
+        tt.play();
+    }
+}
+
+
 public class SelectMap {
     static double AnchorX, AnchorY;
     private Stage stage;
     private Scene scene;
     private Pane root;
-    private GridPane gridPane;
+    private Cat cat;
 
     private ArrayList<MapNode> nodes;
 
     public SelectMap(Stage stage) {
         this.stage = stage;
-        gridPane = new GridPane();
+        cat = new Cat();
         if(stage.getScene() != null){
             this.scene = stage.getScene();
             this.root = (Pane) scene.getRoot();
@@ -43,46 +78,23 @@ public class SelectMap {
             if(nodes == null) nodes = new ArrayList<>();
             nodes.add(node);
         }
-        generateGridPane();
-    }
-
-    public void generateGridPane(){
-        if(gridPane == null) gridPane = new GridPane();
-        gridPane.getChildren().clear();
-
-        for (MapNode node : nodes) {
-            gridPane.add(node.button, node.x, node.y);
-        }
-
-        // 绘制小路
-        for (int i = 0; i < nodes.size() - 1; i++) {
-            MapNode node1 = nodes.get(i); MapNode node2 = nodes.get(i + 1);
-            int x = node1.x, y =node1.y; int toX = node2.x, toY = node2.y;
-            boolean move_down = toY > y;
-            while(x!=toX && y!=toY){
-                int possible_moves_type = 0;
-                if(x < toX) possible_moves_type++;
-                if((y < toY && move_down) || (y > toY && !move_down)) possible_moves_type++;
-                boolean move_x = Math.random() * possible_moves_type < 1;
-                if(move_x) x++;
-                else y += move_down ? 1 : -1;
-
-                Rectangle rect = new Rectangle(config.Map_Node_Width,config.Map_Node_Width);
-                rect.setFill(Color.BROWN);
-                gridPane.add(rect, x, y);
-            }
-        }
-
-        gridPane.setHgap(0); gridPane.setVgap(0);
-        
     }
 
     public void draw() {
         root.getChildren().clear(); root.setStyle("-fx-background-color: #FFFFFF");
         scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
-        root.setLayoutX(AnchorX); root.setLayoutY(AnchorY); // 设置根节点的位置
+        root.setLayoutX(0); root.setLayoutY(0); // 设置根节点的位置
 
-        root.getChildren().add(gridPane);
+        // 画goals
+        for(MapNode node: nodes) {
+            node.button.setLayoutX(AnchorX + node.x * config.Map_Node_Width);
+            node.button.setLayoutY(AnchorY + node.y * config.Map_Node_Width);
+            root.getChildren().add(node.button);
+        }
+        // 画猫
+        cat.imageView.setX(AnchorX + cat.x * config.Map_Node_Width);
+        cat.imageView.setY(AnchorY + cat.y * config.Map_Node_Width);
+        root.getChildren().add(cat.imageView);
     }
 
     public void Move() {

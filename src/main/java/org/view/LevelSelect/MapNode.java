@@ -50,6 +50,7 @@ public class MapNode {
         button.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
         button.setPrefSize(config.Map_Node_Width, config.Map_Node_Width);
         button.setMaxSize(config.Map_Node_Width, config.Map_Node_Width);
+        button.setMinSize(config.Map_Node_Width, config.Map_Node_Width);
 
         // 图片上的字
         Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 25);
@@ -59,6 +60,8 @@ public class MapNode {
         label.setTextFill(Color.WHITE);
         // 图片
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
+        imageView.setPreserveRatio(false);
+        imageView.setSmooth(false);
         imageView.setFitWidth(config.Map_Node_Width); imageView.setFitHeight(config.Map_Node_Width);
 //        // 发光特效
 //        Glow glow = new Glow();
@@ -98,7 +101,7 @@ public class MapNode {
         button.setOnMouseClicked(e -> action());
 
         //this.y = Grass.myRand(index, index * 31, (index - 17) * 3, -YRange, YRange);
-        this.x = index * 4;
+        this.x = index * 3;
         this.y = (int)(Math.random() * YRange);
     }
 
