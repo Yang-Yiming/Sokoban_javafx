@@ -105,6 +105,133 @@ public class MenuView extends AnchorPane {
 
         Settings settings = new Settings();
         settingsButton = settings.createButton(this);
+
+        //主题选择？
+        themeButton = new Button();
+        ImageView themeImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/theme.png")));
+        themeImageView.setFitWidth(30);
+        themeImageView.setFitHeight(30);
+        themeButton.setGraphic(themeImageView);
+        themeButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
+        themeButton.setLayoutX(580.0);
+        themeButton.setLayoutY(35.0);
+        themeButton.setMaxSize(30, 30);
+        themeButton.setOnMouseClicked(event -> {themeButtonClicked();});
+        themeButton.setOnMouseEntered(event -> {
+            themeImageView.setImage(new Image(getClass().getResourceAsStream("/images/theme_clicked.png")));
+        });
+        themeButton.setOnMouseExited(event -> {
+            themeImageView.setImage(new Image(getClass().getResourceAsStream("/images/theme.png")));
+        });
+    }
+
+    Button themeButton;
+    void themeButtonClicked(){
+
+        //变暗
+        shade = new Rectangle(0, 0, getWidth(), getHeight());
+        shade.setFill(Color.rgb(0, 0, 0, 0.5));
+        getChildren().add(shade);
+        //纸
+        paper.setX(150);
+        paper.setY(50);
+        getChildren().add(paper);
+
+        //标题
+        Text themeText = new Text(360, 150, "主题");
+        themeText.setFont(new Font(pixelFont.getName(), 40));
+        themeText.setFill(Color.web("#55371d"));
+        getChildren().add(themeText);
+
+        //主题
+        ToggleGroup themeGroup = new ToggleGroup();
+
+        RadioButton theme1 = new RadioButton("苔藓绿");
+        //字体
+        theme1.setFont(new Font(pixelFont.getName(), 20));
+        //字体颜色为绿色
+        theme1.setTextFill(Color.rgb(124, 153, 32));
+        theme1.setLayoutX(350);
+        theme1.setLayoutY(200);
+        theme1.setToggleGroup(themeGroup);
+        theme1.setOnMouseClicked(event ->{
+            setThemeColor(Color.rgb(124, 153, 32));
+        });
+
+        RadioButton theme2 = new RadioButton("春梅红");
+        //字体
+        theme2.setFont(new Font(pixelFont.getName(), 20));
+        //字体颜色为红色
+        theme2.setTextFill(Color.rgb(241, 147, 156));
+        theme2.setLayoutX(350);
+        theme2.setLayoutY(250);
+        theme2.setToggleGroup(themeGroup);
+        theme2.setOnMouseClicked(event -> {
+            setThemeColor(Color.rgb(241, 147, 156));
+        });
+
+        RadioButton theme3 = new RadioButton("远山紫");
+        //字体
+        theme3.setFont(new Font(pixelFont.getName(), 20));
+        //字体颜色为紫色
+        theme3.setTextFill(Color.rgb(204, 204, 214));
+        theme3.setLayoutX(350);
+        theme3.setLayoutY(300);
+        theme3.setToggleGroup(themeGroup);
+        theme3.setOnMouseClicked(event -> {
+            setThemeColor(Color.rgb(204, 204, 214));
+        });
+
+
+        RadioButton theme4 = new RadioButton("深灰蓝");
+        //字体
+        theme4.setFont(new Font(pixelFont.getName(), 20));
+        //字体颜色为蓝色
+        theme4.setTextFill(Color.rgb(19, 44, 51));
+        theme4.setLayoutX(350);
+        theme4.setLayoutY(350);
+        theme4.setToggleGroup(themeGroup);
+        theme4.setOnMouseClicked(event -> {
+            setThemeColor(Color.rgb(19, 44, 51));
+        });
+
+
+        RadioButton theme0 = new RadioButton("yym 色");
+        //字体
+        theme0.setFont(new Font(pixelFont.getName(), 20));
+        //字体颜色
+        theme0.setTextFill(Color.rgb(124, 113, 32));
+        theme0.setLayoutX(350);
+        theme0.setLayoutY(400);
+        theme0.setToggleGroup(themeGroup);
+        theme0.setOnMouseClicked(event -> {
+            setThemeColor(Color.rgb(124, 113, 32));
+        });
+
+        getChildren().addAll(theme1, theme2, theme3, theme4, theme0);
+
+        //关闭
+        close = new Button();
+        Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
+        close.setGraphic(new ImageView(X));
+        getChildren().add(close);
+        close.setLayoutX(630);
+        close.setLayoutY(60);
+        close.setMaxSize(30, 30);
+        close.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-text-fill: #55371d;");
+        //点击关闭按钮
+        close.setOnMouseClicked(event -> {
+            getChildren().remove(shade);
+            getChildren().remove(paper);
+            getChildren().remove(close);
+            getChildren().remove(theme1);
+            getChildren().remove(theme2);
+            getChildren().remove(theme3);
+            getChildren().remove(theme4);
+            getChildren().remove(theme0);
+            getChildren().remove(themeText);
+        });
+
     }
     Timeline cloudsTimeLine = null;
     double clouds0Pos = -1000, clouds1Pos = 0, clouds2Pos = -400, clouds3Pos = 200, clouds4Pos = -400, clouds5Pos = -200;
@@ -146,6 +273,7 @@ public class MenuView extends AnchorPane {
     }
 
     ArrayList<Rectangle> grass = new ArrayList<>();
+    ArrayList<Integer> grassI = new ArrayList<>();
     private ImageView box;
     double boxV = 0, boxA = 0.15;
     Timeline boxTimeline;
@@ -205,13 +333,20 @@ public class MenuView extends AnchorPane {
         catTimeline.setCycleCount(Timeline.INDEFINITE);
         catTimeline.play();
     }
-
+    private void setThemeColor(Color color){
+        config.themeColor = color;
+        for(Rectangle rect : grass){
+            rect.setFill(Grass.randColor(grassI.get(grass.indexOf(rect)), grassI.get(grass.indexOf(rect))));
+        }
+    }
     private void addground(){
         grass = new ArrayList<>();
+        grassI = new ArrayList<>();
         for(int i = 0; i < 40; ++i){
 //            System.out.println(getPrefHeight());
             Rectangle rect = new Rectangle(i * 50, getPrefHeight() - 50, 50, 50);
             grass.add(rect);
+            grassI.add(i);
             int divide = 10;
             double siz = 50 / divide;
             for(int j = 0; j < divide; ++j){
@@ -222,6 +357,7 @@ public class MenuView extends AnchorPane {
                 rect1.setX(i * 50 + j * siz);
                 rect1.setY(getPrefHeight() - height);
                 grass.add(rect1);
+                grassI.add(i);
 //                    System.out.println(rect1.getY());
                 rect1.setFill(Grass.randColor(i, i));
                 getChildren().add(rect1);
@@ -264,7 +400,7 @@ public class MenuView extends AnchorPane {
         createButtons();
         changePosX(getPrefWidth());
         changePosY(getPrefHeight());
-        getChildren().addAll(title, startButton, loginButton, settingsButton);
+        getChildren().addAll(title, startButton, loginButton, settingsButton, themeButton);
         //重新设置宽度和高度
     }
 
@@ -284,6 +420,7 @@ public class MenuView extends AnchorPane {
         if(startButton != null) startButton.setLayoutX((doubleValue - 100) / 2);
         if(loginButton != null) loginButton.setLayoutX(doubleValue - 150);
         if(settingsButton != null) settingsButton.setLayoutX(doubleValue - 80);
+        if(themeButton != null) themeButton.setLayoutX(doubleValue - 220);
         if(shade != null) shade.setWidth(doubleValue);
     }
     void changePosY(double doubleValue){

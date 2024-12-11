@@ -1,6 +1,7 @@
 package org.model;
 
 import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
 
 import java.lang.Math;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class config {
     public static boolean auto_check_fail = true; // 自动检查失败 如果性能太低可以关掉）
     public static boolean this_is_hint = false; // 懒了
     public static ArrayList<Timeline> timelines = new ArrayList<>();
+    public static Color themeColor = Color.rgb(124, 153, 32);
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例
