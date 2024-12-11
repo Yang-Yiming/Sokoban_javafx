@@ -6,6 +6,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import org.model.config;
+import org.view.game.player;
+
+import java.sql.Time;
 
 public class Hint {
     public Level level;
@@ -17,8 +20,16 @@ public class Hint {
     }
 
     public void autoMove(){
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration), event -> {
-            autoMoveOnce();
+        moves = level.solve_moves();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), e -> {
+            if(moves.isEmpty()) {
+                return;
+            }
+            if(!player.is_moving){
+                char move = Character.toLowerCase(moves.charAt(0));
+                Move(move);
+                moves = moves.substring(1);
+            }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -26,6 +37,10 @@ public class Hint {
 
     public void autoMoveOnce() {
         char move = Character.toLowerCase(level.solve_next_move());
+        Move(move);
+    }
+
+    public void Move(char move) {
         KeyCode code;
         if (move == 'w') code = KeyCode.W;
         else if (move == 'a') code = KeyCode.A;

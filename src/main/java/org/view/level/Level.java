@@ -388,4 +388,7 @@ public abstract class Level {
     public Pane getRoot() {
         return root;
     }
+    public player getPlayer() {
+        return player;
+    }
 }

@@ -57,6 +57,9 @@ public class FindPath {
         this.closedList = new ArrayList<>();
     }
 
+    int[] dx = new int[]{1, 0, -1, 0};
+    int[] dy = new int[]{0, 1, 0, -1};
+
     public String findPath() {
         openList.add(new node(start, 0, manhatten(start, target), null));
         while (!openList.isEmpty()) {
@@ -64,36 +67,28 @@ public class FindPath {
             if (current.coordinate.equals(target)) {
                 return constructPath(current);
             }
-            closedList.add(new Coordinate(current.coordinate.x, current.coordinate.y));
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    if (i + j != 1) continue;
-                    int x = current.coordinate.x + i;
-                    int y = current.coordinate.y + j;
-                    //if (x < 0 || y < 0 || y >= map[0].length) continue;
-                    if (map.getOrDefault(new Coordinate(x,y),0) == OBSTACLE || closedList.contains(new Coordinate(x,y))) continue;
-                    int g = current.g + 1;
-                    int h = manhatten(new Coordinate(x, y), target);
-                    node next = new node(new Coordinate(x, y), g, h, current);
-
-                    boolean flag = false;
-                    for(node n: openList){
-                        if(n.equals(next)){
-                            if(n.g > next.g){
-                                n.parent = current;
-                                n.g = next.g;
+            closedList.add(current.coordinate);
+            for (int i = 0; i < 4; i++) {
+                int x = current.coordinate.x + dx[i];
+                int y = current.coordinate.y + dy[i];
+                Coordinate next = new Coordinate(x, y);
+                if (map.getOrDefault(next, 0) != OBSTACLE && !closedList.contains(next)) {
+                    node nextNode = new node(next, current.g + 1, manhatten(next, target), current);
+                    if (!openList.contains(nextNode)) {
+                        openList.add(nextNode);
+                    } else {
+                        for (node n : openList) {
+                            if (n.equals(nextNode) && n.g > nextNode.g) {
+                                n.g = nextNode.g;
                                 n.f = n.g + n.h;
-                                flag = true;
-                                break;
+                                n.parent = current;
                             }
                         }
-                    } if(flag) break;
-
-                    openList.add(next);
+                    }
                 }
             }
         }
-        return null;
+        return "";
     }
 
     String constructPath(node node) {

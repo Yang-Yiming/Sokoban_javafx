@@ -5,6 +5,8 @@ import org.model.MapMatrix;
 import org.model.Solve.Solve;
 import org.model.FindPath;
 
+import java.util.HashMap;
+
 public class test {
     static void Test(int[][] map, String Name, int times){
         MapMatrix mapMatrix = new MapMatrix(map);
@@ -34,6 +36,18 @@ public class test {
 //                        {1, 1, 1, 1, 1, 1, 1, 1}},
 //                "NoSolveMap", 20);
 //        Solve solve = new Solve(new MapMatrix(mapdata.huge_maps[0]));
+        HashMap<Coordinate, Integer> map = new HashMap<>();
+        // 0 1 0 0
+        // 0 1 0 0
+        // 0 1 0 1
+        // 0 0 0 1
+        map.put(new Coordinate(1, 0), -1);
+        map.put(new Coordinate(1, 1), -1);
+        map.put(new Coordinate(1, 2), -1);
+        map.put(new Coordinate(3, 2), -1);
+        map.put(new Coordinate(3, 3), -1);
 
+        FindPath findPath = new FindPath(map, new Coordinate(0, 0), new Coordinate(2, 1));
+        System.out.println(findPath.findPath());
     }
 }

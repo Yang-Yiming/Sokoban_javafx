@@ -1,8 +1,11 @@
 package org.view.LevelSelect;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -34,9 +37,9 @@ class Cat {
         imageView.setFitWidth(config.Map_Node_Width);
         x = 0; y = 0;
     }
-
+    boolean is_moving = false;
     public void move(char dir){ // 0 : right 1:down 2:up
-        imageView = new ImageView(cat_run);
+        imageView.setImage(cat_run);
         imageView.setFitHeight(config.Map_Node_Width); imageView.setFitWidth(config.Map_Node_Width);
         TranslateTransition tt = new TranslateTransition(Duration.millis(config.move_anim_duration), imageView);
         if(dir == 'd') {
@@ -45,8 +48,17 @@ class Cat {
             tt.setByY(config.Map_Node_Width); y++;
         } else if (dir == 'w'){
             tt.setByY(-config.Map_Node_Width); y--;
+        } else if (dir == 'a'){
+            tt.setByX(-config.Map_Node_Width); x--;
         }
+        tt.setOnFinished(e -> {
+            imageView.setImage(cat_stand);
+            imageView.setFitHeight(config.Map_Node_Width); imageView.setFitWidth(config.Map_Node_Width);
+            is_moving = false;
+        });
+        is_moving = true;
         tt.play();
+        tt.setCycleCount(1);
     }
 }
 
@@ -114,8 +126,8 @@ public class SelectMap {
             root.getChildren().add(node.button);
         }
         // 画猫
-        cat.imageView.setX(AnchorX + cat.x * config.Map_Node_Width);
-        cat.imageView.setY(AnchorY + cat.y * config.Map_Node_Width);
+        cat.imageView.setLayoutX(AnchorX + cat.x * config.Map_Node_Width);
+        cat.imageView.setLayoutY(AnchorY + cat.y * config.Map_Node_Width);
         root.getChildren().add(cat.imageView);
     }
 
@@ -144,14 +156,24 @@ public class SelectMap {
         Move();
 
         scene.setOnMouseClicked(event -> {
+            if(event.getClickCount() == 1) return;
             int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);
             int y = (int) ((event.getSceneY() - AnchorY) / config.Map_Node_Width);
-            String moves = FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y));
-            while(!moves.isEmpty()){
-                char dir = moves.charAt(0);
-                moves = moves.substring(1);
-                cat.move(dir);
-            }
+            final String[] moves = {FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y))};
+
+            // 创建一个时间轴，每一段时间触发一次事件
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration ), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if (!cat.is_moving && !moves[0].isEmpty()) {
+                        char dir = moves[0].charAt(0);
+                        moves[0] = moves[0].substring(1);
+                        cat.move(dir);
+                    }
+                }
+            }));
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
         });
 
     }
