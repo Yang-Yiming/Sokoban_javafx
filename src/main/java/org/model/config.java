@@ -10,8 +10,7 @@ public class config {
     //Constants
     public static final int ScreenHeight = 600;
     public static final int ScreenWidth = 800;
-    public static final int Map_Node_Width = 60;
-    public static final int Map_Node_Height = 20;
+    public static final int Map_Node_Width = 40;
     public static final int Map_Layer_Gap = 40;
     public static final int Map_Node_Gap = 20;
     public static final int Win_Rect_Height = 0;

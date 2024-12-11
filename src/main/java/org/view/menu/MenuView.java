@@ -208,7 +208,19 @@ public class MenuView extends AnchorPane {
             setThemeColor(Color.rgb(124, 113, 32));
         });
 
-        getChildren().addAll(theme1, theme2, theme3, theme4, theme0);
+        RadioButton theme5 = new RadioButton("gyx 色");
+        //字体
+        theme5.setFont(new Font(pixelFont.getName(), 20));
+        //字体颜色
+        theme5.setTextFill(Color.rgb(124, 111, 52));
+        theme5.setLayoutX(350);
+        theme5.setLayoutY(450);
+        theme5.setToggleGroup(themeGroup);
+        theme5.setOnMouseClicked(event -> {
+            setThemeColor(Color.rgb(124, 111, 52));
+        });
+
+        getChildren().addAll(theme1, theme2, theme3, theme4, theme0, theme5);
 
         //关闭
         close = new Button();
@@ -221,15 +233,9 @@ public class MenuView extends AnchorPane {
         close.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-text-fill: #55371d;");
         //点击关闭按钮
         close.setOnMouseClicked(event -> {
-            getChildren().remove(shade);
-            getChildren().remove(paper);
-            getChildren().remove(close);
-            getChildren().remove(theme1);
-            getChildren().remove(theme2);
-            getChildren().remove(theme3);
-            getChildren().remove(theme4);
-            getChildren().remove(theme0);
-            getChildren().remove(themeText);
+            getChildren().removeAll(shade, paper, close,
+                    theme1, theme2, theme3, theme4, theme0, theme5,
+                    themeText);
         });
 
     }

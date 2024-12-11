@@ -1,8 +1,6 @@
 package org.view.level;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -11,7 +9,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
@@ -27,13 +24,11 @@ import org.model.User;
 import org.model.config;
 import org.view.LevelSelect.MapNode;
 import org.view.LevelSelect.SelectMap;
-import org.view.LevelSelect.map;
 
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.view.LevelSelect.node;
 import org.view.menu.Home;
 import org.view.menu.MenuController;
 import org.view.menu.Settings;
@@ -44,7 +39,7 @@ public class LevelManager {
     private Pane root;
     private Scene scene;
     private Stage primaryStage; // 直接作为属性 不然函数里有一坨（
-    private map level_menu; // 选关界面
+    private SelectMap level_menu; // 选关界面
     private int move_count;
     private Level level;
     MenuController controller;
@@ -57,13 +52,13 @@ public class LevelManager {
         this.currentLevel = 0;
         this.totalLevel = mapdata.maps.length;
         this.primaryStage = primaryStage; // 主舞台
-        this.level_menu = new map(primaryStage); // 选关界面
-
-        node.levelManager = this;
+        this.level_menu = new SelectMap(primaryStage); // 选关界面
+        MapNode.levelManager = this;
     }
 
     public void loadLevel(int id, int[][][] maps){
         root.getChildren().clear();
+        root.setLayoutX(0); root.setLayoutY(0);
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
@@ -75,6 +70,7 @@ public class LevelManager {
     }
     public void loadLevel(int id, int[][] mapmatrix) {
         root.getChildren().clear();
+        root.setLayoutX(0); root.setLayoutY(0);
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
@@ -447,15 +443,13 @@ public class LevelManager {
             }
         }
 
-        level_menu.linear_generate_map(user);
         showLevelMenu();
         primaryStage.setTitle("Sokoban");
         primaryStage.show();
     }
 
     public void showLevelMenu() {
-        SelectMap level_menu = new SelectMap(primaryStage);
-        MapNode.levelManager = this;
+        level_menu = new SelectMap(primaryStage);
         level_menu.add_levels(mapdata.maps, user);
         level_menu.draw(); level_menu.Move();
         primaryStage.setScene(level_menu.getScene());
