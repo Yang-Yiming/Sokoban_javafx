@@ -17,7 +17,16 @@ public class box extends entity {
         imageView.setFitHeight(config.tile_size * (1 + config.box_angle_amount));
         imageView.setFitWidth(config.tile_size);
     }
-
+    public void move_back(GameMap map, int vx, int vy) {
+        imageView.setX(imageView.getX() - vx * config.tile_size);
+        imageView.setY(imageView.getY() - vy * config.tile_size);
+        map.remove(x, y, type);
+        map.setBox_matrix(x, y, 0);
+        x -= vx;
+        y -= vy;
+        map.add(x, y, type);
+        map.setBox_matrix(x, y, id);
+    }
     @Override
     public void move(GameMap map) {
         if (can_move(map, velocity_x, velocity_y)) {

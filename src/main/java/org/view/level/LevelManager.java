@@ -152,6 +152,7 @@ public class LevelManager {
         item_withdraw.setOnMouseReleased(event -> {
             if(item_withdraw.getY() < -50){
 //                撤销操作
+                if(level.player.move_back(level.getMap(), level.boxes, level)) level.addStep(-1);
             }
             isDraggingItem = false;
             //回到原来的位置
@@ -286,7 +287,7 @@ public class LevelManager {
         if(!level.player.is_moving){
             if(level.player.move(level.getMap(), level.boxes, level)){
                 user.addMoveCount();
-                level.addStep();
+                level.addStep(1);
             }
             level.player.setImageTowards(level.player.getOrientation());
         }

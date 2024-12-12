@@ -102,7 +102,15 @@ public class player extends entity {
         cameraTimeline.setCycleCount(Timeline.INDEFINITE);
         cameraTimeline.play();
     }
-
+    public void move_back(GameMap map, int vx, int vy, int lastOrientation) {
+        imageView.setX(imageView.getX() - vx * config.tile_size); // 更新
+        imageView.setY(imageView.getY() - vy * config.tile_size); // 更新
+        map.remove(x, y, type);
+        x -= vx;
+        y -= vy;
+        map.add(x, y, type); // 向那一格第i位加入
+        setImageTowards(lastOrientation);
+    }
     public void move(GameMap map) {
         // 动画
         imageView.setImage(new Image(getClass().getResourceAsStream("/images/player_cat/cat_run.gif"), config.tile_size, config.tile_size, false, false));
@@ -140,11 +148,45 @@ public class player extends entity {
         int newx = x + velocity_x;
         int newy = y + velocity_y;
         if(can_move(map, velocity_x, velocity_y)){
+
+            //实验开始
+            ++hisTime;
+            //如果存在这个位置就直接修改
+            if(hisBox.size() > hisTime) {
+                hisBox.set(hisTime, null);
+                hisPlayerVX.set(hisTime, velocity_x);
+                hisPlayerVY.set(hisTime, velocity_y);
+                hisPlayerO.set(hisTime, orientation);
+            }else {
+                hisBox.add(null);
+                hisPlayerVX.add(velocity_x);
+                hisPlayerVY.add(velocity_y);
+                hisPlayerO.add(orientation);
+            }
+            //实验结束
+
             this.move(map);
             return true;
         }else if(map.hasBox(newx, newy)) { // 暂时先这么写
             box e = entities.get(map.getBox_matrix_id(newx, newy) - 1); // 获得那个被推的箱子
             if(push(e, map)){
+
+                //开始实验
+                ++hisTime;
+                //如果存在这个位置就直接修改
+                if((int)hisBox.size() > hisTime) {
+                    hisBox.set(hisTime, e);
+                    hisPlayerVX.set(hisTime, velocity_x);
+                    hisPlayerVY.set(hisTime, velocity_y);
+                    hisPlayerO.set(hisTime, orientation);
+                }else{
+                    hisBox.add(e);
+                    hisPlayerVX.add(velocity_x);
+                    hisPlayerVY.add(velocity_y);
+                    hisPlayerO.add(orientation);
+                }
+                //结束实验
+
                 //map.setBox_matrix(e.get_x(), e.get_y(), 0);
                 e.move(map);
                 //map.setBox_matrix(e.get_x(), e.get_y(), e.id);
@@ -155,6 +197,22 @@ public class player extends entity {
         }
         is_moving = false;
         return false;
+    }
+    ArrayList <box> hisBox = new ArrayList<box>();
+    ArrayList <Integer> hisPlayerVX = new ArrayList<Integer>();
+    ArrayList <Integer> hisPlayerVY = new ArrayList<Integer>();
+    ArrayList <Integer> hisPlayerO = new ArrayList<Integer>();
+
+    public int hisTime = -1;
+    public boolean move_back(GameMap map, ArrayList<box> entities, Level level){
+        if(hisTime == -1) return false;
+        if(hisBox.get(hisTime) != null){
+            box e = hisBox.get(hisTime);
+            e.move_back(map, hisPlayerVX.get(hisTime), hisPlayerVY.get(hisTime));
+        }
+        this.move_back(map, hisPlayerVX.get(hisTime), hisPlayerVY.get(hisTime), hisPlayerO.get(hisTime));
+        --hisTime;
+        return true;
     }
 
     public void set_velocity(int x, int y) {

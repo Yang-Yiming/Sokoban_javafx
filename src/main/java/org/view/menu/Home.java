@@ -125,7 +125,7 @@ public class Home {
         root.getChildren().add(homeText);
 
         //返回主页按钮
-        Button home = new Button("返回");
+        Button home = new Button("结束");
         home.setLayoutX(348);
         home.setLayoutY(270);
         home.setPrefSize(100, 50);

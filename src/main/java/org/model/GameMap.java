@@ -3,7 +3,7 @@ package org.model;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public abstract class GameMap {
+public abstract class GameMap{
     public boolean isOne(int num, int n) {
         return (((num >> n) & 1) == 1);
     }

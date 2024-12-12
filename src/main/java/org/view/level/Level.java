@@ -30,7 +30,7 @@ import java.util.HashMap;
 
 public abstract class Level {
 
-    protected GameMap map;
+    public GameMap map;
     
     public Pane root;
     org.view.game.player player;
@@ -55,6 +55,7 @@ public abstract class Level {
     protected Timeline fadeTimeline;
     protected Grass grass = new Grass();
     public boolean isEnd = false;
+
     public void init() {
         isEnd = false;
         //用 a* 跑出步数限制 先 +5
@@ -98,6 +99,8 @@ public abstract class Level {
         fadeRectangle.setOpacity(1.0);
         root.getChildren().add(fadeRectangle);
         createFadeTimeline();
+        player.hisTime = -1;
+
         drawMap();
     }
     public void createFadeTimeline(){
@@ -169,8 +172,8 @@ public abstract class Level {
         this.stepLimit = stepLimit;
         stepLimitText.setText("步数限制: " + stepLimit);
     }
-    public void addStep(){
-        ++step;
+    public void addStep(int o){
+        step += o;
         stepText.setText("移动步数: " + step);
     }
     protected void load_gui(User user) {
