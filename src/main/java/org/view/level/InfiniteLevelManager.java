@@ -45,11 +45,18 @@ public class InfiniteLevelManager {
     public void createSettingsButton(){
         Settings settings = new Settings();
         settingsButton = settings.createButton(root);
-        System.out.println("settingsButton created");
+//        System.out.println("settingsButton created");
+    }
+    Button homeButton;
+    public void createHomeButton(){
+        Home home = new Home();
+        homeButton = home.createButton(root, primaryStage, controller);
     }
     private void InLevel() {
         createSettingsButton();
         root.getChildren().add(settingsButton);
+        createHomeButton();
+        root.getChildren().add(homeButton);
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
             level.player.set_velocity(0, 0);
@@ -138,11 +145,13 @@ public class InfiniteLevelManager {
         fade.play();
         fade.setOnFinished(event -> {
             root.getChildren().remove(label);
-            level = new InfiniteLevel(root, StartLobby.lobbies[0], primaryStage,0, user);
+            Pane levelRoot = new Pane();
+            level = new InfiniteLevel(levelRoot, StartLobby.lobbies[0], primaryStage,0, user);
             level_init();
             update_box();
             //level.solve = new Solve(level.getMap());
             level.super_init();
+            root.getChildren().add(levelRoot);
             InLevel();
         });
     }
