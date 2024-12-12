@@ -4,21 +4,16 @@ import javafx.animation.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.config;
-import org.view.level.Grass;
 import org.view.level.LevelManager;
-
-import java.sql.Time;
 
 public class MapNode {
 
@@ -31,8 +26,9 @@ public class MapNode {
     private Stage stage;
     private Scene scene;
     private Pane root;
-    Button button;
+    ImageView imageView;
     int index;
+    StackPane stackPane;
     boolean is_locked;
     int target_level;
     private double posX, posY;
@@ -45,12 +41,10 @@ public class MapNode {
         this.stage = levelManager.getPrimaryStage();
         this.scene = stage.getScene();
 
-        // 创建按钮
-        this.button = new Button("");
-        button.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
-        button.setPrefSize(config.Map_Node_Width, config.Map_Node_Width);
-        button.setMaxSize(config.Map_Node_Width, config.Map_Node_Width);
-        button.setMinSize(config.Map_Node_Width, config.Map_Node_Width);
+        // 创建图片
+        this.imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
+        imageView.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
+        imageView.setFitWidth(config.Map_Node_Width); imageView.setFitHeight(config.Map_Node_Width);
 
         // 图片上的字
         Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 25);
@@ -58,11 +52,7 @@ public class MapNode {
         label.setOpacity(0.2);
         label.setFont(pixelFont);
         label.setTextFill(Color.WHITE);
-        // 图片
-        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
-        imageView.setPreserveRatio(false);
-        imageView.setSmooth(false);
-        imageView.setFitWidth(config.Map_Node_Width); imageView.setFitHeight(config.Map_Node_Width);
+
 //        // 发光特效
 //        Glow glow = new Glow();
 //        glow.setLevel(0.0);
@@ -77,18 +67,16 @@ public class MapNode {
 //        timeline.play();
         // 好像有问题 以后再改
 
-        StackPane stackPane = new StackPane(imageView, label);
+        stackPane = new StackPane(imageView, label);
 
-        button.setGraphic(stackPane);
-
-        button.setOnMouseEntered(e -> {
+        this.imageView.setOnMouseEntered(e -> {
             if(is_locked) return;
             FadeTransition ft = new FadeTransition(Duration.millis(200), label);
             ft.setFromValue(0.2);
             ft.setToValue(0.8);
             ft.play();
         });
-        button.setOnMouseExited(e -> {
+        this.imageView.setOnMouseExited(e -> {
             if(is_locked) return;
             FadeTransition ft = new FadeTransition(Duration.millis(200), label);
             ft.setFromValue(0.8);
@@ -97,7 +85,6 @@ public class MapNode {
         });
 
 
-        button.setPrefSize(config.Map_Node_Width, config.Map_Node_Width);
         //button.setOnMouseClicked(e -> action());
 
         //this.y = Grass.myRand(index, index * 31, (index - 17) * 3, -YRange, YRange);
@@ -122,10 +109,10 @@ public class MapNode {
 
     //获得坐标
     public double get_left_posX() {
-        return button.localToScene(scene.getX(),scene.getY()).getX();
+        return imageView.localToScene(scene.getX(),scene.getY()).getX();
     }
     public double get_right_posX() {
-        return button.localToScene(scene.getX(),scene.getY()).getX() + config.Map_Node_Width;
+        return imageView.localToScene(scene.getX(),scene.getY()).getX() + config.Map_Node_Width;
     }
 
 }

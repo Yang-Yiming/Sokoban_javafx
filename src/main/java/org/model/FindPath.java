@@ -41,7 +41,7 @@ public class FindPath {
         return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
     }
 
-    public static final int OBSTACLE = -1;
+    public static final int OBSTACLE = -1; // 负数全都是障碍物
 
     HashMap<Coordinate, Integer> map;
     Coordinate start;
@@ -72,7 +72,7 @@ public class FindPath {
                 int x = current.coordinate.x + dx[i];
                 int y = current.coordinate.y + dy[i];
                 Coordinate next = new Coordinate(x, y);
-                if (map.getOrDefault(next, 0) != OBSTACLE && !closedList.contains(next)) {
+                if (map.getOrDefault(next, 0) > OBSTACLE && !closedList.contains(next)) {
                     node nextNode = new node(next, current.g + 1, manhatten(next, target), current);
                     if (!openList.contains(nextNode)) {
                         openList.add(nextNode);
