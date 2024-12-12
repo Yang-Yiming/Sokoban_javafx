@@ -215,9 +215,9 @@ public class LevelManager {
                     e.printStackTrace();
                 }
             }
-            else if(code == KeyCode.U) {
-                Hint hint = new Hint(level);
-                hint.autoMove();
+            else if(code == KeyCode.U) { // 为了防止到时候忘删先删了（）
+//                Hint hint = new Hint(level);
+//                hint.autoMove();
             } else if(code == KeyCode.J) {
 //                Hint hint = new Hint(level);
 //                hint.autoMoveOnce();
