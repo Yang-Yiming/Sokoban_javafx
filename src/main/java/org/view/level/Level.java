@@ -287,7 +287,7 @@ public abstract class Level {
     }
     public void updateAllRadiatingEffect() {
         for (GlowRectangle glowRectangle: GlowRectangle.glowRectangles) {
-            if(map.hasGoal(glowRectangle.getX() + sublevel_begin_x, glowRectangle.getY() + sublevel_begin_y))
+//            if(map.hasGoal(glowRectangle.getX() + sublevel_begin_x, glowRectangle.getY() + sublevel_begin_y))
                 glowRectangle.update(glowRectangle.getX(), glowRectangle.getY());
         }
     }

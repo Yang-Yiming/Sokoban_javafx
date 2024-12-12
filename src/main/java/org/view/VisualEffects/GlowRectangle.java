@@ -64,10 +64,12 @@ public class GlowRectangle {
     }
 
     public void update(int x, int y) {
+//        System.out.print(rect.getX() + " " + rect.getY());
         double centerX = anchor_posx + x * config.tile_size;
         double centerY = anchor_posy + y * config.tile_size;
         rect.setX(centerX - (rect.getWidth() - config.tile_size) / 2);
         rect.setY(centerY - (rect.getHeight() - config.tile_size) / 2);
+//        System.out.println(" -> " + rect.getX() + " " + rect.getY());
     }
 
     public int getX() {
