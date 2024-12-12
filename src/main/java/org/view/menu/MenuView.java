@@ -219,6 +219,9 @@ public class MenuView extends AnchorPane {
         theme5.setOnMouseClicked(event -> {
             setThemeColor(Color.rgb(124, 111, 52));
         });
+        theme5.setOnMouseEntered(event -> {
+            getChildren().remove(theme5); //gyx 已经被移除
+        });
 
         getChildren().addAll(theme1, theme2, theme3, theme4, theme0, theme5);
 

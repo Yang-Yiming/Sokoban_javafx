@@ -85,42 +85,7 @@ public class Home {
         home.setFont(new Font(pixelFont.getName(), 20));
         root.getChildren().add(home);
         home.setOnMouseClicked(event -> {
-            //音乐停止
-            mediaPlayer.stop();
-            root.getChildren().clear();
-            Pane menuView = new MenuView(controller);
-            primaryStage.setScene(new Scene(menuView));
-            primaryStage.show();
-            //停止所有 timeline
-            for(Timeline timeline : config.timelines){
-                if(timeline != null) timeline.stop();
-            }
-            //停止所有 server
-            if(FightLevelManager.server != null){
-                //如果 server 正在运行
-                if(!FightLevelManager.server.socket.isClosed()) {
-                    FightLevelManager.server.send(FightLevelManager.server.socket, "B");
-                    try {
-                        FightLevelManager.server.serverSocket.close();
-                        FightLevelManager.server.socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            //停止所有 client
-            if(FightLevelManager.client != null){
-                //如果 client 正在运行
-                if(!FightLevelManager.client.socket.isClosed()) {
-                    FightLevelManager.client.send(FightLevelManager.client.socket, "B");
-                    try {
-                        FightLevelManager.client.socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
+            homeAction(root, controller, primaryStage);
         });
 
         //关闭按钮
@@ -140,5 +105,43 @@ public class Home {
             root.getChildren().remove(close);
             root.getChildren().remove(home);
         });
+    }
+    public void homeAction(Pane root, MenuController controller, Stage primaryStage) {
+
+        //音乐停止
+        mediaPlayer.stop();
+        root.getChildren().clear();
+        Pane menuView = new MenuView(controller);
+        primaryStage.setScene(new Scene(menuView));
+        primaryStage.show();
+        //停止所有 timeline
+        for(Timeline timeline : config.timelines){
+            if(timeline != null) timeline.stop();
+        }
+        //停止所有 server
+        if(FightLevelManager.server != null){
+            //如果 server 正在运行
+            if(!FightLevelManager.server.socket.isClosed()) {
+                FightLevelManager.server.send(FightLevelManager.server.socket, "B");
+                try {
+                    FightLevelManager.server.serverSocket.close();
+                    FightLevelManager.server.socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //停止所有 client
+        if(FightLevelManager.client != null){
+            //如果 client 正在运行
+            if(!FightLevelManager.client.socket.isClosed()) {
+                FightLevelManager.client.send(FightLevelManager.client.socket, "B");
+                try {
+                    FightLevelManager.client.socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

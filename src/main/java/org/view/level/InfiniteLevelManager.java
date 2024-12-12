@@ -20,6 +20,8 @@ import org.model.Direction;
 import org.model.Solve.Solve;
 import org.view.VisualEffects.GlowRectangle;
 import org.view.game.box;
+import org.view.menu.Home;
+import org.view.menu.MenuController;
 import org.view.menu.Settings;
 
 import java.util.List;
@@ -32,10 +34,12 @@ public class InfiniteLevelManager {
     private Scene scene;
     private InfiniteLevel level;
     private User user;
+    MenuController controller;
 
-    public InfiniteLevelManager(Stage primaryStage) {
+    public InfiniteLevelManager(Stage primaryStage, MenuController controller) {
         this.root = new Pane();
         this.primaryStage = primaryStage;
+        this.controller = controller;
     }
     Button settingsButton;
     public void createSettingsButton(){
@@ -58,7 +62,17 @@ public class InfiniteLevelManager {
 //                level.stopTimelines();
 //                level.init();
 //                level.super_init();
-            } else return;
+            }
+            else if(code == KeyCode.ESCAPE){
+                //回到关卡选择界面并移除监听和动画
+                scene.setOnKeyPressed(null);
+                scene.setOnMousePressed(null);
+                scene.setOnMouseDragged(null);
+                level.stopTimelines();
+                Home home = new Home();
+                home.homeAction(root, controller, primaryStage);
+            }
+            else return;
 
             level.player.set_velocity(dx, dy);
             if(!level.player.is_moving){
