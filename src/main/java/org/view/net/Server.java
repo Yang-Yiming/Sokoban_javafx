@@ -91,6 +91,7 @@ public class Server {
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.waitingText);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.themeButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
                                 fightLevelManager.level.root.getChildren().clear();
                                 fightLevelManager.start();

@@ -23,6 +23,7 @@ import org.view.game.box;
 import org.view.menu.Home;
 import org.view.menu.MenuController;
 import org.view.menu.Settings;
+import org.view.menu.Theme;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,11 +53,18 @@ public class InfiniteLevelManager {
         Home home = new Home();
         homeButton = home.createButton(root, primaryStage, controller);
     }
+    Button themeButton;
+    public void createThemeButton(){
+        Theme theme = new Theme();
+        themeButton = theme.createButton(root);
+    }
     private void InLevel() {
         createSettingsButton();
         root.getChildren().add(settingsButton);
         createHomeButton();
         root.getChildren().add(homeButton);
+        createThemeButton();
+        root.getChildren().add(themeButton);
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
             level.player.set_velocity(0, 0);
@@ -118,6 +126,10 @@ public class InfiniteLevelManager {
             // level.setAnchor_posx(level.getAnchor_posx() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
             level.getCanvas().setWidth(newValue.doubleValue());
             level.drawMap();
+            //设置和主界面图标
+            if(settingsButton != null) settingsButton.setLayoutX(primaryStage.getWidth() - 80);
+            if(homeButton != null) homeButton.setLayoutX(primaryStage.getWidth() - 150);
+            if(themeButton != null) themeButton.setLayoutX(primaryStage.getWidth() - 220);
         });
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
             // level.setAnchor_posy(level.getAnchor_posy() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);

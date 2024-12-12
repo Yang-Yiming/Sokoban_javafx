@@ -23,10 +23,7 @@ import org.data.mapdata;
 import org.model.MapMatrix;
 import org.model.Solve.Solve;
 import org.model.config;
-import org.view.menu.Home;
-import org.view.menu.MenuController;
-import org.view.menu.MenuView;
-import org.view.menu.Settings;
+import org.view.menu.*;
 import org.view.net.Client;
 import org.view.net.LocalIPAddress;
 import org.view.net.Server;
@@ -347,6 +344,11 @@ public class FightLevelManager {
         inLevel3(level, socket);
     }
 
+    public Button themeButton;
+    public void createThemeButton(){
+        Theme theme = new Theme();
+        themeButton = theme.createButton(root);
+    }
     public Button settingsButton;
     public void createSettingsButton(){
         Settings settings = new Settings();
@@ -359,10 +361,13 @@ public class FightLevelManager {
     }
     public int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
     private void inLevel2(FightLevel level, Socket socket) {
+        createThemeButton();
         createSettingsButton();
         createHomeButton();
+        root.getChildren().add(themeButton);
         root.getChildren().add(settingsButton);
         root.getChildren().add(homeButton);
+
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -394,8 +399,10 @@ public class FightLevelManager {
     public void inLevel3(FightLevel level, Socket socket) {
         createSettingsButton();
         createHomeButton();
+        createThemeButton();
         root.getChildren().add(settingsButton);
         root.getChildren().add(homeButton);
+        root.getChildren().add(themeButton);
         // 添加键盘监听功能
         scene.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -458,6 +465,8 @@ public class FightLevelManager {
     private void inLevel(FightLevel level) {
         createSettingsButton();
         createHomeButton();
+        createThemeButton();
+        root.getChildren().add(themeButton);
         root.getChildren().add(settingsButton);
         root.getChildren().add(homeButton);
         // 添加键盘监听功能
@@ -544,6 +553,7 @@ public class FightLevelManager {
                     root.getChildren().remove(levelRoot);
                     root.getChildren().remove(waitingText);
                     root.getChildren().remove(settingsButton);
+                    root.getChildren().remove(themeButton);
                     root.getChildren().remove(homeButton);
                     level.root.getChildren().clear();
                     if(type == 2){
@@ -564,6 +574,7 @@ public class FightLevelManager {
                     root.getChildren().remove(backButton);
                     root.getChildren().remove(backButton0);
                     root.getChildren().remove(settingsButton);
+                    root.getChildren().remove(themeButton);
                     root.getChildren().remove(homeButton);
                     if(type == 2) inLevel2(level, server.socket);
                     if(type == 1) inLevel(level);
@@ -629,6 +640,7 @@ public class FightLevelManager {
             //设置和主界面图标
             if(settingsButton != null) settingsButton.setLayoutX(primaryStage.getWidth() - 80);
             if(homeButton != null) homeButton.setLayoutX(primaryStage.getWidth() - 150);
+            if(themeButton != null) themeButton.setLayoutX(primaryStage.getWidth() - 220);
         });
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
 //            primaryStage.setHeight((double) newValue);

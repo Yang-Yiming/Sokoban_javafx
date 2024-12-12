@@ -97,6 +97,7 @@ public class Client {
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.waitingText);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.restartButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.themeButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
                                 fightLevelManager.level.root.getChildren().clear();
                                 fightLevelManager.start();
@@ -106,6 +107,7 @@ public class Client {
                             Platform.runLater(() -> {
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.vbox);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.themeButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
                                 fightLevelManager.inLevel3(fightLevelManager.level, socket);
                                 fightLevelManager.FightLevelID = fightLevelID;

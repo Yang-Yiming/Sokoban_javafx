@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.view.menu.Home;
 import org.view.menu.MenuController;
 import org.view.menu.Settings;
+import org.view.menu.Theme;
 
 public class LevelManager {
     private int currentLevel;
@@ -161,9 +162,11 @@ public class LevelManager {
         createDirectionButtons();
         createSettingsButton();
         createHomeButton();
+        createThemeButton();
         drawDirectionButtons(root);
         drawSettingsButton(root);
         drawHomeButton(root);
+        drawThemeButton(root);
 
         //道具栏
         itemsImageView.setLayoutX(30);
@@ -249,6 +252,7 @@ public class LevelManager {
             setDirectionButtons();
             setSettingsButton();
             setHomeButton();
+            setThemeButton();
         });
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
             // level.setAnchor_posy(level.getAnchor_posy() + (newValue.doubleValue() - oldValue.doubleValue()) / 2);
@@ -321,9 +325,11 @@ public class LevelManager {
     }
     static Button homeButton;
     static Button settingsButton;
+    static Button themeButton;
     public static void drawSettingsButton(Pane root){
         root.getChildren().add(settingsButton);
     }
+    public static void drawThemeButton(Pane root){ root.getChildren().add(themeButton);}
     public void setDirectionButtons(){
         hbox.setLayoutX(primaryStage.getWidth() - 200);
         hbox.setLayoutY(primaryStage.getHeight() - 200);
@@ -334,6 +340,13 @@ public class LevelManager {
     }
     public void setSettingsButton(){
         settingsButton.setLayoutX(primaryStage.getWidth() - 80);
+    }
+    public void createThemeButton(){
+        Theme theme = new Theme();
+        themeButton = theme.createButton(root);
+    }
+    public void setThemeButton(){
+        themeButton.setLayoutX(primaryStage.getWidth() - 220);
     }
 
     public void createHomeButton(){
