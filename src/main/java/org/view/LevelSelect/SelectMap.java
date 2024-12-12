@@ -98,7 +98,7 @@ public class SelectMap {
     public SelectMap(Stage stage) {
         this.stage = stage;
         cat = new Cat();
-        AnchorX = 100; AnchorY = 100;
+        map = new HashMap<>();
         if(stage.getScene() != null){
             this.scene = stage.getScene();
             this.root = (Pane) scene.getRoot();
@@ -106,19 +106,20 @@ public class SelectMap {
             this.root = new Pane();
             this.scene = new Scene(root);
         }
+        AnchorX = scene.getWidth() / 2 - 100; AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
     }
 
-    public void add_levels(int[][][] maps, User user){
+    public void add_levels(int[][][] maps, User user) {
         MapNode.maps = maps;
-        for(int i = 0; i < maps.length; i++){
+        for (int i = 0; i < maps.length; i++) {
             MapNode node = new MapNode(i, stage);
             node.target_level = i;
-            if(user.getLevelAt() < i) node.is_locked = true;
-            if(nodes == null) nodes = new ArrayList<>();
+            if (user.getLevelAt() < i) node.is_locked = true;
+            if (nodes == null) nodes = new ArrayList<>();
             nodes.add(node);
+            map.put(new Coordinate(node.x, node.y), i + 1);
         }
-        map = new HashMap<>();
-        map.put(new Coordinate(1,1),1);
+        map.put(new Coordinate(1, 1), -1);
     }
 
     public void draw() {
@@ -165,7 +166,7 @@ public class SelectMap {
             double catx = cat.imageView.getLayoutX() + config.Map_Node_Width / 2;
             double caty = cat.imageView.getLayoutY() + config.Map_Node_Width/ 2;
             double dx = midx - catx, dy = midy - caty;
-            int mid_dis = 1;
+            int mid_dis = 3;
             if(dx < -config.Map_Node_Width * mid_dis) dx += config.Map_Node_Width * mid_dis;
             else if(dx > config.Map_Node_Width * mid_dis) dx -= config.Map_Node_Width * mid_dis;
             else dx = 0;
@@ -187,19 +188,25 @@ public class SelectMap {
         Move();
 
         scene.setOnMouseClicked(event -> {
-           // if(event.getClickCount() == 1) return;
+            if(event.getClickCount() != 1)  return;
+
             int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);
             int y = (int) ((event.getSceneY() - AnchorY) / config.Map_Node_Width);
             final String[] moves = {FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y))};
 
             // 创建一个时间轴，每一段时间触发一次事件
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration ), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    if (!cat.is_moving && !moves[0].isEmpty()) {
-                        char dir = moves[0].charAt(0);
-                        moves[0] = moves[0].substring(1);
-                        cat.move(dir);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration ), e->{
+                if (!cat.is_moving && !moves[0].isEmpty()) {
+                    char dir = moves[0].charAt(0);
+                    moves[0] = moves[0].substring(1);
+                    cat.move(dir);
+                } else if (moves[0].isEmpty() || moves[0].isBlank()){
+                    int at = map.getOrDefault(new Coordinate(cat.x, cat.y),0);
+                    if(at > 0) {
+                        nodes.get(at - 1).action();
+                        map.clear();
+                        nodes = null;
+                        cameraTimeline.stop();
                     }
                 }
             }));

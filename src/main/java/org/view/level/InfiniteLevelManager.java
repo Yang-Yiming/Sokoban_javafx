@@ -181,9 +181,7 @@ public class InfiniteLevelManager {
 
     public void win_update() {
         int new_map_id = (int) (mapdata.maps.length * Math.random());
-        //Direction direction = Direction.values()[(int)(2 * Math.random()) + 1];
         Direction direction = new Direction[]{Direction.RIGHT, Direction.DOWN}[(int)(2 * Math.random())];
-//        direction = Direction.UP; // debug
         int[][] next_map = mapdata.maps[new_map_id];
         change_level(direction, next_map);
 

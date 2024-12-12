@@ -98,7 +98,7 @@ public class MapNode {
 
 
         button.setPrefSize(config.Map_Node_Width, config.Map_Node_Width);
-        button.setOnMouseClicked(e -> action());
+        //button.setOnMouseClicked(e -> action());
 
         //this.y = Grass.myRand(index, index * 31, (index - 17) * 3, -YRange, YRange);
         this.x = index * 3;

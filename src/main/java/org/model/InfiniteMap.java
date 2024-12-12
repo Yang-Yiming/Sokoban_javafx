@@ -212,12 +212,33 @@ public class InfiniteMap extends GameMap {
         }
     }
 
+    public void add_line(int x1, int y1, boolean dir, int value, int stop, boolean set_last_0, int max_len) {
+        // dir : true -> x, false -> y
+        if(dir){
+            while(get(x1, y1) != stop && max_len > 0){
+                set(x1, y1, value);
+                x1++; max_len--;
+            }
+        } else {
+            while(get(x1, y1) != stop && max_len > 0){
+                set(x1, y1, value);
+                y1++; max_len--;
+            }
+        }
+        if(set_last_0){
+            set(x1, y1, 0);
+        }
+    }
+
     public void add_road(int x1, int y1, int width, int length, Direction direction) {
     switch (direction) {
         case Direction.RIGHT:
+//            add_line(x1, y1, true, 1, 1, false, length + 5);
+//            add_line(x1, y1 + width - 1, true, 1, 1, false, length + 5);
             add_line(x1, y1, length, 0, 1);
             add_line(x1, y1 + width - 1, length, 0, 1);
             for (int i = 1; i < width - 1; i++) {
+//                add_line(x1, y1 + i, true, 0, 1, true, length + 5);
                 add_line(x1, y1 + i, length, 0, 0);
             }
             break;
