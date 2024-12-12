@@ -18,9 +18,7 @@ import static javafx.application.Application.launch;
 public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws IOException {
-        MenuController controller = null;{
-            controller = new MenuController();
-        }
+        MenuController controller = null;
         try {
             controller = new MenuController();
         } catch (Exception e) {

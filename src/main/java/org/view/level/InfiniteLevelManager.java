@@ -84,8 +84,9 @@ public class InfiniteLevelManager {
                 scene.setOnMousePressed(null);
                 scene.setOnMouseDragged(null);
                 level.stopTimelines();
+                //结算画面
                 Home home = new Home();
-                home.homeAction(root, controller, primaryStage);
+                home.account(root, primaryStage, controller, level.start_time, level.level_past);
             }
             else return;
 
@@ -255,6 +256,7 @@ public class InfiniteLevelManager {
 
     public void level_update() {
         if(level.isWin()){
+            ++level.level_past;
             clear_box();
             //clear_goals();
             GlowRectangle.glowRectangles.clear();

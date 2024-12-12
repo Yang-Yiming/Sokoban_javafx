@@ -106,6 +106,54 @@ public class Home {
             root.getChildren().remove(home);
         });
     }
+    public void account(Pane root, Stage primaryStage, MenuController controller, long start_time, int level_past) {
+        //变暗
+        shade = new Rectangle(0, 0, root.getWidth(), root.getHeight());
+        shade.setFill(Color.rgb(0, 0, 0, 0.5));
+        root.getChildren().add(shade);
+        //纸
+        paper.setX(150);
+        paper.setY(50);
+        root.getChildren().add(paper);
+//        标题
+        Text homeText;
+        if(level_past == 0) homeText = new Text(280, 150.0, "乐 还没过关");
+        else homeText = new Text(250, 150.0, "平均用时 " + (System.currentTimeMillis() - start_time) / 1000 / level_past + " 秒");
+
+        homeText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        homeText.setFont(new Font(pixelFont.getName(), 45));
+        root.getChildren().add(homeText);
+
+        //返回主页按钮
+        Button home = new Button("返回");
+        home.setLayoutX(348);
+        home.setLayoutY(270);
+        home.setPrefSize(100, 50);
+        home.setStyle("-fx-background-color: #55371d; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #f2f2f2;");
+        home.setFont(new Font(pixelFont.getName(), 20));
+        root.getChildren().add(home);
+        home.setOnMouseClicked(event -> {
+            homeAction(root, controller, primaryStage);
+        });
+
+        //关闭按钮
+        Button close = new Button();
+        Image X = new Image(getClass().getResourceAsStream("/images/X.png"), 30, 30, false, false);
+        close.setGraphic(new ImageView(X));
+//        root.getChildren().add(close);
+        close.setLayoutX(630);
+        close.setLayoutY(60);
+        close.setMaxSize(30, 30);
+        close.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px; -fx-text-fill: #55371d;");
+        //点击关闭按钮
+        close.setOnMouseClicked(event -> {
+            root.getChildren().remove(shade);
+            root.getChildren().remove(paper);
+            root.getChildren().remove(homeText);
+//            root.getChildren().remove(close);
+            root.getChildren().remove(home);
+        });
+    }
     public void homeAction(Pane root, MenuController controller, Stage primaryStage) {
 
         //音乐停止

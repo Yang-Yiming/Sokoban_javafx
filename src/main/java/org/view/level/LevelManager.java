@@ -301,6 +301,7 @@ public class LevelManager {
 
                 loadLevel(id + 1, mapdata.maps);
 
+
                 try {
                     save("自动保存成功");
                 } catch (FileNotFoundException e) {
