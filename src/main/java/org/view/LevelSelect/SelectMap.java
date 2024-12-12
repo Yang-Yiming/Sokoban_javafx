@@ -1,27 +1,18 @@
 package org.view.LevelSelect;
 
 import javafx.animation.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
-import org.view.level.Grass;
-import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 class Cat {
     Image cat_stand = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
@@ -132,22 +123,20 @@ public class SelectMap {
         background.setFill(Color.WHITE);
         root.getChildren().add(background);
 
-//        // 画障碍
-//        for(int i = 0; i < map.length; i++){
-//            for(int j = 0; j < map[0].length; j++){
-//                if(map[i][j] == -1){
-//                    Rectangle rect = new Rectangle(AnchorX + i * config.Map_Node_Width, AnchorY + j * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
-//                    rect.setFill(Color.BLACK);
-//                    root.getChildren().add(rect);
-//                }
-//            }
-//        }
+        // 画障碍
+        for(Coordinate c: map.keySet()) {
+            if(map.get(c) == -1){
+                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+                rect.setFill(Color.BLACK);
+                root.getChildren().add(rect);
+            }
+        }
 
         // 画goals
         for(MapNode node: nodes) {
-            node.button.setLayoutX(AnchorX + node.x * config.Map_Node_Width);
-            node.button.setLayoutY(AnchorY + node.y * config.Map_Node_Width);
-            root.getChildren().add(node.button);
+            node.stackPane.setLayoutX(AnchorX + node.x * config.Map_Node_Width);
+            node.stackPane.setLayoutY(AnchorY + node.y * config.Map_Node_Width);
+            root.getChildren().add(node.stackPane);
         }
         // 画猫
         cat.imageView.setLayoutX(AnchorX + cat.x * config.Map_Node_Width);
@@ -186,31 +175,31 @@ public class SelectMap {
     public void update() {
         draw();
         Move();
+        String[] moves = {""};
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration ), e->{
+            if (!cat.is_moving && !moves[0].isEmpty()) {
+                char dir = moves[0].charAt(0);
+                moves[0] = moves[0].substring(1);
+                cat.move(dir);
+            } else if (moves[0].isEmpty() || moves[0].isBlank()){
+                int at = map.getOrDefault(new Coordinate(cat.x, cat.y),0);
+                if(at > 0) {
+                    nodes.get(at - 1).action();
+                    map.clear();
+                    nodes = null;
+                    cameraTimeline.stop();
+                }
+            }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
 
         scene.setOnMouseClicked(event -> {
             if(event.getClickCount() != 1)  return;
 
             int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);
             int y = (int) ((event.getSceneY() - AnchorY) / config.Map_Node_Width);
-            final String[] moves = {FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y))};
-
-            // 创建一个时间轴，每一段时间触发一次事件
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration ), e->{
-                if (!cat.is_moving && !moves[0].isEmpty()) {
-                    char dir = moves[0].charAt(0);
-                    moves[0] = moves[0].substring(1);
-                    cat.move(dir);
-                } else if (moves[0].isEmpty() || moves[0].isBlank()){
-                    int at = map.getOrDefault(new Coordinate(cat.x, cat.y),0);
-                    if(at > 0) {
-                        nodes.get(at - 1).action();
-                        map.clear();
-                        nodes = null;
-                        cameraTimeline.stop();
-                    }
-                }
-            }));
-            timeline.setCycleCount(Timeline.INDEFINITE);
+            moves[0] = FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y));
             timeline.play();
         });
 
