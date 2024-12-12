@@ -99,8 +99,13 @@ public class LevelManager {
             if(item_hint.getY() < -50){
                 Hint hint = new Hint(level);
                 config.this_is_hint = true;
-                hint.autoMoveOnce();
+                char res = hint.autoMoveOnce();
                 config.this_is_hint = false;
+                if(res == 'n'){
+                    level.isEnd = true;
+                    Win lose_anim = new Win(primaryStage, root);
+                    lose_anim.lose();
+                }
             }
             isDraggingItem = false;
             //回到原来的位置

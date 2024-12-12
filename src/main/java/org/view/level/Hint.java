@@ -35,9 +35,10 @@ public class Hint {
         timeline.play();
     }
 
-    public void autoMoveOnce() {
+    public char autoMoveOnce() {
         char move = Character.toLowerCase(level.solve_next_move());
         Move(move);
+        return move;
     }
 
     public void Move(char move) {
