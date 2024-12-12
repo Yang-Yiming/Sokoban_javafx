@@ -15,6 +15,8 @@ import javafx.scene.input.KeyCode;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -326,9 +328,11 @@ public class LevelManager {
     Button upButton, downButton, leftButton, rightButton;
     static public VBox vbox;
     static public HBox hbox;
+    static public Text explainText = new Text("R：重置 ESC：退出 Ctrl+S：存档");
     public static void drawDirectionButtons(Pane root){
 //        root.getChildren().add(vbox);
         root.getChildren().add(hbox);
+        root.getChildren().add(explainText);
     }
     static Button homeButton;
     static Button settingsButton;
@@ -340,6 +344,8 @@ public class LevelManager {
     public void setDirectionButtons(){
         hbox.setLayoutX(primaryStage.getWidth() - 200);
         hbox.setLayoutY(primaryStage.getHeight() - 200);
+        explainText.setLayoutX(primaryStage.getWidth() - 230);
+        explainText.setLayoutY(primaryStage.getHeight() - 70);
     }
     public void createSettingsButton(){
         Settings settings = new Settings();
@@ -366,12 +372,17 @@ public class LevelManager {
     public void drawHomeButton(Pane root){
         root.getChildren().add(homeButton);
     }
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 15);
+
     public void createDirectionButtons() {
+
+        explainText.setFont(pixelFont);
+        explainText.setFill(javafx.scene.paint.Color.web("#55371d"));
+
         Image upImage = new Image(getClass().getResourceAsStream("/images/direction/up.png"), config.button_size, config.button_size, false, false);
         Image downImage = new Image(getClass().getResourceAsStream("/images/direction/down.png"), config.button_size, config.button_size, false, false);
         Image leftImage = new Image(getClass().getResourceAsStream("/images/direction/left.png"), config.button_size, config.button_size, false, false);
         Image rightImage = new Image(getClass().getResourceAsStream("/images/direction/right.png"), config.button_size, config.button_size, false, false);
-
 
         upButton = new Button();
         downButton = new Button();

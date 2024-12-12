@@ -160,7 +160,7 @@ public abstract class Level {
         //load_gui(user);
     }
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 20);
-    Text stepText, stepLimitText;
+    Text idText, stepText, stepLimitText;
     private int step, stepLimit = 0;
     public int getStep(){
         return step;
@@ -176,11 +176,22 @@ public abstract class Level {
         step += o;
         stepText.setText("移动步数: " + step);
     }
+    protected int id;
     protected void load_gui(User user) {
+
+
+        idText = new Text("关卡 " + (id + 1));
+        idText.setX(40);
+        idText.setY(60);
+        //棕色
+        idText.setFill(Color.web("#55371d"));
+        idText.setFont(new Font(pixelFont.getName(), 25));
+        root.getChildren().add(idText);
+
         step = 0;
         stepText = new Text("移动步数: " + step);
         stepText.setX(40);
-        stepText.setY(60);
+        stepText.setY(100);
         //棕色
         stepText.setFill(Color.web("#55371d"));
         stepText.setFont(pixelFont);
@@ -188,7 +199,7 @@ public abstract class Level {
 
         stepLimitText = new Text("步数限制: " + stepLimit);
         stepLimitText.setX(40);
-        stepLimitText.setY(100);
+        stepLimitText.setY(140);
         //棕色
         stepLimitText.setFill(Color.web("#55371d"));
         stepLimitText.setFont(pixelFont);
@@ -307,6 +318,7 @@ public abstract class Level {
     public void drawGUI() {
         root.getChildren().add(stepText);
         root.getChildren().add(stepLimitText);
+        root.getChildren().add(idText);
 //        if(settingsButton == null) {
 //            Settings settings = new Settings();
 //            settingsButton = settings.createButton(root);

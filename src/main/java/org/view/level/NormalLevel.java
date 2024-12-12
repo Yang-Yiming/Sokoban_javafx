@@ -14,7 +14,6 @@ import org.model.config;
 
 public class NormalLevel extends Level {
 
-    private final int id;
     private boolean default_map = true;
 
     public MapMatrix getMap() {
