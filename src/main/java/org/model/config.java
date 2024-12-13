@@ -37,6 +37,9 @@ public class config {
     public static boolean this_is_hint = false; // 懒了
     public static ArrayList<Timeline> timelines = new ArrayList<>();
     public static Color themeColor = Color.rgb(124, 153, 32);
+    public static int item_hintNumber = 3;
+    public static int item_plusNumber = 3;
+    public static int item_withdrawNumber = 3;
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例
