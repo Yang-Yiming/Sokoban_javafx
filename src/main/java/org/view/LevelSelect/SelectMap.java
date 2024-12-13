@@ -112,27 +112,51 @@ public class SelectMap {
         return cnt;
     }
 
-    final int GENERATE_WATER_NUM = 3, REMOVE_WATER_NUM = 2;
-    void generate_water(int begin_y, int end_y, int firstN, int times) {
-        int left_x = -(int)(AnchorX / config.Map_Node_Width);
-        int right_x = (int)((scene.getWidth() - AnchorX) / config.Map_Node_Width);
 
-        while(firstN-- > 0) {
-            int x = (int)(Math.random() * (right_x - left_x)) + left_x;
+    final int WATER = 30, ROCK = 10;
+    void generate_obstacle(int begin_x, int begin_y, int end_x, int end_y, int times) {
+        for(int i = 0; i < WATER; i++) {
+            int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
             int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
             map.put(new Coordinate(x, y), -3);
         }
+        for(int i = 0; i < ROCK; i++) {
+            int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
+            int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            map.put(new Coordinate(x,y), -2);
+        }
 
         while(times-- > 0) {
-            for(int xx = left_x; xx < right_x; xx++) {
+            for(int xx = begin_x; xx < end_x; xx++) {
                 for(int yy = begin_y; yy < end_y; yy++) {
-                    int cnt = count(xx, yy, -3);
-                    if(cnt > GENERATE_WATER_NUM) {
-                        map.put(new Coordinate(xx, yy), -3);
-                    } else if (cnt < REMOVE_WATER_NUM){
-                        map.remove(new Coordinate(xx, yy));
+                    int cnt_water = count(xx, yy, -3);
+                    int cnt_rock = count(xx, yy, -2);
+                    Coordinate now = new Coordinate(xx, yy);
+                    if(cnt_water >= 3 && Math.random() < 0.6) {
+                        map.put(now, -3);
+                    }
+                    if(cnt_rock >= 4 && Math.random() < 0.4) {
+                        map.put(now, -2);
+                    }
+                    if(cnt_water <= 2 && map.getOrDefault(now,0) == -3 && Math.random() < 0.5){
+                        map.remove(now);
                     }
                 }
+            }
+            remove_all(begin_x, 7, end_x, 10);
+        }
+    }
+    void remove_all(int begin_x, int begin_y, int end_x, int end_y) {
+        for(int i = begin_x; i < end_x; i++) {
+            for(int j = begin_y; j < end_y; j++) {
+                map.remove(new Coordinate(i, j));
+            }
+        }
+    }
+    void fill_all(int begin_x, int begin_y, int end_x, int end_y, int item) {
+        for(int i = begin_x; i < end_x; i++) {
+            for(int j = begin_y; j < end_y; j++) {
+                map.put(new Coordinate(i, j), item);
             }
         }
     }
@@ -150,11 +174,12 @@ public class SelectMap {
         }
 
         // 障碍
+        int left_x = -(int)(AnchorX / config.Map_Node_Width);
+        int right_x = (int)((scene.getWidth() - AnchorX) / config.Map_Node_Width);
         int up_y = -(int)(AnchorY / config.Map_Node_Width);
         int down_y = (int)((scene.getHeight() - AnchorY) / config.Map_Node_Width);
-        map.put(new Coordinate(1, 1), -2);
-        generate_water(up_y,up_y+3,30,1);
-        generate_water(down_y-3,down_y,30,2);
+
+        generate_obstacle(left_x-1, up_y-1, right_x-1, down_y-1, 10);
 
         // 宝箱
         if(chests == null) chests = new ArrayList<>();
@@ -269,6 +294,9 @@ public class SelectMap {
             int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);
             int y = (int) ((event.getSceneY() - AnchorY) / config.Map_Node_Width);
 
+            if(map.getOrDefault(new Coordinate(x,y),0) < -1){
+                return;
+            }
             // 对箱子的特殊处理
             if(map.getOrDefault(new Coordinate(x,y),0) == -1) {
                 for(Chest chest: chests) {
