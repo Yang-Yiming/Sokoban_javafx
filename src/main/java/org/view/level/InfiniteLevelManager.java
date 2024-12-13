@@ -246,6 +246,8 @@ public class InfiniteLevelManager {
                 int y = last_down + RoadLength;
                 add_level(x, y, data);
                 level.getMap().set(x + data[0].length / 2 - 1, y,0);
+                level.getMap().set(x + data[0].length / 2 - 1, y + 1,0);
+                level.getMap().set(x + data[0].length / 2 - 3, y,1);
             } case UP -> {
                 int x = last_right + last_left - data[0].length/2;
                 int y = last_up - RoadLength;
