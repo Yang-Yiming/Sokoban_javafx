@@ -130,7 +130,7 @@ public class User {
         json = json.replaceAll("\n", "");
 
         // 去除首尾的大括号
-        json = json.substring(1, json.length() - 2);
+        json = json.substring(1, json.length() - 1);
 
         // 单独提取playingmap 防止逗号分割时出错
         int playingMapStart = json.indexOf("\"PlayingMap\":[");
@@ -199,12 +199,15 @@ public class User {
         if(json == null || json.isEmpty() || json.equals("[]")) {
             return;
         }
-
+        System.out.println(json);
         json = json.substring(1, json.length() - 1); // 去除[]
         String[] userStrs = json.split("},"); // 以}分割
 
         for (String userStr : userStrs) {
-            User user = User.fromJSON(userStr + "}"); // 自动加入到UserInfo
+            if(userStr.charAt(userStr.length() - 1) != '}')
+                userStr += "}";
+            System.out.println(userStr);
+            User user = User.fromJSON(userStr); // 自动加入到UserInfo
         }
     }
 }
