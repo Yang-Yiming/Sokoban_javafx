@@ -115,7 +115,7 @@ public class SelectMap {
 
     final int WATER = 30, ROCK = 10;
     void generate_obstacle(int begin_x, int begin_y, int end_x, int end_y, int times) {
-        if(true) return;
+//        if(true) return;
         for(int i = 0; i < WATER; i++) {
             int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
             int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
