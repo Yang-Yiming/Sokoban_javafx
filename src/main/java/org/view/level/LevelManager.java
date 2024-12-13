@@ -308,9 +308,9 @@ public class LevelManager {
 
             Win_anim.sequentialTransition.setOnFinished(ev -> {
                 level.stopTimelines();
-                user.setLevelAt(Math.max(++currentLevel, user.getLevelAt()));
-//                System.out.println(level.getStep());
+                user.setLevelAt(++currentLevel);
                 user.setLevelAtStep(level.getStep());
+                user.setMaxLevel(Math.max(currentLevel, user.getMaxLevel()));
                 user.setMoveCount(0);
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
 
@@ -509,8 +509,9 @@ public class LevelManager {
     public void save(String s) throws FileNotFoundException {
         if(user.getMoveCount() > 0) {
             user.setPlayingMap(level.getMap().getMatrix());
-            user.setLevelAt(Math.max(currentLevel, user.getLevelAt()));
+            user.setLevelAt(currentLevel);
             user.setLevelAtStep(level.getStep());
+            user.setMaxLevel(Math.max(currentLevel, user.getMaxLevel()));
         }
         SavingManager.save();
         save_text(s);

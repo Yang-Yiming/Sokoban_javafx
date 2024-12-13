@@ -10,6 +10,7 @@ public class User {
     private String Password;
     private int LevelAt;
     private int LevelAtStep;
+    private int MaxLevel;
     private int MoveCount;
     private int[][] PlayingMap;
 
@@ -31,10 +32,18 @@ public class User {
         return LevelAt;
     }
     public int getLevelAtStep() {return LevelAtStep;}
+    public int getMaxLevel() {
+        return MaxLevel;
+    }
     public void setLevelAt(int levelAt) {
         LevelAt = levelAt;
     }
-    public void setLevelAtStep(int levelAtStep) {LevelAtStep = levelAtStep;}
+    public void setLevelAtStep(int levelAtStep) {
+        LevelAtStep = levelAtStep;
+    }
+    public void setMaxLevel(int maxLevel) {
+        MaxLevel = maxLevel;
+    }
 
     public int getMoveCount() {
         return MoveCount;
@@ -56,9 +65,10 @@ public class User {
         return PlayingMap;
     }
 
-    public void update_info(int levelAt, int levelAtStep, int MoveCount, InfiniteMap map){
+    public void update_info(int levelAt, int levelAtStep, int maxLevel, int MoveCount, InfiniteMap map){
         this.LevelAt = levelAt;
         this.LevelAtStep = levelAtStep;
+        this.MaxLevel = maxLevel;
         this.MoveCount = MoveCount;
         this.PlayingMap = map.getMatrix();
     }
@@ -70,6 +80,7 @@ public class User {
                 ", Password='" + Password + '\'' +
                 ", LevelAt=" + LevelAt +
                 ", LevelAtStep=" + LevelAtStep +
+                ", MaxLevel=" + MaxLevel +
                 ", MoveCount=" + MoveCount +
                 '}';
     } // 调试用
@@ -83,6 +94,7 @@ public class User {
         json.append("\"Password\":\"").append(Password).append("\",");
         json.append("\"LevelAt\":").append(LevelAt).append(",");
         json.append("\"LevelAtStep\":").append(LevelAtStep).append(",");
+        json.append("\"MaxLevel\":").append(MaxLevel).append(",");
         json.append("\"MoveCount\":").append(MoveCount).append(",");
 
         // playing map
@@ -139,6 +151,7 @@ public class User {
         String password = jsonMap.get("Password").substring(1, jsonMap.get("Password").length() - 1); // 删除""
         int levelAt = Integer.parseInt(jsonMap.get("LevelAt"));
         int levelAtStep = Integer.parseInt(jsonMap.get("LevelAtStep"));
+        int MaxLevel = Integer.parseInt(jsonMap.get("MaxLevel"));
         int MoveCount = Integer.parseInt(jsonMap.get("MoveCount"));
 
         // 处理PlayingMap
@@ -162,6 +175,7 @@ public class User {
         User user = new User(name, password);
         user.LevelAt = levelAt;
         user.LevelAtStep = levelAtStep;
+        user.MaxLevel = MaxLevel;
         user.MoveCount = MoveCount;
         user.PlayingMap = playingMap;
 

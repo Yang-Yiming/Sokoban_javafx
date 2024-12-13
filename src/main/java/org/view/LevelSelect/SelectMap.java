@@ -105,7 +105,7 @@ public class SelectMap {
         for (int i = 0; i < maps.length; i++) {
             MapNode node = new MapNode(i, stage);
             node.target_level = i;
-            if (user.getLevelAt() < i) node.is_locked = true;
+            if (user.getMaxLevel() < i) node.is_locked = true;
             if (nodes == null) nodes = new ArrayList<>();
             nodes.add(node);
             map.put(new Coordinate(node.x, node.y), i + 1);
