@@ -85,6 +85,7 @@ public class SelectMap {
     private HashMap<Coordinate, Integer> map;
 
     private ArrayList<MapNode> nodes;
+    private ArrayList<Chest> chests;
 
     public SelectMap(Stage stage) {
         this.stage = stage;
@@ -101,6 +102,7 @@ public class SelectMap {
     }
 
     public void add_levels(int[][][] maps, User user) {
+        // 关卡
         MapNode.maps = maps;
         for (int i = 0; i < maps.length; i++) {
             MapNode node = new MapNode(i, stage);
@@ -110,7 +112,14 @@ public class SelectMap {
             nodes.add(node);
             map.put(new Coordinate(node.x, node.y), i + 1);
         }
-        map.put(new Coordinate(1, 1), -1);
+
+        // 障碍
+        map.put(new Coordinate(1, 1), -2);
+
+        // 宝箱
+        if(chests == null) chests = new ArrayList<>();
+        chests.add(new Chest(2,2));
+        map.put(new Coordinate(2, 2), -1);
     }
 
     public void draw() {
@@ -125,11 +134,18 @@ public class SelectMap {
 
         // 画障碍
         for(Coordinate c: map.keySet()) {
-            if(map.get(c) == -1){
+            if(map.get(c) == -2){
                 Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
                 rect.setFill(Color.BLACK);
                 root.getChildren().add(rect);
             }
+        }
+
+        // 画宝箱
+        for(Chest chest: chests) {
+            chest.imageView.setLayoutX(AnchorX + chest.x * config.Map_Node_Width);
+            chest.imageView.setLayoutY(AnchorY + chest.y * config.Map_Node_Width);
+            root.getChildren().add(chest.imageView);
         }
 
         // 画goals
@@ -182,13 +198,30 @@ public class SelectMap {
                 char dir = moves[0].charAt(0);
                 moves[0] = moves[0].substring(1);
                 cat.move(dir);
-            } else if (moves[0].isEmpty() || moves[0].isBlank()){
+            }
+            if (moves[0].isEmpty()){
                 int at = map.getOrDefault(new Coordinate(cat.x, cat.y),0);
-                if(at > 0) {
+                if(at > 0 && !nodes.get(at - 1).is_locked) {
                     nodes.get(at - 1).action();
                     map.clear();
                     nodes = null;
                     cameraTimeline.stop();
+                }
+            }
+            if (moves[0].length() == 1) {
+                Coordinate next = new Coordinate(cat.x, cat.y);
+                if (moves[0].charAt(0) == 'w') next.y--;
+                else if (moves[0].charAt(0) == 's') next.y++;
+                else if (moves[0].charAt(0) == 'a') next.x--;
+                else if (moves[0].charAt(0) == 'd') next.x++;
+                if (map.getOrDefault(next, 0) == -1) {
+                    for (Chest chest : chests) {
+                        if (chest.x == next.x && chest.y == next.y) {
+                            chest.open();
+                            moves[0] = "";
+                            break;
+                        }
+                    }
                 }
             }
         }));
