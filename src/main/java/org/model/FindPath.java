@@ -41,7 +41,7 @@ public class FindPath {
         return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
     }
 
-    public static final int OBSTACLE = -2; // <=-2 是障碍。 -1是宝箱，0是空地
+    public static final int OBSTACLE = -1; // 负数是障碍
 
     HashMap<Coordinate, Integer> map;
     Coordinate start;

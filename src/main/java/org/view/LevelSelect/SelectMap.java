@@ -101,6 +101,42 @@ public class SelectMap {
         AnchorX = scene.getWidth() / 2 - 100; AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
     }
 
+    int count(int x, int y, int goal) {
+        int cnt = 0;
+        int[] dx = new int[]{1, 0, -1, 0, 1, 1, -1, -1};
+        int[] dy = new int[]{0, 1, 0, -1, 1, -1, 1, -1};
+        for(int i = 0; i < 8; i++) {
+            int xx = x + dx[i], yy = y + dy[i];
+            if(map.getOrDefault(new Coordinate(xx, yy), 0) == goal) cnt++;
+        }
+        return cnt;
+    }
+
+    final int GENERATE_WATER_NUM = 3, REMOVE_WATER_NUM = 2;
+    void generate_water(int begin_y, int end_y, int firstN, int times) {
+        int left_x = -(int)(AnchorX / config.Map_Node_Width);
+        int right_x = (int)((scene.getWidth() - AnchorX) / config.Map_Node_Width);
+
+        while(firstN-- > 0) {
+            int x = (int)(Math.random() * (right_x - left_x)) + left_x;
+            int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            map.put(new Coordinate(x, y), -3);
+        }
+
+        while(times-- > 0) {
+            for(int xx = left_x; xx < right_x; xx++) {
+                for(int yy = begin_y; yy < end_y; yy++) {
+                    int cnt = count(xx, yy, -3);
+                    if(cnt > GENERATE_WATER_NUM) {
+                        map.put(new Coordinate(xx, yy), -3);
+                    } else if (cnt < REMOVE_WATER_NUM){
+                        map.remove(new Coordinate(xx, yy));
+                    }
+                }
+            }
+        }
+    }
+
     public void add_levels(int[][][] maps, User user) {
         // 关卡
         MapNode.maps = maps;
@@ -114,7 +150,11 @@ public class SelectMap {
         }
 
         // 障碍
+        int up_y = -(int)(AnchorY / config.Map_Node_Width);
+        int down_y = (int)((scene.getHeight() - AnchorY) / config.Map_Node_Width);
         map.put(new Coordinate(1, 1), -2);
+        generate_water(up_y,up_y+3,30,1);
+        generate_water(down_y-3,down_y,30,2);
 
         // 宝箱
         if(chests == null) chests = new ArrayList<>();
@@ -134,9 +174,16 @@ public class SelectMap {
 
         // 画障碍
         for(Coordinate c: map.keySet()) {
-            if(map.get(c) == -2){
+            // rock ?
+            if(map.get(c) == -2) {
                 Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
                 rect.setFill(Color.BLACK);
+                root.getChildren().add(rect);
+            }
+            // water ?
+            if(map.get(c) == -3) {
+                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+                rect.setFill(Color.BLUE);
                 root.getChildren().add(rect);
             }
         }
@@ -192,6 +239,7 @@ public class SelectMap {
         draw();
         Move();
         String[] moves = {""};
+        Chest[] goal_chest = new Chest[]{null};
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration ), e->{
             if (!cat.is_moving && !moves[0].isEmpty()) {
@@ -207,21 +255,9 @@ public class SelectMap {
                     nodes = null;
                     cameraTimeline.stop();
                 }
-            }
-            if (moves[0].length() == 1) {
-                Coordinate next = new Coordinate(cat.x, cat.y);
-                if (moves[0].charAt(0) == 'w') next.y--;
-                else if (moves[0].charAt(0) == 's') next.y++;
-                else if (moves[0].charAt(0) == 'a') next.x--;
-                else if (moves[0].charAt(0) == 'd') next.x++;
-                if (map.getOrDefault(next, 0) == -1) {
-                    for (Chest chest : chests) {
-                        if (chest.x == next.x && chest.y == next.y) {
-                            chest.open();
-                            moves[0] = "";
-                            break;
-                        }
-                    }
+                if(goal_chest[0] != null) {
+                    goal_chest[0].open();
+                    goal_chest[0] = null;
                 }
             }
         }));
@@ -232,7 +268,23 @@ public class SelectMap {
 
             int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);
             int y = (int) ((event.getSceneY() - AnchorY) / config.Map_Node_Width);
-            moves[0] = FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y));
+
+            // 对箱子的特殊处理
+            if(map.getOrDefault(new Coordinate(x,y),0) == -1) {
+                for(Chest chest: chests) {
+                    if(chest.x == x && chest.y == y) {
+                        goal_chest[0] = chest;
+                        break;
+                    }
+                }
+                Coordinate goal = new Coordinate(x, y);
+                map.put(goal, 0);
+                moves[0] = FindPath.findPath(map, new Coordinate(cat.x, cat.y), goal);
+                map.put(goal, -1);
+                moves[0] = moves[0].substring(0, moves[0].length() - 1);
+            } else{
+                moves[0] = FindPath.findPath(map, new Coordinate(cat.x, cat.y), new Coordinate(x, y));
+            }
             timeline.play();
         });
 
