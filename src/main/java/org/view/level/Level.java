@@ -57,6 +57,9 @@ public abstract class Level {
     public boolean isEnd = false;
 
     public void init() {
+        config.item_hintNumber = user.getItem_hintNumber();
+        config.item_plusNumber = user.getItem_plusNumber();
+        config.item_withdrawNumber = user.getItem_withdrawNumber();
         step = 0;
         isEnd = false;
         if(canvas == null)

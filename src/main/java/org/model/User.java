@@ -12,6 +12,9 @@ public class User {
     private int LevelAtStep;
     private int MaxLevel;
     private int MinTime = -1;
+    private int Item_hintNumber = 3;
+    private int Item_plusNumber = 3;
+    private int Item_withdrawNumber = 3;
     private int MoveCount;
     private int[][] PlayingMap;
 
@@ -39,6 +42,15 @@ public class User {
     public int getMinTime() {
         return MinTime;
     }
+    public int getItem_hintNumber() {
+        return Item_hintNumber;
+    }
+    public int getItem_plusNumber() {
+        return Item_plusNumber;
+    }
+    public int getItem_withdrawNumber() {
+        return Item_withdrawNumber;
+    }
     public void setLevelAt(int levelAt) {
         LevelAt = levelAt;
     }
@@ -50,6 +62,15 @@ public class User {
     }
     public void setMinTime(int minTime) {
         this.MinTime = minTime;
+    }
+    public void setItem_hintNumber(int item_hintNumber) {
+        this.Item_hintNumber = item_hintNumber;
+    }
+    public void setItem_plusNumber(int item_plusNumber) {
+        this.Item_plusNumber = item_plusNumber;
+    }
+    public void setItem_withdrawNumber(int item_withdrawNumber) {
+        this.Item_withdrawNumber = item_withdrawNumber;
     }
 
     public int getMoveCount() {
@@ -72,11 +93,14 @@ public class User {
         return PlayingMap;
     }
 
-    public void update_info(int levelAt, int levelAtStep, int maxLevel, int minTime, int MoveCount, InfiniteMap map){
+    public void update_info(int levelAt, int levelAtStep, int maxLevel, int minTime, int item_hintNumber, int item_plusNumber, int item_withdrawNumber, int MoveCount, InfiniteMap map){
         this.LevelAt = levelAt;
         this.LevelAtStep = levelAtStep;
         this.MaxLevel = maxLevel;
         this.MinTime = minTime;
+        this.Item_hintNumber = item_hintNumber;
+        this.Item_plusNumber = item_plusNumber;
+        this.Item_withdrawNumber = item_withdrawNumber;
         this.MoveCount = MoveCount;
         this.PlayingMap = map.getMatrix();
     }
@@ -90,6 +114,9 @@ public class User {
                 ", LevelAtStep=" + LevelAtStep +
                 ", MaxLevel=" + MaxLevel +
                 ", MinTime=" + MinTime +
+                ", Item_hintNumber=" + Item_hintNumber +
+                ", Item_plusNumber=" + Item_plusNumber +
+                ", Item_withdrawNumber=" + Item_withdrawNumber +
                 ", MoveCount=" + MoveCount +
                 '}';
     } // 调试用
@@ -105,6 +132,9 @@ public class User {
         json.append("\"LevelAtStep\":").append(LevelAtStep).append(",");
         json.append("\"MaxLevel\":").append(MaxLevel).append(",");
         json.append("\"MinTime\":").append(MinTime).append(",");
+        json.append("\"Item_hintNumber\":").append(Item_hintNumber).append(",");
+        json.append("\"Item_plusNumber\":").append(Item_plusNumber).append(",");
+        json.append("\"Item_withdrawNumber\":").append(Item_withdrawNumber).append(",");
         json.append("\"MoveCount\":").append(MoveCount).append(",");
 
         // playing map
@@ -163,6 +193,9 @@ public class User {
         int levelAtStep = Integer.parseInt(jsonMap.get("LevelAtStep"));
         int MaxLevel = Integer.parseInt(jsonMap.get("MaxLevel"));
         int MinTime = Integer.parseInt(jsonMap.get("MinTime"));
+        int Item_hintNumber = Integer.parseInt(jsonMap.get("Item_hintNumber"));
+        int Item_plusNumber = Integer.parseInt(jsonMap.get("Item_plusNumber"));
+        int Item_withdrawNumber = Integer.parseInt(jsonMap.get("Item_withdrawNumber"));
         int MoveCount = Integer.parseInt(jsonMap.get("MoveCount"));
 
         // 处理PlayingMap
@@ -188,6 +221,9 @@ public class User {
         user.LevelAtStep = levelAtStep;
         user.MaxLevel = MaxLevel;
         user.MinTime = MinTime;
+        user.Item_hintNumber = Item_hintNumber;
+        user.Item_plusNumber = Item_plusNumber;
+        user.Item_withdrawNumber = Item_withdrawNumber;
         user.MoveCount = MoveCount;
         user.PlayingMap = playingMap;
 

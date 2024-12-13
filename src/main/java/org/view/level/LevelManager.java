@@ -90,8 +90,15 @@ public class LevelManager {
     }
 
     ImageView item_hint, item_plus, item_withdraw;
+    Text item_hintText, item_plusText, item_withdrawText;
     boolean isDraggingItem = false;
     private void addItem_hint(Pane root){
+        item_hintText = new Text("x" + config.item_hintNumber);
+        item_hintText.setFont(new Font(pixelFont.getName(), 23));
+        item_hintText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        item_hintText.setLayoutX(70);
+        item_hintText.setLayoutY(primaryStage.getHeight() - 63);
+        root.getChildren().add(item_hintText);
         item_hint = new ImageView(new Image(getClass().getResourceAsStream("/images/hint.png"), 40, 40, false, false));
         item_hint.setLayoutX(45);
         item_hint.setLayoutY(primaryStage.getHeight() - 135);
@@ -114,6 +121,13 @@ public class LevelManager {
                     lose_anim.lose();
                 }
                 --config.item_hintNumber;
+                user.setItem_hintNumber(user.getItem_hintNumber() - 1);
+                try{
+                    SavingManager.save();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                item_hintText.setText("x" + config.item_hintNumber);
                 if(config.item_hintNumber == 0) root.getChildren().remove(item_hint);
             }
             isDraggingItem = false;
@@ -125,6 +139,13 @@ public class LevelManager {
     }
 
     private void addItem_plus(Pane root){
+        item_plusText = new Text("x" + config.item_plusNumber);
+        item_plusText.setFont(new Font(pixelFont.getName(), 23));
+        item_plusText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        item_plusText.setLayoutX(130);
+        item_plusText.setLayoutY(primaryStage.getHeight() - 63);
+        root.getChildren().add(item_plusText);
+
         item_plus = new ImageView(new Image(getClass().getResourceAsStream("/images/plus.png"), 40, 40, false, false));
         item_plus.setLayoutX(105);
         item_plus.setLayoutY(primaryStage.getHeight() - 135);
@@ -139,6 +160,13 @@ public class LevelManager {
             if(item_plus.getY() < -50){
                 level.setStepLimit(level.getStepLimit() + 5);
                 --config.item_plusNumber;
+                user.setItem_plusNumber(user.getItem_plusNumber() - 1);
+                try{
+                    SavingManager.save();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                item_plusText.setText("x" + config.item_plusNumber);
                 if(config.item_plusNumber == 0) root.getChildren().remove(item_plus);
             }
             isDraggingItem = false;
@@ -150,6 +178,13 @@ public class LevelManager {
     }
 
     private void addItem_withdraw(Pane root){
+        item_withdrawText = new Text("x" + config.item_withdrawNumber);
+        item_withdrawText.setFont(new Font(pixelFont.getName(), 23));
+        item_withdrawText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        item_withdrawText.setLayoutX(195);
+        item_withdrawText.setLayoutY(primaryStage.getHeight() - 63);
+        root.getChildren().add(item_withdrawText);
+
         item_withdraw = new ImageView(new Image(getClass().getResourceAsStream("/images/withdraw.png"), 40, 40, false, false));
         item_withdraw.setLayoutX(165);
         item_withdraw.setLayoutY(primaryStage.getHeight() - 135);
@@ -166,6 +201,13 @@ public class LevelManager {
                 if(level.player.move_back(level.getMap(), level.boxes, level)){
                     level.addStep(-1);
                     --config.item_withdrawNumber;
+                    user.setItem_withdrawNumber(user.getItem_withdrawNumber() - 1);
+                    try{
+                        SavingManager.save();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    item_withdrawText.setText("x" + config.item_withdrawNumber);
                     if(config.item_withdrawNumber == 0) root.getChildren().remove(item_withdraw);
                 }
             }
@@ -284,23 +326,26 @@ public class LevelManager {
             item_hint.setLayoutY(newValue.doubleValue() - 97);
             item_plus.setLayoutY(newValue.doubleValue() - 97);
             item_withdraw.setLayoutY(newValue.doubleValue() - 97);
+            item_hintText.setLayoutY(newValue.doubleValue() - 63);
+            item_plusText.setLayoutY(newValue.doubleValue() - 63);
+            item_withdrawText.setLayoutY(newValue.doubleValue() - 63);
         });
     }
 
     public void keyPressedEvent(int dx, int dy, int id){
-        if(level.getStep() >= level.getStepLimit()){
-            if(!level.isEnd){
-                Win out_anim = new Win(primaryStage, root);
-                out_anim.outOfLimit();
-            }
-            level.isEnd = true;
-            return;
-        }
         if(level.isEnd) return;
         if(level.isWin()) return; // 目前来看表现正常
         level.player.set_velocity(dx, dy);
         if(!level.player.is_moving){
             if(level.player.move(level.getMap(), level.boxes, level)){
+                if(level.getStep() >= level.getStepLimit()){
+                    if(!level.isEnd){
+                        Win out_anim = new Win(primaryStage, root);
+                        out_anim.outOfLimit();
+                    }
+                    level.isEnd = true;
+                    return;
+                }
                 user.addMoveCount();
                 level.addStep(1);
             }
