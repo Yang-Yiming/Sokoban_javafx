@@ -113,13 +113,15 @@ public class LevelManager {
                     Win lose_anim = new Win(primaryStage, root);
                     lose_anim.lose();
                 }
+                --config.item_hintNumber;
+                if(config.item_hintNumber == 0) root.getChildren().remove(item_hint);
             }
             isDraggingItem = false;
             //回到原来的位置
             item_hint.setX(0);
             item_hint.setY(0);
         });
-        root.getChildren().add(item_hint);
+        if(config.item_hintNumber > 0) root.getChildren().add(item_hint);
     }
 
     private void addItem_plus(Pane root){
@@ -136,13 +138,15 @@ public class LevelManager {
         item_plus.setOnMouseReleased(event -> {
             if(item_plus.getY() < -50){
                 level.setStepLimit(level.getStepLimit() + 5);
+                --config.item_plusNumber;
+                if(config.item_plusNumber == 0) root.getChildren().remove(item_plus);
             }
             isDraggingItem = false;
             //回到原来的位置
             item_plus.setX(0);
             item_plus.setY(0);
         });
-        root.getChildren().add(item_plus);
+        if(config.item_plusNumber > 0) root.getChildren().add(item_plus);
     }
 
     private void addItem_withdraw(Pane root){
@@ -159,14 +163,18 @@ public class LevelManager {
         item_withdraw.setOnMouseReleased(event -> {
             if(item_withdraw.getY() < -50){
 //                撤销操作
-                if(level.player.move_back(level.getMap(), level.boxes, level)) level.addStep(-1);
+                if(level.player.move_back(level.getMap(), level.boxes, level)){
+                    level.addStep(-1);
+                    --config.item_withdrawNumber;
+                    if(config.item_withdrawNumber == 0) root.getChildren().remove(item_withdraw);
+                }
             }
             isDraggingItem = false;
             //回到原来的位置
             item_withdraw.setX(0);
             item_withdraw.setY(0);
         });
-        root.getChildren().add(item_withdraw);
+        if(config.item_withdrawNumber > 0) root.getChildren().add(item_withdraw);
     }
 
     ImageView itemsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/items.png"), 190, 70, false, false));
@@ -467,7 +475,7 @@ public class LevelManager {
         keyPressedEvent(dx, dy, currentLevel);
     }
     public void start() {
-        if(user.getMoveCount() > 0) {
+        if(user.getLevelAtStep() > 0) {
             Alert alert  = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("提示");
             alert.setHeaderText("检测到上次游戏未结束，是否继续？");
@@ -507,12 +515,12 @@ public class LevelManager {
     }
 
     public void save(String s) throws FileNotFoundException {
-        if(user.getMoveCount() > 0) {
+//        if(user.getLevelAtStep() > 0) {
             user.setPlayingMap(level.getMap().getMatrix());
             user.setLevelAt(currentLevel);
             user.setLevelAtStep(level.getStep());
             user.setMaxLevel(Math.max(currentLevel, user.getMaxLevel()));
-        }
+//        }
         SavingManager.save();
         save_text(s);
     }
