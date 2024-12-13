@@ -107,23 +107,28 @@ public class SelectMap {
         int[] dy = new int[]{0, 1, 0, -1, 1, -1, 1, -1};
         for(int i = 0; i < 8; i++) {
             int xx = x + dx[i], yy = y + dy[i];
-            if(map.getOrDefault(new Coordinate(xx, yy), 0) == goal) cnt++;
+            if(xx == 0 && yy == 0) return -1;
+            int get = map.getOrDefault(new Coordinate(xx, yy), 0);
+            if(get == goal) cnt++;
+            if(get == -1 || get > 0) return -1; // 让目标点和宝箱周围无障碍
         }
         return cnt;
     }
 
 
-    final int WATER = 30, ROCK = 10;
+    final int WATER = 70, ROCK = 25;
     void generate_obstacle(int begin_x, int begin_y, int end_x, int end_y, int times) {
 //        if(true) return;
         for(int i = 0; i < WATER; i++) {
             int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
             int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            if(map.containsKey(new Coordinate(x, y))) continue;
             map.put(new Coordinate(x, y), -3);
         }
         for(int i = 0; i < ROCK; i++) {
             int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
             int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            if(map.containsKey(new Coordinate(x, y))) continue;
             map.put(new Coordinate(x,y), -2);
         }
 
@@ -133,18 +138,25 @@ public class SelectMap {
                     int cnt_water = count(xx, yy, -3);
                     int cnt_rock = count(xx, yy, -2);
                     Coordinate now = new Coordinate(xx, yy);
-                    if(cnt_water >= 3 && Math.random() < 0.6) {
-                        map.put(now, -3);
-                    }
-                    if(cnt_rock >= 4 && Math.random() < 0.4) {
-                        map.put(now, -2);
-                    }
-                    if(cnt_water <= 2 && map.getOrDefault(now,0) == -3 && Math.random() < 0.5){
+                    if(cnt_rock < 0 || cnt_water < 0){
                         map.remove(now);
+                        continue;
+                    }
+                    if (cnt_water <= 1 && map.getOrDefault(now, 0) == -3) {
+                        map.remove(now);
+                    }
+
+                    if(times >= 2) { // 最后几次用来清理
+                        if (cnt_water >= 3 && Math.random() < 0.3) {
+                            map.put(now, -3);
+                        }
+                        if (cnt_rock >= 5 && Math.random() < 0.7) {
+                            map.put(now, -2);
+                        }
                     }
                 }
             }
-            remove_all(begin_x, 7, end_x, 10);
+//            random_remove(begin_x, 0, end_x, MapNode.YRange, 10);
         }
     }
     void remove_all(int begin_x, int begin_y, int end_x, int end_y) {
@@ -154,6 +166,14 @@ public class SelectMap {
             }
         }
     }
+    void random_remove(int begin_x, int begin_y, int end_x, int end_y, int NUM) {
+        for(int i = 0; i < NUM; i++) {
+            int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
+            int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            map.remove(new Coordinate(x, y));
+        }
+    }
+
     void fill_all(int begin_x, int begin_y, int end_x, int end_y, int item) {
         for(int i = begin_x; i < end_x; i++) {
             for(int j = begin_y; j < end_y; j++) {
@@ -174,18 +194,18 @@ public class SelectMap {
             map.put(new Coordinate(node.x, node.y), i + 1);
         }
 
+        // 宝箱
+        if(chests == null) chests = new ArrayList<>();
+        chests.add(new Chest(2,2, root));
+        map.put(new Coordinate(2, 2), -1);
+
         // 障碍
         int left_x = -(int)(AnchorX / config.Map_Node_Width);
         int right_x = (int)((scene.getWidth() - AnchorX) / config.Map_Node_Width);
         int up_y = -(int)(AnchorY / config.Map_Node_Width);
         int down_y = (int)((scene.getHeight() - AnchorY) / config.Map_Node_Width);
 
-        generate_obstacle(left_x-1, up_y-1, right_x-1, down_y-1, 10);
-
-        // 宝箱
-        if(chests == null) chests = new ArrayList<>();
-        chests.add(new Chest(2,2));
-        map.put(new Coordinate(2, 2), -1);
+        generate_obstacle(left_x-1, up_y-1, right_x-1, down_y-1, 20);
     }
 
     public void draw() {
