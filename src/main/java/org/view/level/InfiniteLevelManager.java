@@ -25,6 +25,7 @@ import org.view.menu.MenuController;
 import org.view.menu.Settings;
 import org.view.menu.Theme;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -36,6 +37,10 @@ public class InfiniteLevelManager {
     private InfiniteLevel level;
     private User user;
     MenuController controller;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public InfiniteLevelManager(Stage primaryStage, MenuController controller) {
         this.root = new Pane();
@@ -86,7 +91,18 @@ public class InfiniteLevelManager {
                 level.stopTimelines();
                 //结算画面
                 Home home = new Home();
-                home.account(root, primaryStage, controller, level.start_time, level.level_past);
+                int useTime = -1;
+                if(level.level_past != 0) useTime = (int)(System.currentTimeMillis() - level.start_time) / 1000 / level.level_past;
+                if(useTime != -1){
+                    if(user.getMinTime() == -1) user.setMinTime(useTime);
+                    else user.setMinTime(Math.min(user.getMinTime(), useTime));
+                }
+                try{
+                    SavingManager.save();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                home.account(root, primaryStage, controller, useTime);
             }
             else return;
 

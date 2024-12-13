@@ -11,6 +11,7 @@ public class User {
     private int LevelAt;
     private int LevelAtStep;
     private int MaxLevel;
+    private int MinTime = -1;
     private int MoveCount;
     private int[][] PlayingMap;
 
@@ -35,6 +36,9 @@ public class User {
     public int getMaxLevel() {
         return MaxLevel;
     }
+    public int getMinTime() {
+        return MinTime;
+    }
     public void setLevelAt(int levelAt) {
         LevelAt = levelAt;
     }
@@ -43,6 +47,9 @@ public class User {
     }
     public void setMaxLevel(int maxLevel) {
         MaxLevel = maxLevel;
+    }
+    public void setMinTime(int minTime) {
+        this.MinTime = minTime;
     }
 
     public int getMoveCount() {
@@ -65,10 +72,11 @@ public class User {
         return PlayingMap;
     }
 
-    public void update_info(int levelAt, int levelAtStep, int maxLevel, int MoveCount, InfiniteMap map){
+    public void update_info(int levelAt, int levelAtStep, int maxLevel, int minTime, int MoveCount, InfiniteMap map){
         this.LevelAt = levelAt;
         this.LevelAtStep = levelAtStep;
         this.MaxLevel = maxLevel;
+        this.MinTime = minTime;
         this.MoveCount = MoveCount;
         this.PlayingMap = map.getMatrix();
     }
@@ -81,6 +89,7 @@ public class User {
                 ", LevelAt=" + LevelAt +
                 ", LevelAtStep=" + LevelAtStep +
                 ", MaxLevel=" + MaxLevel +
+                ", MinTime=" + MinTime +
                 ", MoveCount=" + MoveCount +
                 '}';
     } // 调试用
@@ -95,6 +104,7 @@ public class User {
         json.append("\"LevelAt\":").append(LevelAt).append(",");
         json.append("\"LevelAtStep\":").append(LevelAtStep).append(",");
         json.append("\"MaxLevel\":").append(MaxLevel).append(",");
+        json.append("\"MinTime\":").append(MinTime).append(",");
         json.append("\"MoveCount\":").append(MoveCount).append(",");
 
         // playing map
@@ -152,6 +162,7 @@ public class User {
         int levelAt = Integer.parseInt(jsonMap.get("LevelAt"));
         int levelAtStep = Integer.parseInt(jsonMap.get("LevelAtStep"));
         int MaxLevel = Integer.parseInt(jsonMap.get("MaxLevel"));
+        int MinTime = Integer.parseInt(jsonMap.get("MinTime"));
         int MoveCount = Integer.parseInt(jsonMap.get("MoveCount"));
 
         // 处理PlayingMap
@@ -176,6 +187,7 @@ public class User {
         user.LevelAt = levelAt;
         user.LevelAtStep = levelAtStep;
         user.MaxLevel = MaxLevel;
+        user.MinTime = MinTime;
         user.MoveCount = MoveCount;
         user.PlayingMap = playingMap;
 
@@ -199,14 +211,14 @@ public class User {
         if(json == null || json.isEmpty() || json.equals("[]")) {
             return;
         }
-        System.out.println(json);
+//        System.out.println(json);
         json = json.substring(1, json.length() - 1); // 去除[]
         String[] userStrs = json.split("},"); // 以}分割
 
         for (String userStr : userStrs) {
             if(userStr.charAt(userStr.length() - 1) != '}')
                 userStr += "}";
-            System.out.println(userStr);
+//            System.out.println(userStr);
             User user = User.fromJSON(userStr); // 自动加入到UserInfo
         }
     }

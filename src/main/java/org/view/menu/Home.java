@@ -106,7 +106,7 @@ public class Home {
             root.getChildren().remove(home);
         });
     }
-    public void account(Pane root, Stage primaryStage, MenuController controller, long start_time, int level_past) {
+    public void account(Pane root, Stage primaryStage, MenuController controller, int useTime) {
         //变暗
         shade = new Rectangle(0, 0, root.getWidth(), root.getHeight());
         shade.setFill(Color.rgb(0, 0, 0, 0.5));
@@ -116,13 +116,19 @@ public class Home {
         paper.setY(50);
         root.getChildren().add(paper);
 //        标题
-        Text homeText;
-        if(level_past == 0) homeText = new Text(280, 150.0, "乐 还没过关");
-        else homeText = new Text(250, 150.0, "平均用时 " + (System.currentTimeMillis() - start_time) / 1000 / level_past + " 秒");
+        Text homeText1;
+        if(useTime == -1) homeText1 = new Text(280, 150.0, "乐 还没过关");
+        else homeText1 = new Text(250, 150.0, "平均用时 " + useTime + " 秒");
+        homeText1.setFill(javafx.scene.paint.Color.web("#55371d"));
+        homeText1.setFont(new Font(pixelFont.getName(), 40));
+        root.getChildren().add(homeText1);
 
-        homeText.setFill(javafx.scene.paint.Color.web("#55371d"));
-        homeText.setFont(new Font(pixelFont.getName(), 45));
-        root.getChildren().add(homeText);
+        Text homeText2;
+        if(controller.get_user().getMinTime() == -1) homeText2 = new Text(250, 200.0, "还没有最短记录");
+        else homeText2 = new Text(250, 200.0, "最短记录 " + controller.get_user().getMinTime() + " 秒");
+        homeText2.setFill(javafx.scene.paint.Color.web("#55371d"));
+        homeText2.setFont(new Font(pixelFont.getName(), 40));
+        root.getChildren().add(homeText2);
 
         //返回主页按钮
         Button home = new Button("结束");
@@ -149,7 +155,8 @@ public class Home {
         close.setOnMouseClicked(event -> {
             root.getChildren().remove(shade);
             root.getChildren().remove(paper);
-            root.getChildren().remove(homeText);
+            root.getChildren().remove(homeText1);
+            root.getChildren().remove(homeText2);
 //            root.getChildren().remove(close);
             root.getChildren().remove(home);
         });

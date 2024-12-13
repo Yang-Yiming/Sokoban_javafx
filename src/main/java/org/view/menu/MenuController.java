@@ -153,6 +153,7 @@ public class MenuController {
 
     public void startInfiniteLevel() {
         InfiniteLevelManager manager = new InfiniteLevelManager(primaryStage, this);
+        manager.setUser(user);
         manager.start();
         primaryStage.show();
     }
