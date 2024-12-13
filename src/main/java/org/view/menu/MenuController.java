@@ -48,54 +48,54 @@ public class MenuController {
 //    private Button StartButton;
 
 //    @FXML
-    void LoginButtonClicked() {
-        try{
-            // 加载登陆窗口fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-            Parent root = loader.load();
-            LoginController loginController = loader.getController();
-            Scene scene  = new Scene(root);
+//    void LoginButtonClicked() {
+//        try{
+//            // 加载登陆窗口fxml
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+//            Parent root = loader.load();
+//            LoginController loginController = loader.getController();
+//            Scene scene  = new Scene(root);
+//
+//            // 创建一个新的stage用于显示登陆窗口
+//            Stage loginStage = new Stage();
+//            loginStage.initStyle(StageStyle.TRANSPARENT);
+//            loginStage.initModality(Modality.APPLICATION_MODAL);
+//            // 将登陆窗口的stage传给controller
+//            loginController.initialize(loginStage, primaryStage, this);
+//
+//            ChangeStageAnim(scene, loginStage, primaryStage);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            // 创建一个新的stage用于显示登陆窗口
-            Stage loginStage = new Stage();
-            loginStage.initStyle(StageStyle.TRANSPARENT);
-            loginStage.initModality(Modality.APPLICATION_MODAL);
-            // 将登陆窗口的stage传给controller
-            loginController.initialize(loginStage, primaryStage, this);
-
-            ChangeStageAnim(scene, loginStage, primaryStage);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void open_settings(Stage primaryStage) {
-        try{
-            // 加载设置窗口fxml
-            FXMLLoader loader = new FXMLLoader(MenuController.class.getResource("/fxml/Settings.fxml"));
-            Parent root = loader.load();
-            SettingController settingController = loader.getController();
-            Scene scene = new Scene(root);
-
-            // 创建一个新的stage用于显示设置窗口
-            Stage settingStage = new Stage();
-            settingStage.initStyle(StageStyle.TRANSPARENT);
-            settingStage.initModality(Modality.APPLICATION_MODAL);
-            // 将设置窗口的stage传给controller
-            settingController.initialize(settingStage, primaryStage);
-
-            ChangeStageAnim(scene, settingStage, primaryStage);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void open_settings(Stage primaryStage) {
+//        try{
+//            // 加载设置窗口fxml
+//            FXMLLoader loader = new FXMLLoader(MenuController.class.getResource("/fxml/Settings.fxml"));
+//            Parent root = loader.load();
+//            SettingController settingController = loader.getController();
+//            Scene scene = new Scene(root);
+//
+//            // 创建一个新的stage用于显示设置窗口
+//            Stage settingStage = new Stage();
+//            settingStage.initStyle(StageStyle.TRANSPARENT);
+//            settingStage.initModality(Modality.APPLICATION_MODAL);
+//            // 将设置窗口的stage传给controller
+//            settingController.initialize(settingStage, primaryStage);
+//
+//            ChangeStageAnim(scene, settingStage, primaryStage);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 //    @FXML
-    public void SettingButtonClicked() {
-        open_settings(primaryStage);
-    }
+//    public void SettingButtonClicked() {
+//        open_settings(primaryStage);
+//    }
 
     public static void ChangeStageAnim(Scene scene, Stage newStage, Stage primaryStage) { // 用于login 和 setting这两个从右侧滑过来的模块
         // 将背景设置为透明

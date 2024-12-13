@@ -27,7 +27,7 @@ public class Theme {
         themeImageView.setFitHeight(30);
         themeButton.setGraphic(themeImageView);
         themeButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
-        themeButton.setLayoutX(580.0);
+        themeButton.setLayoutX(root.getWidth() - 220);
         themeButton.setLayoutY(35.0);
         themeButton.setMaxSize(30, 30);
         themeButton.setOnMouseClicked(event -> {
