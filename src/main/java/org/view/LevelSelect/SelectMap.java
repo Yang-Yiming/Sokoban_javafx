@@ -135,9 +135,12 @@ public class SelectMap {
         while(times-- > 0) {
             for(int xx = begin_x; xx < end_x; xx++) {
                 for(int yy = begin_y; yy < end_y; yy++) {
+                    Coordinate now = new Coordinate(xx, yy);
+                    if(map.getOrDefault(now,0) == -1 || map.getOrDefault(now, 0)>0)
+                        continue;
+
                     int cnt_water = count(xx, yy, -3);
                     int cnt_rock = count(xx, yy, -2);
-                    Coordinate now = new Coordinate(xx, yy);
                     if(cnt_rock < 0 || cnt_water < 0){
                         map.remove(now);
                         continue;
