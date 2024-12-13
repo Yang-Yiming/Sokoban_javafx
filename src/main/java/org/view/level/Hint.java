@@ -20,7 +20,7 @@ public class Hint {
     }
 
     public void autoMove(){
-        moves = level.solve_moves();
+        moves = level.solve_moves(level.map);
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), e -> {
             if(moves.isEmpty()) {
                 return;

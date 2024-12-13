@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.data.mapdata;
@@ -72,16 +73,19 @@ public class LevelManager {
 
         InLevel(id);
     }
-    public void loadLevel(int id, int[][] mapmatrix) {
+    public void loadLevel(int id, int step, int[][] mapmatrix) {
         root.getChildren().clear();
         root.setLayoutX(0); root.setLayoutY(0);
         currentLevel = id;
         Pane rootLevel = new Pane();
         root.getChildren().add(rootLevel);
         level = new NormalLevel(rootLevel, mapmatrix, primaryStage, currentLevel, user);
+        level.step = step;
+        level.stepText.setText("移动步数: " + step);
         scene = primaryStage.getScene();
         scene.setRoot(root); // 这样应该就算是一个完全新的scene了吧
 
+//        System.out.println(step);
         InLevel(id);
     }
 
@@ -305,6 +309,8 @@ public class LevelManager {
             Win_anim.sequentialTransition.setOnFinished(ev -> {
                 level.stopTimelines();
                 user.setLevelAt(Math.max(++currentLevel, user.getLevelAt()));
+//                System.out.println(level.getStep());
+                user.setLevelAtStep(level.getStep());
                 user.setMoveCount(0);
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
 
@@ -466,9 +472,12 @@ public class LevelManager {
             alert.setTitle("提示");
             alert.setHeaderText("检测到上次游戏未结束，是否继续？");
             alert.setContentText("选择\"是\"继续游戏，选择\"否\"从选关界面开始");
+            alert.initOwner(primaryStage); // 设置提示窗口的所有者为主窗口
+            alert.initModality(Modality.APPLICATION_MODAL); // 设置提示窗口为模态窗口
+
             ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
             if(result == ButtonType.OK) {
-                loadLevel(user.getLevelAt(), user.getPlayingMap());
+                loadLevel(user.getLevelAt(), user.getLevelAtStep(), user.getPlayingMap());
                 return;
             } else {
                 user.setMoveCount(0);
@@ -500,6 +509,8 @@ public class LevelManager {
     public void save(String s) throws FileNotFoundException {
         if(user.getMoveCount() > 0) {
             user.setPlayingMap(level.getMap().getMatrix());
+            user.setLevelAt(Math.max(currentLevel, user.getLevelAt()));
+            user.setLevelAtStep(level.getStep());
         }
         SavingManager.save();
         save_text(s);

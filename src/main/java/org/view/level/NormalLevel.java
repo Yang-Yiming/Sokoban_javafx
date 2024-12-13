@@ -12,6 +12,8 @@ import org.model.Solve.Solve;
 import org.model.User;
 import org.model.config;
 
+import java.util.Map;
+
 public class NormalLevel extends Level {
 
     private boolean default_map = true;
@@ -28,6 +30,9 @@ public class NormalLevel extends Level {
         double beginTime = System.currentTimeMillis();
         solve.aStarSearch();
         double solve_time = System.currentTimeMillis() - beginTime;
+
+        //用 a* 跑出步数限制 先 +5
+        if(super.stepLimit == -1) super.stepLimit = solve_moves(new MapMatrix(mapdata.maps[id])).length() + 5;
 
         super.init();
 

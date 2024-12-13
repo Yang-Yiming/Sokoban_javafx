@@ -31,7 +31,7 @@ import java.util.HashMap;
 public abstract class Level {
 
     public GameMap map;
-    
+
     public Pane root;
     org.view.game.player player;
     ArrayList<box> boxes;
@@ -57,9 +57,8 @@ public abstract class Level {
     public boolean isEnd = false;
 
     public void init() {
+        step = 0;
         isEnd = false;
-        //用 a* 跑出步数限制 先 +5
-        if(stepLimit == 0) stepLimit = solve_moves().length() + 5;
         if(canvas == null)
             canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
 
@@ -161,7 +160,7 @@ public abstract class Level {
     }
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 20);
     Text idText, stepText, stepLimitText;
-    private int step, stepLimit = 0;
+    public int step, stepLimit = -1;
     public int getStep(){
         return step;
     }
@@ -188,7 +187,6 @@ public abstract class Level {
         idText.setFont(new Font(pixelFont.getName(), 25));
         root.getChildren().add(idText);
 
-        step = 0;
         stepText = new Text("移动步数: " + step);
         stepText.setX(40);
         stepText.setY(100);
@@ -352,7 +350,7 @@ public abstract class Level {
         return true;
     }
 
-    public String solve_moves() {
+    public String solve_moves(GameMap map) {
         solve = new Solve(map);
         if(!config.auto_check_fail && !config.this_is_hint)
             return solve.simple_search()? "N":" ";
@@ -360,7 +358,7 @@ public abstract class Level {
         return solve.aStarSearch();
     }
     public char solve_next_move() {
-        String solution = solve_moves();
+        String solution = solve_moves(map);
         if(solution.isEmpty()) return 'E'; // 赢了
         return solution.charAt(0);
     }
