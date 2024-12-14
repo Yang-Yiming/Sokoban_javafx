@@ -271,8 +271,10 @@ public class LevelManager {
                 }
             }
             else if(code == KeyCode.U) { // 为了防止到时候忘删先删了（）
-//                Hint hint = new Hint(level);
-//                hint.autoMove();
+                config.this_is_hint = true;
+                Hint hint = new Hint(level);
+                hint.autoMove();
+                config.this_is_hint = false;
             } else if(code == KeyCode.J) {
 //                Hint hint = new Hint(level);
 //                hint.autoMoveOnce();

@@ -245,9 +245,23 @@ public class InfiniteLevelManager {
                 int x = (last_right + last_left - RoadWidth) / 2;
                 int y = last_down + RoadLength;
                 add_level(x, y, data);
-                level.getMap().set(x + data[0].length / 2 - 1, y,0);
-                level.getMap().set(x + data[0].length / 2 - 1, y + 1,0);
-                level.getMap().set(x + data[0].length / 2 - 3, y,1);
+                int xx, yy;
+                xx = x + data[0].length / 2; yy = y;
+                while(level.getMap().get(xx, yy) == 0) ++yy;
+                while(level.getMap().get(xx, yy) == 1){
+                    level.getMap().set(xx, yy, 0);
+                    ++yy;
+                }
+                xx = x + data[0].length / 2 - 2; yy = y;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    ++yy;
+                }
+                xx = x + data[0].length / 2 + 2; yy = y;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    ++yy;
+                }
             } case UP -> {
                 int x = last_right + last_left - data[0].length/2;
                 int y = last_up - RoadLength;

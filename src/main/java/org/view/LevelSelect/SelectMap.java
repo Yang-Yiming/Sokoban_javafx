@@ -115,6 +115,34 @@ public class SelectMap {
         return cnt;
     }
 
+    int count1(int x, int y, int goal) {
+        int cnt = 0;
+        int[] dx = new int[]{1, 0, -1, 0};
+        int[] dy = new int[]{0, 1, 0, -1};
+        for(int i = 0; i < 4; i++) {
+            int xx = x + dx[i], yy = y + dy[i];
+            if(xx == 0 && yy == 0) return -1;
+            int get = map.getOrDefault(new Coordinate(xx, yy), 0);
+            if(get == goal) cnt++;
+            if(get == -1 || get > 0) return -1; // 让目标点和宝箱周围无障碍
+        }
+        return cnt;
+    }
+
+    int count2(int x, int y, int goal) {
+        int cnt = 0;
+        int[] dx = new int[]{2, 0, -2, 0, 1, 1, -1, -1};
+        int[] dy = new int[]{0, 2, 0, -2, 1, -1, 1, -1};
+        for(int i = 0; i < 8; i++) {
+            int xx = x + dx[i], yy = y + dy[i];
+            if(xx == 0 && yy == 0) return -1;
+            int get = map.getOrDefault(new Coordinate(xx, yy), 0);
+            if(get == goal) cnt++;
+            if(get == -1 || get > 0) return -1; // 让目标点和宝箱周围无障碍
+        }
+        return cnt;
+    }
+
 
     final int WATER = 70, ROCK = 25;
     void generate_obstacle(int begin_x, int begin_y, int end_x, int end_y, int times) {
@@ -132,7 +160,7 @@ public class SelectMap {
             map.put(new Coordinate(x,y), -2);
         }
 
-        while(times-- > 0) {
+        while(times --> 0) { // 时间趋近于0
             for(int xx = begin_x; xx < end_x; xx++) {
                 for(int yy = begin_y; yy < end_y; yy++) {
                     Coordinate now = new Coordinate(xx, yy);
@@ -212,7 +240,7 @@ public class SelectMap {
     }
 
     public void draw() {
-        root.getChildren().clear(); root.setStyle("-fx-background-color: #FFFFFF");
+        root.getChildren().clear(); root.setStyle("-fx-background-color: #7C9920");
         scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
         root.setLayoutX(0); root.setLayoutY(0); // 设置根节点的位置
 
@@ -230,9 +258,15 @@ public class SelectMap {
                 root.getChildren().add(rect);
             }
             // water ?
+            Color deepBlue = Color.web("4c6e78");
+            Color blue = Color.web("5d9798");
+            Color lightBlue = Color.web("77ad9d");
             if(map.get(c) == -3) {
                 Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
-                rect.setFill(Color.BLUE);
+                //如果在边界上，就是深蓝色
+                if(count1(c.x, c.y, -3) < 4) rect.setFill(deepBlue);
+                else if(count2(c.x, c.y, -3) < 8) rect.setFill(blue);
+                else rect.setFill(lightBlue);
                 root.getChildren().add(rect);
             }
         }

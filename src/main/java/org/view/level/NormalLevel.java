@@ -32,7 +32,9 @@ public class NormalLevel extends Level {
         double solve_time = System.currentTimeMillis() - beginTime;
 
         //用 a* 跑出步数限制 先 +5
+        config.this_is_hint = true;
         if(super.stepLimit == -1) super.stepLimit = solve_moves(new MapMatrix(mapdata.maps[id])).length() + 5;
+        config.this_is_hint = false;
 
         super.init();
 
