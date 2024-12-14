@@ -240,6 +240,16 @@ public class SelectMap {
         generate_obstacle(left_x-1, up_y-1, right_x-1, down_y-1, 20);
     }
 
+    Image rock1_img = new Image(getClass().getResourceAsStream("/images/bush/Snow_bush1.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image rock2_img = new Image(getClass().getResourceAsStream("/images/bush/Snow_bush2.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image rock3_img = new Image(getClass().getResourceAsStream("/images/bush/Snow_bush3.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Color deepBlue = Color.web("4c6e78");
+    Color blue = Color.web("5d9798");
+    Color lightBlue = Color.web("77ad9d");
+    Image lily1_img = new Image(getClass().getResourceAsStream("/images/bush/lily1.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image lily2_img = new Image(getClass().getResourceAsStream("/images/bush/lily2.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image lily3_img = new Image(getClass().getResourceAsStream("/images/bush/lily3.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+
     public void draw() {
         root.getChildren().clear(); root.setStyle("-fx-background-color: #7C9920");
         scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
@@ -247,25 +257,40 @@ public class SelectMap {
 
         //画背景
         Rectangle background = new Rectangle(0,0,config.ScreenWidth, config.ScreenHeight);
-        background.setFill(Color.WHITE);
+        background.setFill(Color.web("#7C9920"));
         root.getChildren().add(background);
 
         // 画障碍
         for(Coordinate c: map.keySet()) {
             // rock ?
             if(map.get(c) == -2) {
-                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
-                rect.setFill(Color.BLACK);
-                root.getChildren().add(rect);
+                ImageView rock1 = new ImageView(rock1_img);
+                ImageView rock2 = new ImageView(rock2_img);
+                ImageView rock3 = new ImageView(rock3_img);
+//                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+//                rect.setFill(Color.BLACK);
+//                root.getChildren().add(rect);
+                //随机放置障碍
+                int res = Grass.myRand(c.x * c.x, c.y * c.y, 0, 1, 30);
+                if(res < 11) {
+                    rock1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+                    rock1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+                    root.getChildren().add(rock1);
+                } else if(res < 21) {
+                    rock2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+                    rock2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+                    root.getChildren().add(rock2);
+                } else{
+                    rock3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+                    rock3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+                    root.getChildren().add(rock3);
+                }
             }
             // water ?
-            Color deepBlue = Color.web("4c6e78");
-            Color blue = Color.web("5d9798");
-            Color lightBlue = Color.web("77ad9d");
-            ImageView lily1 = new ImageView(new Image(getClass().getResourceAsStream("/images/bush/lily1.png"), config.Map_Node_Width, config.Map_Node_Width, false, false));
-            ImageView lily2 = new ImageView(new Image(getClass().getResourceAsStream("/images/bush/lily2.png"), config.Map_Node_Width, config.Map_Node_Width, false, false));
-            ImageView lily3 = new ImageView(new Image(getClass().getResourceAsStream("/images/bush/lily3.png"), config.Map_Node_Width, config.Map_Node_Width, false, false));
             if(map.get(c) == -3) {
+                ImageView lily1 = new ImageView(lily1_img);
+                ImageView lily2 = new ImageView(lily2_img);
+                ImageView lily3 = new ImageView(lily3_img);
                 Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
                 //如果在边界上，就是深蓝色
                 if(count1(c.x, c.y, -3) < 4) rect.setFill(deepBlue);
