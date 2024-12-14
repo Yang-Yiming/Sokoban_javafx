@@ -594,17 +594,24 @@ public class LevelManager {
         primaryStage.setTitle("Sokoban");
         primaryStage.show();
     }
-
+    Pane level_menu_root;
     public void showLevelMenu() {
         root.getChildren().clear();
         root.setLayoutX(0); root.setLayoutY(0);
-        Pane level_menu_root = new Pane();
-        root.getChildren().add(level_menu_root);
-        level_menu = new SelectMap(primaryStage, level_menu_root, root);
+        if(level_menu_root == null){
+            System.out.println("new level_menu_root");
+            level_menu_root = new Pane();
+            level_menu = new SelectMap(primaryStage, level_menu_root, root);
+            scene = primaryStage.getScene();
+            scene.setRoot(root);
+            level_menu.add_levels(maps, user);
+            level_menu.update();
+        }
+        SelectMap.AnchorX = scene.getWidth() / 2 - 100;
+        SelectMap.AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
         scene = primaryStage.getScene();
         scene.setRoot(root);
-        level_menu.add_levels(maps, user);
-        level_menu.update();
+        root.getChildren().add(level_menu_root);
         InLevelMenu();
     }
 

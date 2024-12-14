@@ -28,7 +28,6 @@ class Cat {
     Image cat_stand_front = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_front.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     Image cat_stand_back = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_back.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     ImageView imageView;
-    User user;
     int x, y;
     public Cat() {
         imageView = new ImageView(cat_stand);
@@ -88,7 +87,6 @@ public class SelectMap {
     private Stage stage;
     private Scene scene;
     private Pane root;
-    private Pane superRoot;
     private Cat cat;
     private HashMap<Coordinate, Integer> map;
     private Random rand;
@@ -97,24 +95,36 @@ public class SelectMap {
     private ArrayList<MapNode> nodes;
     private ArrayList<Chest> chests;
 
-    public SelectMap(Stage stage, Pane root, Pane superRoot) {
+    public SelectMap(Stage stage, Pane root) {
         this.root = root;
         this.stage = stage;
         this.scene = stage.getScene();
-        this.superRoot = superRoot;
-//        this.scene = new Scene(root);
 
-        //画一个长方形
-//        Rectangle background = new Rectangle(0,0,config.ScreenWidth, config.ScreenHeight);
-//        background.setFill(Color.web("#7C9920"));
-//        root.getChildren().add(background);
+        //设置背景颜色
+        scene.setFill(Color.web("#7C9920"));
+        s
 
-        cat = new Cat();
-        setSeed(2);
-        AnchorX = scene.getWidth() / 2 - 100;
-        AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
+//        cat = new Cat();
+//        setSeed(2);
+//        AnchorX = scene.getWidth() / 2 - 100;
+//        AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
+//
+//        init();
+    }
+
+    public void init() {
+//        this.stage = stage;
         setSeed(seed);
         map = new HashMap<>();
+//        if(stage.getScene() != null){
+//        this.scene = stage.getScene();
+//        scene.setRoot(root);
+//            this.root = new Pane();
+//            this.root = (Pane) scene.getRoot();
+//        } else {
+//            this.root = new Pane();
+//            this.scene = new Scene(root);
+//        }
     }
 
     public double rand() {
@@ -248,7 +258,7 @@ public class SelectMap {
 
         // 宝箱
         if(chests == null) chests = new ArrayList<>();
-        chests.add(new Chest(2,2, root, user));
+        chests.add(new Chest(2,2, root));
         map.put(new Coordinate(2, 2), -1);
 
         // 障碍
@@ -309,13 +319,28 @@ public class SelectMap {
         for(Coordinate c: map.keySet()) {
             // rock ?
             if(map.get(c) == -2) {
+//                ImageView rock1 = new ImageView(rock1_img);
+//                ImageView rock2 = new ImageView(rock2_img);
+//                ImageView rock3 = new ImageView(rock3_img);
+//                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+//                rect.setFill(Color.BLACK);
+//                root.getChildren().add(rect);
                 //随机放置障碍
                 int res = Rand.myRand(c.x * c.x, c.y * c.y, 0, 1, 30);
                 if(res < 11) {
+//                    rock1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    rock1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(rock1);
                     canvas.getGraphicsContext2D().drawImage(rock1_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else if(res < 21) {
+//                    rock2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    rock2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(rock2);
                     canvas.getGraphicsContext2D().drawImage(rock2_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else{
+//                    rock3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    rock3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(rock3);
                     canvas.getGraphicsContext2D().drawImage(rock3_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 }
             }
@@ -325,11 +350,29 @@ public class SelectMap {
                 gc.setFill(waterColor);
                 gc.fillRect(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
 
+//                ImageView lily1 = new ImageView(lily1_img);
+//                ImageView lily2 = new ImageView(lily2_img);
+//                ImageView lily3 = new ImageView(lily3_img);
+//                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+                //如果在边界上，就是深蓝色
+//                if(count1(c.x, c.y, -3) < 4) rect.setFill(deepBlue);
+//                else if(count2(c.x, c.y, -3) < 8) rect.setFill(blue);
+//                else rect.setFill(lightBlue);
+//                root.getChildren().add(rect);
                 if(Rand.myRand(c.x, c.y, 0, 0, 50) < 1) {
+//                    lily1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    lily1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(lily1);
                     canvas.getGraphicsContext2D().drawImage(lily1_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else if(Rand.myRand(c.x, c.y, 1, 0, 50) < 1) {
+//                    lily2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    lily2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(lily2);
                     canvas.getGraphicsContext2D().drawImage(lily2_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else if(Rand.myRand(c.x, c.y, 2, 0, 50) < 1) {
+//                    lily3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    lily3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(lily3);
                     canvas.getGraphicsContext2D().drawImage(lily3_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 }
             }
@@ -350,6 +393,7 @@ public class SelectMap {
             node.stackPane.setLayoutX(AnchorX + node.x * config.Map_Node_Width);
             node.stackPane.setLayoutY(AnchorY + node.y * config.Map_Node_Width);
             root.getChildren().add(node.stackPane);
+//            canvas.getGraphicsContext2D().drawImage(goal_img, AnchorX + node.x * config.Map_Node_Width, AnchorY + node.y * config.Map_Node_Width);
 
         }
 
@@ -414,7 +458,7 @@ public class SelectMap {
                     });
                 }
                 if(goal_chest[0] != null) {
-                    goal_chest[0].open(superRoot);
+                    goal_chest[0].open();
                     goal_chest[0] = null;
                 }
                 timeline.stop();
