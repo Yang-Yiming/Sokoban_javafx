@@ -12,8 +12,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.model.Rand;
 import org.model.config;
 import org.view.level.LevelManager;
+
+import java.util.Random;
 
 public class MapNode {
 
@@ -89,7 +92,7 @@ public class MapNode {
 
         //this.y = Grass.myRand(index, index * 31, (index - 17) * 3, -YRange, YRange);
         this.x = index * 3;
-        this.y = (int)(Math.random() * YRange);
+        this.y = (int)(Rand.next_double() * YRange);
     }
 
     public void action() {

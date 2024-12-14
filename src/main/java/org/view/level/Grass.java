@@ -12,31 +12,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.util.Duration;
 import org.model.config;
 
-public class Grass {
+public class Grass extends org.model.Rand {
     public Grass() {
     }
-    public static int myRand(int a, int b, int c, int l, int r){
-        int randomNumber = generatePseudoRandom(a, b, c);
-//        System.out.println(a + " " + b + " " + c + " " + randomNumber);
-        return (randomNumber % (r - l + 1)) + l;
-    }
+
     public static Color randColor(int dx, int dy){
         // 没学号可用了，就用这个吧
         int R = (int)(config.themeColor.getRed() * 255) + myRand(dx, dy, 1, -10, 10);
         int G = (int)(config.themeColor.getGreen() * 255) + myRand(dx, dy, 2, -10, 10);
         int B = (int)(config.themeColor.getBlue() * 255) + myRand(dx, dy, 3, -10, 10);
         return Color.rgb(R, G, B);
-    }
-    public static int generatePseudoRandom(int x, int y, int z) {
-        // 使用XORShift算法生成伪随机数
-        x ^= x << 6;
-        y ^= y << 5;
-        z ^= z << 4;
-        x ^= x >> 7;
-        y ^= y >> 3;
-        z ^= z >> 1;
-        int result = (x ^ y ^ z);
-        return result;
     }
     public static int grasstimeid = 0;
     private static int[] grassMove = {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, -1, -1, -1, -1, -1};

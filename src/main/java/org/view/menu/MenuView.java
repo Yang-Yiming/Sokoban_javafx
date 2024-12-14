@@ -15,6 +15,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.model.Rand;
 import org.model.SavingManager;
 import org.model.User;
 import org.model.config;
@@ -222,7 +223,7 @@ public class MenuView extends AnchorPane {
             int divide = 10;
             double siz = 50 / divide;
             for(int j = 0; j < divide; ++j){
-                double height = siz * Grass.myRand(i, j, 0, -1, 3);
+                double height = siz * Rand.myRand(i, j, 0, -1, 3);
                 if(height <= 0) continue;
                 height += 50;
                 Rectangle rect1 = new Rectangle(siz, height);

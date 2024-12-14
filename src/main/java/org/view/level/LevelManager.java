@@ -369,8 +369,8 @@ public class LevelManager {
                 user.setMoveCount(0);
                 if(currentLevel == mapdata.maps.length) currentLevel = 0;
 
-                loadLevel(id + 1, mapdata.maps);
-
+                //loadLevel(id + 1, mapdata.maps);
+                showLevelMenu();
 
                 try {
                     save("自动保存成功");
@@ -545,7 +545,9 @@ public class LevelManager {
     }
 
     public void showLevelMenu() {
+        //if(level_menu == null)
         level_menu = new SelectMap(primaryStage);
+        level_menu.init(primaryStage);
         level_menu.add_levels(mapdata.maps, user);
         level_menu.update();
         primaryStage.setScene(level_menu.getScene());

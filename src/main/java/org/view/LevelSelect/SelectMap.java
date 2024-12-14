@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +18,7 @@ import javafx.scene.canvas.Canvas;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 class Cat {
     Image cat_stand = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
@@ -87,13 +89,23 @@ public class SelectMap {
     private Pane root;
     private Cat cat;
     private HashMap<Coordinate, Integer> map;
+    private Random rand;
+    public static int seed;
 
     private ArrayList<MapNode> nodes;
     private ArrayList<Chest> chests;
 
     public SelectMap(Stage stage) {
-        this.stage = stage;
         cat = new Cat();
+        setSeed(2);
+        init(stage);
+        AnchorX = scene.getWidth() / 2 - 100;
+        AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
+    }
+
+    public void init(Stage stage) {
+        this.stage = stage;
+        setSeed(seed);
         map = new HashMap<>();
         if(stage.getScene() != null){
             this.scene = stage.getScene();
@@ -102,7 +114,10 @@ public class SelectMap {
             this.root = new Pane();
             this.scene = new Scene(root);
         }
-        AnchorX = scene.getWidth() / 2 - 100; AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
+    }
+
+    public double rand() {
+        return rand.nextDouble();
     }
 
     int count(int x, int y, int goal) {
@@ -111,7 +126,7 @@ public class SelectMap {
         int[] dy = new int[]{0, 1, 0, -1, 1, -1, 1, -1};
         for(int i = 0; i < 8; i++) {
             int xx = x + dx[i], yy = y + dy[i];
-            if(xx == 0 && yy == 0) return -1;
+            if(xx == 0 && yy == 0) return -1; // 猫的出生点默认是（0，0）吧
             int get = map.getOrDefault(new Coordinate(xx, yy), 0);
             if(get == goal) cnt++;
             if(get == -1 || get > 0) return -1; // 让目标点和宝箱周围无障碍
@@ -152,14 +167,14 @@ public class SelectMap {
     void generate_obstacle(int begin_x, int begin_y, int end_x, int end_y, int times) {
 //        if(true) return;
         for(int i = 0; i < WATER; i++) {
-            int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
-            int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            int x = (int)(rand() * (end_x - begin_x)) + begin_x;
+            int y = (int)(rand() * (end_y - begin_y)) + begin_y;
             if(map.containsKey(new Coordinate(x, y))) continue;
             map.put(new Coordinate(x, y), -3);
         }
         for(int i = 0; i < ROCK; i++) {
-            int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
-            int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            int x = (int)(rand() * (end_x - begin_x)) + begin_x;
+            int y = (int)(rand() * (end_y - begin_y)) + begin_y;
             if(map.containsKey(new Coordinate(x, y))) continue;
             map.put(new Coordinate(x,y), -2);
         }
@@ -182,10 +197,10 @@ public class SelectMap {
                     }
 
                     if(times >= 2) { // 最后几次用来清理
-                        if (cnt_water >= 3 && Math.random() < 0.3) {
+                        if (cnt_water >= 3 && rand() < 0.3) {
                             map.put(now, -3);
                         }
-                        if (cnt_rock >= 5 && Math.random() < 0.7) {
+                        if (cnt_rock >= 5 && rand() < 0.7) {
                             map.put(now, -2);
                         }
                     }
@@ -203,8 +218,8 @@ public class SelectMap {
     }
     void random_remove(int begin_x, int begin_y, int end_x, int end_y, int NUM) {
         for(int i = 0; i < NUM; i++) {
-            int x = (int)(Math.random() * (end_x - begin_x)) + begin_x;
-            int y = (int)(Math.random() * (end_y - begin_y)) + begin_y;
+            int x = (int)(rand() * (end_x - begin_x)) + begin_x;
+            int y = (int)(rand() * (end_y - begin_y)) + begin_y;
             map.remove(new Coordinate(x, y));
         }
     }
@@ -218,6 +233,7 @@ public class SelectMap {
     }
 
     public void add_levels(int[][][] maps, User user) {
+        map.clear();
         // 关卡
         MapNode.maps = maps;
         for (int i = 0; i < maps.length; i++) {
@@ -299,7 +315,7 @@ public class SelectMap {
 //                rect.setFill(Color.BLACK);
 //                root.getChildren().add(rect);
                 //随机放置障碍
-                int res = Grass.myRand(c.x * c.x, c.y * c.y, 0, 1, 30);
+                int res = Rand.myRand(c.x * c.x, c.y * c.y, 0, 1, 30);
                 if(res < 11) {
 //                    rock1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
 //                    rock1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
@@ -332,17 +348,17 @@ public class SelectMap {
 //                else if(count2(c.x, c.y, -3) < 8) rect.setFill(blue);
 //                else rect.setFill(lightBlue);
 //                root.getChildren().add(rect);
-                if(Grass.myRand(c.x, c.y, 0, 0, 50) < 1) {
+                if(Rand.myRand(c.x, c.y, 0, 0, 50) < 1) {
 //                    lily1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
 //                    lily1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
 //                    root.getChildren().add(lily1);
                     canvas.getGraphicsContext2D().drawImage(lily1_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
-                } else if(Grass.myRand(c.x, c.y, 1, 0, 50) < 1) {
+                } else if(Rand.myRand(c.x, c.y, 1, 0, 50) < 1) {
 //                    lily2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
 //                    lily2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
 //                    root.getChildren().add(lily2);
                     canvas.getGraphicsContext2D().drawImage(lily2_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
-                } else if(Grass.myRand(c.x, c.y, 2, 0, 50) < 1) {
+                } else if(Rand.myRand(c.x, c.y, 2, 0, 50) < 1) {
 //                    lily3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
 //                    lily3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
 //                    root.getChildren().add(lily3);
@@ -410,7 +426,8 @@ public class SelectMap {
         String[] moves = {""};
         Chest[] goal_chest = new Chest[]{null};
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(config.move_anim_duration ), e->{
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(config.move_anim_duration ), e->{
             if (!cat.is_moving && !moves[0].isEmpty()) {
                 char dir = moves[0].charAt(0);
                 moves[0] = moves[0].substring(1);
@@ -419,15 +436,21 @@ public class SelectMap {
             if (moves[0].isEmpty()){
                 int at = map.getOrDefault(new Coordinate(cat.x, cat.y),0);
                 if(at > 0 && !nodes.get(at - 1).is_locked) {
-                    nodes.get(at - 1).action();
-                    map.clear();
-                    nodes = null;
-                    cameraTimeline.stop();
+                    // 按下enter
+                    scene.setOnKeyPressed(event -> {
+                        if(event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
+                            nodes.get(at - 1).action();
+                            map.clear();
+                            nodes = null;
+                            cameraTimeline.stop();
+                        }
+                    });
                 }
                 if(goal_chest[0] != null) {
                     goal_chest[0].open();
                     goal_chest[0] = null;
                 }
+                timeline.stop();
             }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -460,6 +483,11 @@ public class SelectMap {
             timeline.play();
         });
 
+    }
+
+    public void setSeed(int seed) {
+        SelectMap.seed = seed;
+        rand = new Random(seed);
     }
 
     public Scene getScene() {
