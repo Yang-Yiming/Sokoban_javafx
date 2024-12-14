@@ -38,6 +38,8 @@ import org.view.menu.MenuController;
 import org.view.menu.Settings;
 import org.view.menu.Theme;
 
+import static org.data.mapdata.maps;
+
 public class LevelManager {
     private int currentLevel;
     private int totalLevel;
@@ -55,9 +57,13 @@ public class LevelManager {
         this.root = new Pane(); // 直接用新的Pane 除了stage其他全部新建
         this.controller = controller;
         this.currentLevel = 0;
-        this.totalLevel = mapdata.maps.length;
+        this.totalLevel = maps.length;
         this.primaryStage = primaryStage; // 主舞台
-        this.level_menu = new SelectMap(primaryStage); // 选关界面
+
+//        Pane level_menu_root = new Pane();
+//        this.level_menu = new SelectMap(primaryStage, level_menu_root); // 选关界面
+//        root.getChildren().add(level_menu_root);
+
         MapNode.levelManager = this;
     }
 
@@ -220,7 +226,21 @@ public class LevelManager {
     }
 
     ImageView itemsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/items.png"), 190, 70, false, false));
+    private void InLevelMenu(){
+        createSettingsButton();
+        createHomeButton();
+        createThemeButton();
+        drawSettingsButton(root);
+        drawHomeButton(root);
+        drawThemeButton(root);
 
+        // 监听大小改变
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> {
+            setSettingsButton();
+            setHomeButton();
+            setThemeButton();
+        });
+    }
     private void InLevel(int id) {
         createDirectionButtons();
         createSettingsButton();
@@ -367,7 +387,7 @@ public class LevelManager {
                 user.setLevelAtStep(level.getStep());
                 user.setMaxLevel(Math.max(currentLevel, user.getMaxLevel()));
                 user.setMoveCount(0);
-                if(currentLevel == mapdata.maps.length) currentLevel = 0;
+                if(currentLevel == maps.length) currentLevel = 0;
 
                 //loadLevel(id + 1, mapdata.maps);
                 showLevelMenu();
@@ -545,12 +565,16 @@ public class LevelManager {
     }
 
     public void showLevelMenu() {
-        //if(level_menu == null)
-        level_menu = new SelectMap(primaryStage);
-        level_menu.init(primaryStage);
-        level_menu.add_levels(mapdata.maps, user);
+        root.getChildren().clear();
+        root.setLayoutX(0); root.setLayoutY(0);
+        Pane level_menu_root = new Pane();
+        root.getChildren().add(level_menu_root);
+        level_menu = new SelectMap(primaryStage, level_menu_root);
+        scene = primaryStage.getScene();
+        scene.setRoot(root);
+        level_menu.add_levels(maps, user);
         level_menu.update();
-        primaryStage.setScene(level_menu.getScene());
+        InLevelMenu();
     }
 
     public void setStage(Stage primaryStage) {

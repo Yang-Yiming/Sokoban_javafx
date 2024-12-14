@@ -95,25 +95,36 @@ public class SelectMap {
     private ArrayList<MapNode> nodes;
     private ArrayList<Chest> chests;
 
-    public SelectMap(Stage stage) {
+    public SelectMap(Stage stage, Pane root) {
+        this.root = root;
+        this.stage = stage;
+        this.scene = stage.getScene();
+//        this.scene = new Scene(root);
+
+        //画一个长方形
+//        Rectangle background = new Rectangle(0,0,config.ScreenWidth, config.ScreenHeight);
+//        background.setFill(Color.web("#7C9920"));
+//        root.getChildren().add(background);
+
         cat = new Cat();
         setSeed(2);
-        init(stage);
         AnchorX = scene.getWidth() / 2 - 100;
         AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
-    }
-
-    public void init(Stage stage) {
-        this.stage = stage;
         setSeed(seed);
         map = new HashMap<>();
-        if(stage.getScene() != null){
-            this.scene = stage.getScene();
-            this.root = (Pane) scene.getRoot();
-        } else {
-            this.root = new Pane();
-            this.scene = new Scene(root);
-        }
+    }
+
+    public void init() {
+//        this.stage = stage;
+//        if(stage.getScene() != null){
+//        this.scene = stage.getScene();
+//        scene.setRoot(root);
+//            this.root = new Pane();
+//            this.root = (Pane) scene.getRoot();
+//        } else {
+//            this.root = new Pane();
+//            this.scene = new Scene(root);
+//        }new Scene(root);
     }
 
     public double rand() {

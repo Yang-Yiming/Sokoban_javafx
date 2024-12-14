@@ -102,7 +102,6 @@ public abstract class Level {
         root.getChildren().add(fadeRectangle);
         createFadeTimeline();
         player.hisTime = -1;
-
         drawMap();
     }
     public void createFadeTimeline(){
