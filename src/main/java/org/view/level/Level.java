@@ -220,7 +220,7 @@ public abstract class Level {
         int downNum = (int) Math.ceil((height - anchor_posy) / config.tile_size);
         for(int dx = -leftNum; dx < map.getWidth() + rightNum; ++dx)
             for(int dy = -upNum; dy < map.getHeight() + downNum; ++dy)
-                grass.addGrass(canvas, dx, dy, anchor_posx, anchor_posy, config.tile_size);
+                Grass.addGrass(canvas, dx, dy, anchor_posx, anchor_posy, config.tile_size);
     }
     public void drawButterfly(){
         double width = primaryStage.getWidth();

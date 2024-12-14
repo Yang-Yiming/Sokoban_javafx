@@ -38,9 +38,9 @@ public class Grass {
         int result = (x ^ y ^ z);
         return result;
     }
-    private int grasstimeid = 0;
+    public static int grasstimeid = 0;
     private static int[] grassMove = {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, -1, -1, -1, -1, -1};
-    public void addGrass(Canvas canvas, int dx, int dy, double anchor_posx, double anchor_posy, double size){
+    public static void addGrass(Canvas canvas, int dx, int dy, double anchor_posx, double anchor_posy, double size){
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         int x = (int) (anchor_posx + dx * size);

@@ -269,6 +269,19 @@ public class SelectMap {
         gc.setFill(Color.web("#7C9920"));
         gc.fillRect(0, 0, config.ScreenWidth, config.ScreenHeight);
 
+        //尝试把 grass 搬过来
+        //将能显示在窗口里的部分都用 grass 填充
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+        int leftNum = (int) Math.ceil(AnchorX / config.Map_Node_Width);
+        int rightNum = (int) Math.ceil((width - AnchorX) / config.Map_Node_Width);
+        int upNum = (int) Math.ceil(AnchorY / config.Map_Node_Width);
+        int downNum = (int) Math.ceil((height - AnchorY) / config.Map_Node_Width);
+        for(int dx = -leftNum; dx < rightNum; ++dx)
+            for(int dy = -upNum; dy < downNum; ++dy)
+                Grass.addGrass(canvas, dx, dy, AnchorX, AnchorY, config.Map_Node_Width);
+        //尝试把 grass 搬过来
+
 
 //        //画背景
 //        Rectangle background = new Rectangle(0,0,config.ScreenWidth, config.ScreenHeight);
