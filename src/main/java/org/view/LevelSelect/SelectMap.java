@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
+import org.view.level.Grass;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -261,6 +262,9 @@ public class SelectMap {
             Color deepBlue = Color.web("4c6e78");
             Color blue = Color.web("5d9798");
             Color lightBlue = Color.web("77ad9d");
+            ImageView lily1 = new ImageView(new Image(getClass().getResourceAsStream("/images/bush/lily1.png"), config.Map_Node_Width, config.Map_Node_Width, false, false));
+            ImageView lily2 = new ImageView(new Image(getClass().getResourceAsStream("/images/bush/lily2.png"), config.Map_Node_Width, config.Map_Node_Width, false, false));
+            ImageView lily3 = new ImageView(new Image(getClass().getResourceAsStream("/images/bush/lily3.png"), config.Map_Node_Width, config.Map_Node_Width, false, false));
             if(map.get(c) == -3) {
                 Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
                 //如果在边界上，就是深蓝色
@@ -268,6 +272,19 @@ public class SelectMap {
                 else if(count2(c.x, c.y, -3) < 8) rect.setFill(blue);
                 else rect.setFill(lightBlue);
                 root.getChildren().add(rect);
+                if(Grass.myRand(c.x, c.y, 0, 0, 50) < 1) {
+                    lily1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+                    lily1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+                    root.getChildren().add(lily1);
+                } else if(Grass.myRand(c.x, c.y, 1, 0, 50) < 1) {
+                    lily2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+                    lily2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+                    root.getChildren().add(lily2);
+                } else if(Grass.myRand(c.x, c.y, 2, 0, 50) < 1) {
+                    lily3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+                    lily3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+                    root.getChildren().add(lily3);
+                }
             }
         }
 
