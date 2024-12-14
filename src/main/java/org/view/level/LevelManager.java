@@ -109,11 +109,14 @@ public class LevelManager {
         item_hint.setLayoutX(45);
         item_hint.setLayoutY(primaryStage.getHeight() - 135);
         item_hint.setOnMouseDragged(event -> {
-            item_hint.setX(event.getX() - 20);
-            item_hint.setY(event.getY() - 20);
+            if(IAmInLevel) {
+                item_hint.setX(event.getX() - 20);
+                item_hint.setY(event.getY() - 20);
+            }
         });
         item_hint.setOnMousePressed(event -> {
-            isDraggingItem = true;
+            if(IAmInLevel)
+                isDraggingItem = true;
         });
         item_hint.setOnMouseReleased(event -> {
             if(item_hint.getY() < -50){
@@ -156,11 +159,14 @@ public class LevelManager {
         item_plus.setLayoutX(105);
         item_plus.setLayoutY(primaryStage.getHeight() - 135);
         item_plus.setOnMouseDragged(event -> {
-            item_plus.setX(event.getX() - 20);
-            item_plus.setY(event.getY() - 20);
+            if(IAmInLevel) {
+                item_plus.setX(event.getX() - 20);
+                item_plus.setY(event.getY() - 20);
+            }
         });
         item_plus.setOnMousePressed(event -> {
-            isDraggingItem = true;
+            if(IAmInLevel)
+                isDraggingItem = true;
         });
         item_plus.setOnMouseReleased(event -> {
             if(item_plus.getY() < -50){
@@ -195,11 +201,14 @@ public class LevelManager {
         item_withdraw.setLayoutX(165);
         item_withdraw.setLayoutY(primaryStage.getHeight() - 135);
         item_withdraw.setOnMouseDragged(event -> {
-            item_withdraw.setX(event.getX() - 20);
-            item_withdraw.setY(event.getY() - 20);
+            if(IAmInLevel) {
+                item_withdraw.setX(event.getX() - 20);
+                item_withdraw.setY(event.getY() - 20);
+            }
         });
         item_withdraw.setOnMousePressed(event -> {
-            isDraggingItem = true;
+            if(IAmInLevel)
+                 isDraggingItem = true;
         });
         item_withdraw.setOnMouseReleased(event -> {
             if(item_withdraw.getY() < -50){
@@ -227,6 +236,7 @@ public class LevelManager {
 
     ImageView itemsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/items.png"), 190, 70, false, false));
     private void InLevelMenu(){
+        IAmInLevel = false;
         createSettingsButton();
         createHomeButton();
         createThemeButton();
@@ -240,8 +250,29 @@ public class LevelManager {
             setHomeButton();
             setThemeButton();
         });
+
+
+        //道具栏
+        itemsImageView.setLayoutX(30);
+        itemsImageView.setLayoutY(primaryStage.getHeight() - 150);
+        root.getChildren().add(itemsImageView);
+        addItem_hint(root);
+        addItem_plus(root);
+        addItem_withdraw(root);
+
+        scene.heightProperty().addListener((observable, oldValue, newValue) -> {
+            itemsImageView.setLayoutY(newValue.doubleValue() - 112);
+            item_hint.setLayoutY(newValue.doubleValue() - 97);
+            item_plus.setLayoutY(newValue.doubleValue() - 97);
+            item_withdraw.setLayoutY(newValue.doubleValue() - 97);
+            item_hintText.setLayoutY(newValue.doubleValue() - 63);
+            item_plusText.setLayoutY(newValue.doubleValue() - 63);
+            item_withdrawText.setLayoutY(newValue.doubleValue() - 63);
+        });
     }
+    boolean IAmInLevel = false;
     private void InLevel(int id) {
+        IAmInLevel = true;
         createDirectionButtons();
         createSettingsButton();
         createHomeButton();
@@ -290,7 +321,7 @@ public class LevelManager {
                     e.printStackTrace();
                 }
             }
-            else if(code == KeyCode.U) { // 为了防止到时候忘删先删了（）
+            else if(code == KeyCode.U) { // 别忘删了
                 config.this_is_hint = true;
                 Hint hint = new Hint(level);
                 hint.autoMove();
@@ -569,7 +600,7 @@ public class LevelManager {
         root.setLayoutX(0); root.setLayoutY(0);
         Pane level_menu_root = new Pane();
         root.getChildren().add(level_menu_root);
-        level_menu = new SelectMap(primaryStage, level_menu_root);
+        level_menu = new SelectMap(primaryStage, level_menu_root, root);
         scene = primaryStage.getScene();
         scene.setRoot(root);
         level_menu.add_levels(maps, user);

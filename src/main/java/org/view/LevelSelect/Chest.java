@@ -42,13 +42,13 @@ public class Chest {
         contain = new int[]{1, 1, 1};
     }
 
-    public void open() {
+    public void open(Pane root) {
         if(opened) return;
         open_counter.play();
-        open_counter.setOnFinished(e->{handle_open(); opened = true;});
+        open_counter.setOnFinished(e->{handle_open(root); opened = true;});
     }
 
-    private void handle_open() {
+    private void handle_open(Pane root) {
         HBox itemHbox = new HBox();
         root.getChildren().add(itemHbox);
         if(contain[0] > 0) {
