@@ -14,6 +14,7 @@ import javafx.util.Duration;
 import org.model.*;
 import org.view.level.Grass;
 import javafx.scene.canvas.Canvas;
+import org.view.level.LevelManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -30,11 +31,15 @@ class Cat {
     ImageView imageView;
     User user;
     int x, y;
-    public Cat() {
+    public Cat(User user) {
         imageView = new ImageView(cat_stand);
         imageView.setFitHeight(config.Map_Node_Width);
         imageView.setFitWidth(config.Map_Node_Width);
-        x = 0; y = 0;
+        this.user = user;
+        if(user.getLevelAt() % 5 == 0){
+            if(user.getLevelAt() == 0) {x = 0; y = 0;}
+            else {x = 12; y = 0;}
+        }else {x = ((user.getLevelAt() % 5) - 1) * 3; y = 0;}
     }
     boolean is_moving = false;
     public void move(char dir){ // 0 : right 1:down 2:up
@@ -97,7 +102,7 @@ public class SelectMap {
     private ArrayList<MapNode> nodes;
     private ArrayList<Chest> chests;
 
-    public SelectMap(Stage stage, Pane root, Pane superRoot) {
+    public SelectMap(Stage stage, Pane root, Pane superRoot, User user) {
         this.root = root;
         this.stage = stage;
         this.scene = stage.getScene();
@@ -109,15 +114,15 @@ public class SelectMap {
 //        background.setFill(Color.web("#7C9920"));
 //        root.getChildren().add(background);
 
-        cat = new Cat();
-        setSeed(2);
+        cat = new Cat(user);
+        setSeed(LevelManager.groupNumber);
         AnchorX = scene.getWidth() / 2 - 100;
         AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
-        setSeed(seed);
         map = new HashMap<>();
     }
 
     public double rand() {
+//        ++randCount;
         return rand.nextDouble();
     }
 
@@ -165,6 +170,7 @@ public class SelectMap {
 
 
     final int WATER = 70, ROCK = 25;
+    public static int randCount = 0;
     void generate_obstacle(int begin_x, int begin_y, int end_x, int end_y, int times) {
 //        if(true) return;
         for(int i = 0; i < WATER; i++) {
@@ -179,11 +185,11 @@ public class SelectMap {
             if(map.containsKey(new Coordinate(x, y))) continue;
             map.put(new Coordinate(x,y), -2);
         }
-
         while(times --> 0) { // 时间趋近于0
             for(int xx = begin_x; xx < end_x; xx++) {
                 for(int yy = begin_y; yy < end_y; yy++) {
                     Coordinate now = new Coordinate(xx, yy);
+//                    if(randCount == 50) System.out.println(rand());
                     if(map.getOrDefault(now,0) == -1 || map.getOrDefault(now, 0)>0)
                         continue;
 
@@ -198,6 +204,7 @@ public class SelectMap {
                     }
 
                     if(times >= 2) { // 最后几次用来清理
+                        ++randCount;
                         if (cnt_water >= 3 && rand() < 0.3) {
                             map.put(now, -3);
                         }
@@ -234,11 +241,12 @@ public class SelectMap {
     }
 
     public void add_levels(int[][][] maps, User user) {
+        //随机生成一个数，用于测试
         map.clear();
         // 关卡
         MapNode.maps = maps;
-        for (int i = 0; i < maps.length; i++) {
-            MapNode node = new MapNode(i, stage);
+        for (int i = (LevelManager.groupNumber - 1) * 5; i < Math.min(maps.length, LevelManager.groupNumber * 5); i++) {
+            MapNode node = new MapNode(i, stage, rand);
             node.target_level = i;
             if (user.getMaxLevel() < i) node.is_locked = true;
             if (nodes == null) nodes = new ArrayList<>();
@@ -248,8 +256,11 @@ public class SelectMap {
 
         // 宝箱
         if(chests == null) chests = new ArrayList<>();
-        chests.add(new Chest(2,2, root, user));
-        map.put(new Coordinate(2, 2), -1);
+        int chestsX;
+        if(LevelManager.groupNumber < (maps.length + 4) / 5) chestsX = 15;
+        else chestsX = (maps.length % 5) * 3;
+        chests.add(new Chest(chestsX,2, root, user, LevelManager.groupNumber));
+        map.put(new Coordinate(chestsX, 2), -1);
 
         // 障碍
         int left_x = -(int)(AnchorX / config.Map_Node_Width);
@@ -402,11 +413,11 @@ public class SelectMap {
             }
             if (moves[0].isEmpty()){
                 int at = map.getOrDefault(new Coordinate(cat.x, cat.y),0);
-                if(at > 0 && !nodes.get(at - 1).is_locked) {
+                if(at > 0 && !nodes.get((at - 1) % 5).is_locked) {
                     // 按下enter
                     scene.setOnKeyPressed(event -> {
                         if(event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
-                            nodes.get(at - 1).action();
+                            nodes.get((at - 1) % 5).action();
                             map.clear();
                             nodes = null;
                             cameraTimeline.stop();

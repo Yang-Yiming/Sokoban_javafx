@@ -85,7 +85,7 @@ public class Home {
         home.setFont(new Font(pixelFont.getName(), 20));
         root.getChildren().add(home);
         home.setOnMouseClicked(event -> {
-            homeAction(root, controller, primaryStage);
+            homeAction(root, controller, primaryStage, new MenuView(controller));
         });
 
         //关闭按钮
@@ -139,7 +139,7 @@ public class Home {
         home.setFont(new Font(pixelFont.getName(), 20));
         root.getChildren().add(home);
         home.setOnMouseClicked(event -> {
-            homeAction(root, controller, primaryStage);
+            homeAction(root, controller, primaryStage, new MenuView(controller));
         });
 
         //关闭按钮
@@ -161,12 +161,11 @@ public class Home {
             root.getChildren().remove(home);
         });
     }
-    public void homeAction(Pane root, MenuController controller, Stage primaryStage) {
+    public void homeAction(Pane root, MenuController controller, Stage primaryStage, MenuView menuView) {
 
         //音乐停止
         mediaPlayer.stop();
         root.getChildren().clear();
-        Pane menuView = new MenuView(controller);
         primaryStage.setScene(new Scene(menuView));
         primaryStage.show();
         //停止所有 timeline

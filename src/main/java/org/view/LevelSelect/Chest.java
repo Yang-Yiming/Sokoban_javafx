@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.data.mapdata;
 import org.model.SavingManager;
 import org.model.User;
 import org.model.config;
@@ -27,19 +28,26 @@ public class Chest {
     Image chest_open_anim = new Image(getClass().getResourceAsStream("/images/treasure_open.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     Timeline open_counter;
 
-    ImageView imageView = new ImageView(chest_closed);
+    ImageView imageView;
     Pane root;
 
     int x, y;
-    boolean opened = false;
+//    boolean opened = false;
+    int id;
 
     int[] contain = new int[3]; // hint/ plus/ withdraw
     User user;
-    public Chest(int x, int y, Pane root, User user) {
+    public Chest(int x, int y, Pane root, User user, int id) {
         this.x = x;
         this.y = y;
         this.root = root;
         this.user = user;
+        this.id = id;
+        if(user.getMaxTreasure() >= id) {
+            imageView = new ImageView(chest_open);
+        } else {
+            imageView = new ImageView(chest_closed);
+        }
         open_counter = new Timeline(
                 new KeyFrame(Duration.millis(400), e-> imageView.setImage(chest_open_anim)),
                 new KeyFrame(Duration.millis(500), e-> imageView.setImage(chest_open)));
@@ -48,11 +56,13 @@ public class Chest {
     }
 
     public void open(Pane root) {
-        if(opened) return;
+        if(user.getMaxLevel() < id * 5 && user.getMaxLevel() != mapdata.maps.length) return;
+        if(user.getMaxTreasure() >= id) return;
+        user.setMaxTreasure(id);
         open_counter.play();
         open_counter.setOnFinished(e->{
             handle_open(root);
-            opened = true;
+//            opened = true;
             config.item_hintNumber += contain[0];
             config.item_plusNumber += contain[1];
             config.item_withdrawNumber += contain[2];

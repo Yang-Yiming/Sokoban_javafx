@@ -8,9 +8,10 @@ public class User {
 
     private String Name;
     private String Password;
-    private int LevelAt;
+    private int LevelAt = 0;
     private int LevelAtStep;
-    private int MaxLevel;
+    private int MaxLevel = 0;
+    private int MaxTreasure = 0;
     private int MinTime = -1;
     private int Item_hintNumber = 3;
     private int Item_plusNumber = 3;
@@ -39,6 +40,9 @@ public class User {
     public int getMaxLevel() {
         return MaxLevel;
     }
+    public int getMaxTreasure() {
+        return MaxTreasure;
+    }
     public int getMinTime() {
         return MinTime;
     }
@@ -59,6 +63,9 @@ public class User {
     }
     public void setMaxLevel(int maxLevel) {
         MaxLevel = maxLevel;
+    }
+    public void setMaxTreasure(int maxTreasure) {
+        MaxTreasure = maxTreasure;
     }
     public void setMinTime(int minTime) {
         this.MinTime = minTime;
@@ -93,10 +100,11 @@ public class User {
         return PlayingMap;
     }
 
-    public void update_info(int levelAt, int levelAtStep, int maxLevel, int minTime, int item_hintNumber, int item_plusNumber, int item_withdrawNumber, int MoveCount, InfiniteMap map){
+    public void update_info(int levelAt, int levelAtStep, int maxLevel, int maxTreasure, int minTime, int item_hintNumber, int item_plusNumber, int item_withdrawNumber, int MoveCount, InfiniteMap map){
         this.LevelAt = levelAt;
         this.LevelAtStep = levelAtStep;
         this.MaxLevel = maxLevel;
+        this.MaxTreasure = maxTreasure;
         this.MinTime = minTime;
         this.Item_hintNumber = item_hintNumber;
         this.Item_plusNumber = item_plusNumber;
@@ -113,6 +121,7 @@ public class User {
                 ", LevelAt=" + LevelAt +
                 ", LevelAtStep=" + LevelAtStep +
                 ", MaxLevel=" + MaxLevel +
+                ", MaxTreasure=" + MaxTreasure +
                 ", MinTime=" + MinTime +
                 ", Item_hintNumber=" + Item_hintNumber +
                 ", Item_plusNumber=" + Item_plusNumber +
@@ -131,6 +140,7 @@ public class User {
         json.append("\"LevelAt\":").append(LevelAt).append(",");
         json.append("\"LevelAtStep\":").append(LevelAtStep).append(",");
         json.append("\"MaxLevel\":").append(MaxLevel).append(",");
+        json.append("\"MaxTreasure\":").append(MaxTreasure).append(",");
         json.append("\"MinTime\":").append(MinTime).append(",");
         json.append("\"Item_hintNumber\":").append(Item_hintNumber).append(",");
         json.append("\"Item_plusNumber\":").append(Item_plusNumber).append(",");
@@ -192,6 +202,7 @@ public class User {
         int levelAt = Integer.parseInt(jsonMap.get("LevelAt"));
         int levelAtStep = Integer.parseInt(jsonMap.get("LevelAtStep"));
         int MaxLevel = Integer.parseInt(jsonMap.get("MaxLevel"));
+        int MaxTreasure = Integer.parseInt(jsonMap.get("MaxTreasure"));
         int MinTime = Integer.parseInt(jsonMap.get("MinTime"));
         int Item_hintNumber = Integer.parseInt(jsonMap.get("Item_hintNumber"));
         int Item_plusNumber = Integer.parseInt(jsonMap.get("Item_plusNumber"));
@@ -220,6 +231,7 @@ public class User {
         user.LevelAt = levelAt;
         user.LevelAtStep = levelAtStep;
         user.MaxLevel = MaxLevel;
+        user.MaxTreasure = MaxTreasure;
         user.MinTime = MinTime;
         user.Item_hintNumber = Item_hintNumber;
         user.Item_plusNumber = Item_plusNumber;

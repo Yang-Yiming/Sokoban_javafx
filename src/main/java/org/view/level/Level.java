@@ -142,7 +142,7 @@ public abstract class Level {
         butterflyTimeline.play();
         config.timelines.add(butterflyTimeline);
     }
-    public void stopTimelines(){
+    static public void stopTimelines(){
 //        butterflyTimeline.stop();
 //        this.player.stopCameraTimeline();
 //        GlowRectangle.timeline.stop();

@@ -32,11 +32,8 @@ import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.view.menu.Home;
+import org.view.menu.*;
 //import org.view.menu.MenuController;
-import org.view.menu.MenuController;
-import org.view.menu.Settings;
-import org.view.menu.Theme;
 
 import static org.data.mapdata.maps;
 
@@ -233,6 +230,37 @@ public class LevelManager {
         });
         if(config.item_withdrawNumber > 0) root.getChildren().add(item_withdraw);
     }
+    ImageView leftArrow, rightArrow;
+    private void createLeftArrow(){
+        leftArrow = new ImageView(new Image(getClass().getResourceAsStream("/images/left_arrow.png"), 50, 50, false, false));
+        leftArrow.setLayoutX(30);
+        leftArrow.setLayoutY(primaryStage.getHeight() / 2 - 25);
+        leftArrow.setOnMouseClicked(event -> {
+            --groupNumber;
+            level.stopTimelines();
+            showLevelMenu();
+            InLevelMenu();
+        });
+        root.getChildren().add(leftArrow);
+    }
+    private void createRightArrow(){
+        rightArrow = new ImageView(new Image(getClass().getResourceAsStream("/images/right_arrow.png"), 50, 50, false, false));
+        rightArrow.setLayoutX(primaryStage.getWidth() - 80);
+        rightArrow.setLayoutY(primaryStage.getHeight() / 2 - 25);
+        rightArrow.setOnMouseClicked(event -> {
+            ++groupNumber;
+            level.stopTimelines();
+            showLevelMenu();
+            InLevelMenu();
+        });
+        root.getChildren().add(rightArrow);
+    }
+    private void addArrows(){
+        if(groupNumber == 1 && root.getChildren().contains(leftArrow)) root.getChildren().remove(leftArrow);
+        if(groupNumber != 1 && !root.getChildren().contains(leftArrow)) root.getChildren().add(leftArrow);
+        if(groupNumber == (maps.length + 4) / 5 && root.getChildren().contains(rightArrow)) root.getChildren().remove(rightArrow);
+        if(groupNumber != (maps.length + 4) / 5 && !root.getChildren().contains(rightArrow)) root.getChildren().add(rightArrow);
+    }
 
     ImageView itemsImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/items.png"), 190, 70, false, false));
     private void InLevelMenu(){
@@ -243,6 +271,10 @@ public class LevelManager {
         drawSettingsButton(root);
         drawHomeButton(root);
         drawThemeButton(root);
+
+        createLeftArrow();
+        createRightArrow();
+        addArrows();
 
         // 监听大小改变
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -313,6 +345,7 @@ public class LevelManager {
                 scene.setOnMouseDragged(null);
                 level.stopTimelines();
                 showLevelMenu();
+                InLevelMenu();
             }
             else if(event.isControlDown() && code == KeyCode.S){ //同时按下control s时保存
                 try {
@@ -408,6 +441,9 @@ public class LevelManager {
         level.drawMap();
 
         if(level.isWin()){
+//            if(level.id % 5 == 4){
+//                if(level.id != maps.length - 1) groupNumber = level.id / 5 + 2;
+//            }
             Win Win_anim = new Win(primaryStage, root);
 
             Win_anim.win();
@@ -421,7 +457,7 @@ public class LevelManager {
                 if(currentLevel == maps.length) currentLevel = 0;
 
                 //loadLevel(id + 1, mapdata.maps);
-                showLevelMenu();
+                showLevelMenu(); InLevelMenu();
 
                 try {
                     save("自动保存成功");
@@ -590,22 +626,21 @@ public class LevelManager {
             }
         }
 
-        showLevelMenu();
+        showLevelMenu(); InLevelMenu();
         primaryStage.setTitle("Sokoban");
         primaryStage.show();
     }
-
+    public static int groupNumber = 1;
     public void showLevelMenu() {
         root.getChildren().clear();
         root.setLayoutX(0); root.setLayoutY(0);
         Pane level_menu_root = new Pane();
         root.getChildren().add(level_menu_root);
-        level_menu = new SelectMap(primaryStage, level_menu_root, root);
+        level_menu = new SelectMap(primaryStage, level_menu_root, root, user);
         scene = primaryStage.getScene();
         scene.setRoot(root);
         level_menu.add_levels(maps, user);
         level_menu.update();
-        InLevelMenu();
     }
 
     public void setStage(Stage primaryStage) {

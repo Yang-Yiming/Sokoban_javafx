@@ -145,16 +145,6 @@ public class FightLevel extends Level {
         if(player2Win) return 2;
         return 0;
     }
-    @Override
-    public void stopTimelines(){
-//        butterflyTimeline.stop();
-//        this.player1.stopCameraTimeline();
-//        this.player2.stopCameraTimeline();
-//        GlowRectangle.timeline.stop();
-        for(Timeline timeline : config.timelines){
-            if(timeline != null) timeline.stop();
-        }
-    }
     public String solve_moves(MapMatrix map) {
         solve = new Solve(map);
         if(!config.auto_check_fail && !config.this_is_hint)

@@ -37,7 +37,7 @@ public class MapNode {
     private double posX, posY;
     int x,y;
 
-    public MapNode(int index, Stage stage){
+    public MapNode(int index, Stage stage, Random rand){
         this.index = index;
         this.is_locked = false;
 
@@ -45,7 +45,7 @@ public class MapNode {
         this.scene = stage.getScene();
 
         // 创建图片
-        this.imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/goal.png")));
+        this.imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/level.png"), config.Map_Node_Width, config.Map_Node_Width, false, false));
         imageView.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-width: 0px;");
         imageView.setFitWidth(config.Map_Node_Width); imageView.setFitHeight(config.Map_Node_Width);
 
@@ -91,8 +91,8 @@ public class MapNode {
         //button.setOnMouseClicked(e -> action());
 
         //this.y = Grass.myRand(index, index * 31, (index - 17) * 3, -YRange, YRange);
-        this.x = index * 3;
-        this.y = (int)(Rand.next_double() * YRange);
+        this.x = (index % 5) * 3;
+        this.y = (int)(rand.nextDouble() * YRange);
     }
 
     public void action() {

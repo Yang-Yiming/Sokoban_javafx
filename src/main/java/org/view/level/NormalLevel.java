@@ -36,6 +36,8 @@ public class NormalLevel extends Level {
         if(super.stepLimit == -1) super.stepLimit = solve_moves(new MapMatrix(mapdata.maps[id])).length() + 5;
         config.this_is_hint = false;
 
+        LevelManager.groupNumber = id / 5 + 1;
+
         super.init();
 
         if(solve_time > 50 && config.auto_check_fail) {
