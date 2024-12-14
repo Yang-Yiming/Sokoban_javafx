@@ -28,6 +28,7 @@ class Cat {
     Image cat_stand_front = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_front.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     Image cat_stand_back = new Image(getClass().getResourceAsStream("/images/player_cat/cat_stand_back.gif"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     ImageView imageView;
+    User user;
     int x, y;
     public Cat() {
         imageView = new ImageView(cat_stand);
@@ -247,7 +248,7 @@ public class SelectMap {
 
         // 宝箱
         if(chests == null) chests = new ArrayList<>();
-        chests.add(new Chest(2,2, root));
+        chests.add(new Chest(2,2, root, user));
         map.put(new Coordinate(2, 2), -1);
 
         // 障碍

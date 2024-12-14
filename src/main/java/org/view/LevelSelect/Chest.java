@@ -8,8 +8,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.model.SavingManager;
+import org.model.User;
 import org.model.config;
+import org.view.level.LevelManager;
 
+import java.io.FileNotFoundException;
 import java.sql.Time;
 
 
@@ -30,11 +34,12 @@ public class Chest {
     boolean opened = false;
 
     int[] contain = new int[3]; // hint/ plus/ withdraw
-
-    public Chest(int x, int y, Pane root) {
+    User user;
+    public Chest(int x, int y, Pane root, User user) {
         this.x = x;
         this.y = y;
         this.root = root;
+        this.user = user;
         open_counter = new Timeline(
                 new KeyFrame(Duration.millis(400), e-> imageView.setImage(chest_open_anim)),
                 new KeyFrame(Duration.millis(500), e-> imageView.setImage(chest_open)));
@@ -45,7 +50,31 @@ public class Chest {
     public void open(Pane root) {
         if(opened) return;
         open_counter.play();
-        open_counter.setOnFinished(e->{handle_open(root); opened = true;});
+        open_counter.setOnFinished(e->{
+            handle_open(root);
+            opened = true;
+            config.item_hintNumber += contain[0];
+            config.item_plusNumber += contain[1];
+            config.item_withdrawNumber += contain[2];
+            LevelManager.item_hintText.setText("x" + config.item_hintNumber);
+            LevelManager.item_plusText.setText("x" + config.item_plusNumber);
+            LevelManager.item_withdrawText.setText("x" + config.item_withdrawNumber);
+
+            if(config.item_hintNumber == 1) root.getChildren().add(LevelManager.item_hint);
+            if(config.item_plusNumber == 1) root.getChildren().add(LevelManager.item_plus);
+            if(config.item_withdrawNumber == 1) root.getChildren().add(LevelManager.item_withdraw);
+
+            //写进存档
+            user.setItem_hintNumber(config.item_hintNumber);
+            user.setItem_plusNumber(config.item_plusNumber);
+            user.setItem_withdrawNumber(config.item_withdrawNumber);
+            try{
+                SavingManager.save();
+            } catch (FileNotFoundException exception) {
+                exception.printStackTrace();
+            }
+
+        });
     }
 
     private void handle_open(Pane root) {

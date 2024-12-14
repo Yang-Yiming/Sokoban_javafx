@@ -95,8 +95,8 @@ public class LevelManager {
         InLevel(id);
     }
 
-    ImageView item_hint, item_plus, item_withdraw;
-    Text item_hintText, item_plusText, item_withdrawText;
+    public static ImageView item_hint, item_plus, item_withdraw;
+    public static Text item_hintText, item_plusText, item_withdrawText;
     boolean isDraggingItem = false;
     private void addItem_hint(Pane root){
         item_hintText = new Text("x" + config.item_hintNumber);
