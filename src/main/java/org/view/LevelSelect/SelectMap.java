@@ -2,6 +2,7 @@ package org.view.LevelSelect;
 
 import javafx.animation.*;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -11,7 +12,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
 import org.view.level.Grass;
+import javafx.scene.canvas.Canvas;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -249,66 +252,88 @@ public class SelectMap {
     Image lily1_img = new Image(getClass().getResourceAsStream("/images/bush/lily1.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     Image lily2_img = new Image(getClass().getResourceAsStream("/images/bush/lily2.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
     Image lily3_img = new Image(getClass().getResourceAsStream("/images/bush/lily3.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
+    Image goal_img = new Image(getClass().getResourceAsStream("/images/goal.png"), config.Map_Node_Width, config.Map_Node_Width, false, false);
 
+    private Canvas canvas;
     public void draw() {
-        root.getChildren().clear(); root.setStyle("-fx-background-color: #7C9920");
+        root.getChildren().clear();
+        root.setStyle("-fx-background-color: #7C9920");
         scene.getStylesheets().add("file://" + new java.io.File("./src/main/resources/css/styles.css").getAbsolutePath());
         root.setLayoutX(0); root.setLayoutY(0); // 设置根节点的位置
 
-        //画背景
-        Rectangle background = new Rectangle(0,0,config.ScreenWidth, config.ScreenHeight);
-        background.setFill(Color.web("#7C9920"));
-        root.getChildren().add(background);
+        canvas = new Canvas(scene.getWidth(), scene.getHeight());
+//        root.getChildren().add(canvas);
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.setFill(Color.web("#7C9920"));
+        gc.fillRect(0, 0, config.ScreenWidth, config.ScreenHeight);
+
+
+//        //画背景
+//        Rectangle background = new Rectangle(0,0,config.ScreenWidth, config.ScreenHeight);
+//        background.setFill(Color.web("#7C9920"));
+//        root.getChildren().add(background);
 
         // 画障碍
         for(Coordinate c: map.keySet()) {
             // rock ?
             if(map.get(c) == -2) {
-                ImageView rock1 = new ImageView(rock1_img);
-                ImageView rock2 = new ImageView(rock2_img);
-                ImageView rock3 = new ImageView(rock3_img);
+//                ImageView rock1 = new ImageView(rock1_img);
+//                ImageView rock2 = new ImageView(rock2_img);
+//                ImageView rock3 = new ImageView(rock3_img);
 //                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
 //                rect.setFill(Color.BLACK);
 //                root.getChildren().add(rect);
                 //随机放置障碍
                 int res = Grass.myRand(c.x * c.x, c.y * c.y, 0, 1, 30);
                 if(res < 11) {
-                    rock1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
-                    rock1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
-                    root.getChildren().add(rock1);
+//                    rock1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    rock1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(rock1);
+                    canvas.getGraphicsContext2D().drawImage(rock1_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else if(res < 21) {
-                    rock2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
-                    rock2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
-                    root.getChildren().add(rock2);
+//                    rock2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    rock2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(rock2);
+                    canvas.getGraphicsContext2D().drawImage(rock2_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else{
-                    rock3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
-                    rock3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
-                    root.getChildren().add(rock3);
+//                    rock3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    rock3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(rock3);
+                    canvas.getGraphicsContext2D().drawImage(rock3_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 }
             }
             // water ?
             if(map.get(c) == -3) {
-                ImageView lily1 = new ImageView(lily1_img);
-                ImageView lily2 = new ImageView(lily2_img);
-                ImageView lily3 = new ImageView(lily3_img);
-                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+                Color waterColor = count1(c.x, c.y, -3) < 4 ? deepBlue : (count2(c.x, c.y, -3) < 8 ? blue : lightBlue);
+                gc.setFill(waterColor);
+                gc.fillRect(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
+
+//                ImageView lily1 = new ImageView(lily1_img);
+//                ImageView lily2 = new ImageView(lily2_img);
+//                ImageView lily3 = new ImageView(lily3_img);
+//                Rectangle rect = new Rectangle(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
                 //如果在边界上，就是深蓝色
-                if(count1(c.x, c.y, -3) < 4) rect.setFill(deepBlue);
-                else if(count2(c.x, c.y, -3) < 8) rect.setFill(blue);
-                else rect.setFill(lightBlue);
-                root.getChildren().add(rect);
+//                if(count1(c.x, c.y, -3) < 4) rect.setFill(deepBlue);
+//                else if(count2(c.x, c.y, -3) < 8) rect.setFill(blue);
+//                else rect.setFill(lightBlue);
+//                root.getChildren().add(rect);
                 if(Grass.myRand(c.x, c.y, 0, 0, 50) < 1) {
-                    lily1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
-                    lily1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
-                    root.getChildren().add(lily1);
+//                    lily1.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    lily1.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(lily1);
+                    canvas.getGraphicsContext2D().drawImage(lily1_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else if(Grass.myRand(c.x, c.y, 1, 0, 50) < 1) {
-                    lily2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
-                    lily2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
-                    root.getChildren().add(lily2);
+//                    lily2.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    lily2.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(lily2);
+                    canvas.getGraphicsContext2D().drawImage(lily2_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 } else if(Grass.myRand(c.x, c.y, 2, 0, 50) < 1) {
-                    lily3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
-                    lily3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
-                    root.getChildren().add(lily3);
+//                    lily3.setLayoutX(AnchorX + c.x * config.Map_Node_Width);
+//                    lily3.setLayoutY(AnchorY + c.y * config.Map_Node_Width);
+//                    root.getChildren().add(lily3);
+                    canvas.getGraphicsContext2D().drawImage(lily3_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 }
             }
         }
@@ -317,15 +342,21 @@ public class SelectMap {
         for(Chest chest: chests) {
             chest.imageView.setLayoutX(AnchorX + chest.x * config.Map_Node_Width);
             chest.imageView.setLayoutY(AnchorY + chest.y * config.Map_Node_Width);
-            root.getChildren().add(chest.imageView);
+//            root.getChildren().add(chest.imageView);
+            canvas.getGraphicsContext2D().drawImage(chest.imageView.getImage(), AnchorX + chest.x * config.Map_Node_Width, AnchorY + chest.y * config.Map_Node_Width);
+
         }
+        root.getChildren().add(canvas);
 
         // 画goals
         for(MapNode node: nodes) {
             node.stackPane.setLayoutX(AnchorX + node.x * config.Map_Node_Width);
             node.stackPane.setLayoutY(AnchorY + node.y * config.Map_Node_Width);
             root.getChildren().add(node.stackPane);
+//            canvas.getGraphicsContext2D().drawImage(goal_img, AnchorX + node.x * config.Map_Node_Width, AnchorY + node.y * config.Map_Node_Width);
+
         }
+
         // 画猫
         cat.imageView.setLayoutX(AnchorX + cat.x * config.Map_Node_Width);
         cat.imageView.setLayoutY(AnchorY + cat.y * config.Map_Node_Width);
