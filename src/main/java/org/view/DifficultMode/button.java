@@ -1,14 +1,18 @@
 package org.view.DifficultMode;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
 
 public class button {
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 12);
+
     static ArrayList<button> all_buttons;
 
     Image image;
@@ -34,6 +38,10 @@ public class button {
         background.setArcWidth(10);
         background.setArcHeight(10);
         background.setStroke(javafx.scene.paint.Color.rgb(255, 255, 255));
+        Label label = new Label(text);
+        label.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-color: white; -fx-border-width: 2px;");
+        label.setTextFill(javafx.scene.paint.Color.WHITE);
+        label.setFont(pixelFont);
 
         stack = new StackPane(background, imageView);
 
@@ -49,6 +57,13 @@ public class button {
             DifficultMode.difficulty += chosen? points : -points;
             DifficultMode.label.setText(DifficultMode.difficulty + "");
             set();
+        });
+
+        stack.setOnMouseEntered(event -> {
+            stack.getChildren().add(label);
+        });
+        stack.setOnMouseExited(event -> {
+            stack.getChildren().remove(label);
         });
     }
 
