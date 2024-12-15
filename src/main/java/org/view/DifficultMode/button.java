@@ -40,7 +40,8 @@ public class button {
         this.points = points;
         this.text = text;
         this.id = id;
-        set(); imageView.setOpacity(chosen? 1 : 0.2);
+        set();
+        imageView.setOpacity(chosen? 1 : 0.2);
 
         stack.setOnMouseClicked(event -> {
             chosen = !chosen;
@@ -56,22 +57,40 @@ public class button {
             case "step1" -> {
                 DifficultMode.lower_step_limit1 = chosen;
                 if(chosen){
-                    DifficultMode.lower_step_limit2 = false;
-                    DifficultMode.lower_step_limit3 = false;
+                    if(DifficultMode.lower_step_limit2) {
+                        DifficultMode.difficulty -= 2;
+                        DifficultMode.lower_step_limit2 = false;
+                    }
+                    if(DifficultMode.lower_step_limit3) {
+                        DifficultMode.difficulty -= 3;
+                        DifficultMode.lower_step_limit3 = false;
+                    }
                 }
             }
             case "step2" -> {
                 DifficultMode.lower_step_limit2 = chosen;
                 if(chosen){
-                    DifficultMode.lower_step_limit1 = false;
-                    DifficultMode.lower_step_limit3 = false;
+                    if(DifficultMode.lower_step_limit1) {
+                        DifficultMode.difficulty -= 1;
+                        DifficultMode.lower_step_limit1 = false;
+                    }
+                    if(DifficultMode.lower_step_limit3) {
+                        DifficultMode.difficulty -= 3;
+                        DifficultMode.lower_step_limit3 = false;
+                    }
                 }
             }
             case "step3" -> {
                 DifficultMode.lower_step_limit3 = chosen;
                 if(chosen){
-                    DifficultMode.lower_step_limit1 = false;
-                    DifficultMode.lower_step_limit2 = false;
+                    if(DifficultMode.lower_step_limit1) {
+                        DifficultMode.difficulty -= 1;
+                        DifficultMode.lower_step_limit1 = false;
+                    }
+                    if(DifficultMode.lower_step_limit2) {
+                        DifficultMode.difficulty -= 2;
+                        DifficultMode.lower_step_limit2 = false;
+                    }
                 }
             }
             case "no_items" -> DifficultMode.no_items = chosen;
