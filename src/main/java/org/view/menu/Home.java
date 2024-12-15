@@ -168,6 +168,8 @@ public class Home {
         root.getChildren().clear();
         primaryStage.setScene(new Scene(menuView));
         primaryStage.show();
+        //切换音乐
+        mediaPlayer.play();
         //停止所有 timeline
         for(Timeline timeline : config.timelines){
             if(timeline != null) timeline.stop();

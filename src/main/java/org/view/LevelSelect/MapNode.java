@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.Rand;
@@ -17,6 +18,8 @@ import org.model.config;
 import org.view.level.LevelManager;
 
 import java.util.Random;
+
+import static org.view.LevelSelect.SelectMap.AnchorX;
 
 public class MapNode {
 
@@ -36,6 +39,7 @@ public class MapNode {
     int target_level;
     private double posX, posY;
     int x,y;
+    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 25);
 
     public MapNode(int index, Stage stage, Random rand){
         this.index = index;
@@ -50,7 +54,6 @@ public class MapNode {
         imageView.setFitWidth(config.Map_Node_Width); imageView.setFitHeight(config.Map_Node_Width);
 
         // 图片上的字
-        Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 25);
         Label label = new Label(Integer.toString(index + 1));
         label.setOpacity(0.2);
         label.setFont(pixelFont);
@@ -94,10 +97,23 @@ public class MapNode {
         this.x = (index % 5) * 3;
         this.y = (int)(rand.nextDouble() * YRange);
     }
+    public static Text levelInfo = new Text("level");
+    public void showInfo(Pane root) {
+        root.getChildren().remove(levelInfo);
+        //显示关卡信息
+        levelInfo.setText("Level " + (index + 1) + "\n" + "Press Enter to start");
+        //在关卡下方显示
+        levelInfo.setLayoutX(SelectMap.AnchorX + x * config.Map_Node_Width);
+        levelInfo.setLayoutY(SelectMap.AnchorY + y * config.Map_Node_Width - 10);
+        levelInfo.setFont(new Font(pixelFont.getName(), 10));
+        //棕色
+        levelInfo.setFill(Color.web("#55371d"));
+        root.getChildren().add(levelInfo);
+    }
 
     public void action() {
         if (!is_locked) {
-            SelectMap.AnchorX = 0; SelectMap.AnchorY = 0;
+            AnchorX = 0; SelectMap.AnchorY = 0;
             load_level();
         }
     }

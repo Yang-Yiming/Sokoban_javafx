@@ -107,40 +107,42 @@ public class FightLevelManager {
         backHomeButton.setLayoutX(120);
         backHomeButton.setLayoutY(400);
         backHomeButton.setOnAction(event -> {
-            mediaPlayer.stop();
-            root.getChildren().clear();
-            Pane menuView = new MenuView(controller);
-            primaryStage.setScene(new Scene(menuView));
-            primaryStage.show();
-            //停止所有 timeline
-            for(Timeline timeline : config.timelines){
-                if(timeline != null) timeline.stop();
-            }
-            //停止所有 server
-            if(FightLevelManager.server != null){
-                //如果 server 正在运行
-                if(FightLevelManager.server.socket != null && !FightLevelManager.server.socket.isClosed()) {
-                    FightLevelManager.server.send(FightLevelManager.server.socket, "B");
-                    try {
-                        FightLevelManager.server.serverSocket.close();
-                        FightLevelManager.server.socket.close();
-                    } catch (IOException e) {
-//                        e.printStackTrace();
-                    }
-                }
-            }
-            //停止所有 client
-            if(FightLevelManager.client != null){
-                //如果 client 正在运行
-                if(!FightLevelManager.client.socket.isClosed()) {
-                    FightLevelManager.client.send(FightLevelManager.client.socket, "B");
-                    try {
-                        FightLevelManager.client.socket.close();
-                    } catch (IOException e) {
-//                        e.printStackTrace();
-                    }
-                }
-            }
+            Home home = new Home();
+            home.homeAction(root, controller, primaryStage, new MenuView(controller));
+//            //停止所有 timeline
+//            for(Timeline timeline : config.timelines){
+//                if(timeline != null) timeline.stop();
+//            }
+//            //停止所有 server
+//            if(FightLevelManager.server != null){
+//                //如果 server 正在运行
+//                if(FightLevelManager.server.socket != null && !FightLevelManager.server.socket.isClosed()) {
+//                    FightLevelManager.server.send(FightLevelManager.server.socket, "B");
+//                    try {
+//                        FightLevelManager.server.serverSocket.close();
+//                        FightLevelManager.server.socket.close();
+//                    } catch (IOException e) {
+////                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//            //停止所有 client
+//            if(FightLevelManager.client != null){
+//                //如果 client 正在运行
+//                if(!FightLevelManager.client.socket.isClosed()) {
+//                    FightLevelManager.client.send(FightLevelManager.client.socket, "B");
+//                    try {
+//                        FightLevelManager.client.socket.close();
+//                    } catch (IOException e) {
+////                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//            mediaPlayer.stop();
+//            root.getChildren().clear();
+//            Pane menuView = new MenuView(controller);
+//            primaryStage.setScene(new Scene(menuView));
+//            primaryStage.show();
         });
 
         //取消 startButton 对上下左右键的监听

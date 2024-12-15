@@ -264,7 +264,9 @@ public class MenuView extends AnchorPane {
 //        getChildren().add(grass);
         addground();
 
-        mediaPlayer = new MediaPlayer(new Media(getClass().getResource("/music/main.m4a").toExternalForm()));
+        if(mediaPlayer == null) mediaPlayer = new MediaPlayer(new Media(getClass().getResource("/music/main.m4a").toExternalForm()));
+
+//        System.out.println("play!");
         mediaPlayer.play();
         setMusic("main.m4a");
 
@@ -345,6 +347,7 @@ public class MenuView extends AnchorPane {
         return btn;
     }
     Button btn_mode1 = null, btn_mode2 = null, btn_mode3 = null;
+    Timeline volumeUp;
     public void setMusic(String music){
         mediaPlayer.stop();
         Media backgroundMusic = new Media(getClass().getResource("/music/" + music).toExternalForm());
@@ -352,10 +355,12 @@ public class MenuView extends AnchorPane {
         mediaPlayer.setVolume(0);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
-        Timeline volumeUp = new Timeline(
+        if(volumeUp != null) volumeUp.stop();
+        volumeUp = new Timeline(
                 new KeyFrame(Duration.seconds(5), new KeyValue(mediaPlayer.volumeProperty(), config.volume))
         );
         volumeUp.play();
+//        System.out.println("set music");
     }
     private void startButtonClicked() {
         // 按钮生成

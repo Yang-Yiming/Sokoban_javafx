@@ -281,6 +281,7 @@ public class LevelManager {
             setSettingsButton();
             setHomeButton();
             setThemeButton();
+            rightArrow.setLayoutX(newValue.doubleValue() - 80);
         });
 
 
@@ -297,9 +298,11 @@ public class LevelManager {
             item_hint.setLayoutY(newValue.doubleValue() - 97);
             item_plus.setLayoutY(newValue.doubleValue() - 97);
             item_withdraw.setLayoutY(newValue.doubleValue() - 97);
-            item_hintText.setLayoutY(newValue.doubleValue() - 63);
-            item_plusText.setLayoutY(newValue.doubleValue() - 63);
-            item_withdrawText.setLayoutY(newValue.doubleValue() - 63);
+            item_hintText.setLayoutY(newValue.doubleValue() - 25);
+            item_plusText.setLayoutY(newValue.doubleValue() - 25);
+            item_withdrawText.setLayoutY(newValue.doubleValue() - 25);
+//            rightArrow.setLayoutY(newValue.doubleValue() / 2 - 25);
+//            leftArrow.setLayoutY(newValue.doubleValue() / 2 - 25);
         });
     }
     boolean IAmInLevel = false;
@@ -412,9 +415,9 @@ public class LevelManager {
             item_hint.setLayoutY(newValue.doubleValue() - 97);
             item_plus.setLayoutY(newValue.doubleValue() - 97);
             item_withdraw.setLayoutY(newValue.doubleValue() - 97);
-            item_hintText.setLayoutY(newValue.doubleValue() - 63);
-            item_plusText.setLayoutY(newValue.doubleValue() - 63);
-            item_withdrawText.setLayoutY(newValue.doubleValue() - 63);
+            item_hintText.setLayoutY(newValue.doubleValue() - 25);
+            item_plusText.setLayoutY(newValue.doubleValue() - 25);
+            item_withdrawText.setLayoutY(newValue.doubleValue() - 25);
         });
     }
 

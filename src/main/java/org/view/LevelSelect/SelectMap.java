@@ -116,8 +116,10 @@ public class SelectMap {
 
         cat = new Cat(user);
         setSeed(LevelManager.groupNumber);
-        AnchorX = scene.getWidth() / 2 - 100;
-        AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
+//        AnchorX = scene.getWidth() / 2 - 100;
+//        AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
+        AnchorX = 800 / 2 - 100;
+        AnchorY = (600 - config.Map_Node_Width) / 2;
         map = new HashMap<>();
     }
 
@@ -132,7 +134,7 @@ public class SelectMap {
         int[] dy = new int[]{0, 1, 0, -1, 1, -1, 1, -1};
         for(int i = 0; i < 8; i++) {
             int xx = x + dx[i], yy = y + dy[i];
-            if(xx == 0 && yy == 0) return -1; // 猫的出生点默认是（0，0）吧
+            if(xx == cat.x && yy == cat.y) return -1; // 猫的出生点默认是（0，0）吧
             int get = map.getOrDefault(new Coordinate(xx, yy), 0);
             if(get == goal) cnt++;
             if(get == -1 || get > 0) return -1; // 让目标点和宝箱周围无障碍
@@ -146,7 +148,7 @@ public class SelectMap {
         int[] dy = new int[]{0, 1, 0, -1};
         for(int i = 0; i < 4; i++) {
             int xx = x + dx[i], yy = y + dy[i];
-            if(xx == 0 && yy == 0) return -1;
+            if(xx == cat.x && yy == cat.y) return -1;
             int get = map.getOrDefault(new Coordinate(xx, yy), 0);
             if(get == goal) cnt++;
             if(get == -1 || get > 0) return -1; // 让目标点和宝箱周围无障碍
@@ -160,7 +162,7 @@ public class SelectMap {
         int[] dy = new int[]{0, 2, 0, -2, 1, -1, 1, -1};
         for(int i = 0; i < 8; i++) {
             int xx = x + dx[i], yy = y + dy[i];
-            if(xx == 0 && yy == 0) return -1;
+            if(xx == cat.x && yy == cat.y) return -1;
             int get = map.getOrDefault(new Coordinate(xx, yy), 0);
             if(get == goal) cnt++;
             if(get == -1 || get > 0) return -1; // 让目标点和宝箱周围无障碍
@@ -264,9 +266,11 @@ public class SelectMap {
 
         // 障碍
         int left_x = -(int)(AnchorX / config.Map_Node_Width);
-        int right_x = (int)((scene.getWidth() - AnchorX) / config.Map_Node_Width);
+//        int right_x = (int)((scene.getWidth() - AnchorX) / config.Map_Node_Width);
+        int right_x = (int)((800 - AnchorX) / config.Map_Node_Width);
         int up_y = -(int)(AnchorY / config.Map_Node_Width);
-        int down_y = (int)((scene.getHeight() - AnchorY) / config.Map_Node_Width);
+//        int down_y = (int)((scene.getHeight() - AnchorY) / config.Map_Node_Width);
+        int down_y = (int)((600 - AnchorY) / config.Map_Node_Width);
 
         generate_obstacle(left_x-1, up_y-1, right_x-1, down_y-1, 20);
     }
@@ -336,11 +340,11 @@ public class SelectMap {
                 gc.setFill(waterColor);
                 gc.fillRect(AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width, config.Map_Node_Width, config.Map_Node_Width);
 
-                if(Rand.myRand(c.x, c.y, 0, 0, 50) < 1) {
+                if(Rand.myRand(c.x, c.y, LevelManager.groupNumber, 0, 50) < 1) {
                     canvas.getGraphicsContext2D().drawImage(lily1_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
-                } else if(Rand.myRand(c.x, c.y, 1, 0, 50) < 1) {
+                } else if(Rand.myRand(c.x, c.y, LevelManager.groupNumber + 10, 0, 50) < 1) {
                     canvas.getGraphicsContext2D().drawImage(lily2_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
-                } else if(Rand.myRand(c.x, c.y, 2, 0, 50) < 1) {
+                } else if(Rand.myRand(c.x, c.y, LevelManager.groupNumber + 20, 0, 50) < 1) {
                     canvas.getGraphicsContext2D().drawImage(lily3_img, AnchorX + c.x * config.Map_Node_Width, AnchorY + c.y * config.Map_Node_Width);
                 }
             }
@@ -414,6 +418,8 @@ public class SelectMap {
             if (moves[0].isEmpty()){
                 int at = map.getOrDefault(new Coordinate(cat.x, cat.y),0);
                 if(at > 0 && !nodes.get((at - 1) % 5).is_locked) {
+                    //显示关卡信息
+                    nodes.get((at - 1) % 5).showInfo(superRoot);
                     // 按下enter
                     scene.setOnKeyPressed(event -> {
                         if(event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
@@ -423,7 +429,7 @@ public class SelectMap {
                             cameraTimeline.stop();
                         }
                     });
-                }
+                } else superRoot.getChildren().remove(MapNode.levelInfo);
                 if(goal_chest[0] != null) {
                     goal_chest[0].open(superRoot);
                     goal_chest[0] = null;
