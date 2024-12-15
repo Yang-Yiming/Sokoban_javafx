@@ -11,12 +11,15 @@ import org.model.MapMatrix;
 import org.model.Solve.Solve;
 import org.model.User;
 import org.model.config;
+import org.view.DifficultMode.DifficultMode;
+import org.view.DifficultMode.thunder;
 
 import java.util.Map;
 
 public class NormalLevel extends Level {
 
     private boolean default_map = true;
+    private thunder thunder;
 
     public MapMatrix getMap() {
         return (MapMatrix) map;
@@ -48,6 +51,11 @@ public class NormalLevel extends Level {
             alert.setContentText("A*用时" + solve_time + "ms");
             alert.show();
         }
+
+        if(DifficultMode.thunder) {
+            thunder = new thunder(root);
+            thunder.draw();
+        }
     }
 
     public NormalLevel(Pane root, int id, int[][][] maps, Stage primaryStage, User user) {
@@ -64,5 +72,12 @@ public class NormalLevel extends Level {
         map = new MapMatrix(map_matrix);
         init();
         this.default_map = true;
+    }
+
+    @Override
+    public void drawMap() {
+        super.drawMap();
+        if(thunder!=null)
+            root.getChildren().add(thunder.rect);
     }
 }

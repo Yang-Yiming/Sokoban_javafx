@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
+import org.view.DifficultMode.DifficultMode;
 import org.view.level.Grass;
 import javafx.scene.canvas.Canvas;
 import org.view.level.LevelManager;
@@ -440,6 +441,7 @@ public class SelectMap {
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         scene.setOnMouseClicked(event -> {
+            if(DifficultMode.opened) return;
             if(event.getClickCount() != 1)  return;
 
             int x = (int) ((event.getSceneX() - AnchorX) / config.Map_Node_Width);

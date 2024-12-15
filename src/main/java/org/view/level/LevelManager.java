@@ -21,10 +21,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.data.mapdata;
 import org.model.SavingManager;
 import org.model.User;
 import org.model.config;
+import org.view.DifficultMode.DifficultMode;
 import org.view.LevelSelect.MapNode;
 import org.view.LevelSelect.SelectMap;
 
@@ -276,6 +276,11 @@ public class LevelManager {
         createRightArrow();
         addArrows();
 
+        if(user.getMaxLevel() >= 5 || true) {
+            DifficultMode difficultMode = new DifficultMode(root);
+            difficultMode.draw();
+        }
+
         // 监听大小改变
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
             setSettingsButton();
@@ -367,6 +372,11 @@ public class LevelManager {
 //                hint.autoMoveOnce();
             }
             else return;
+
+            if(DifficultMode.mushrooms){
+                dx = -dx; dy = -dy;
+            }
+
             keyPressedEvent(dx, dy, id);
         });
 
