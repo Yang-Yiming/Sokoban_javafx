@@ -22,6 +22,7 @@ public class DifficultMode {
     Rectangle rect;
     public static Label label;
     public static boolean opened;
+    boolean isMoving;
     GridPane girdPane;
     Timeline girdFade;
 
@@ -48,14 +49,21 @@ public class DifficultMode {
         label.setTextFill(Color.WHITE);
         stack = new StackPane(rect, label);
         opened = false;
+        isMoving = false;
 
-        rect.setOnMouseClicked(event -> {
-            opened = !opened;
-            if(opened)
-                close_select_page();
-            else
+        stack.setOnMouseEntered(event -> {
+            if(!opened && !isMoving) {
+                opened = true;
                 show_select_page();
+            }
         });
+        stack.setOnMouseExited(event -> {
+            if(opened && !isMoving) {
+                opened = false;
+                close_select_page();
+            }
+        });
+
 
         // 按钮
         button lower_step_limit1 = new button("/images/item/down.png", 1, "步数限制-", "step1");
@@ -76,13 +84,15 @@ public class DifficultMode {
         girdPane.add(mushrooms.stack, 2, 2);
     }
 
+    public static final int beginX = 10, beginY = 30;
     public void draw() {
-        stack.setLayoutX(10);
-        stack.setLayoutY(30);
+        stack.setLayoutX(beginX);
+        stack.setLayoutY(beginY);
         root.getChildren().add(stack);
     }
 
     void show_select_page() {
+        isMoving = true;
         Timeline bigger_rect = new Timeline();
         bigger_rect.getKeyFrames().add(
                 new KeyFrame(
@@ -95,6 +105,7 @@ public class DifficultMode {
                                 rect.setHeight((rect.getHeight() + 15));
                             } else {
                                 bigger_rect.stop();
+                                isMoving = false;
                             }
                         }
                 )
@@ -112,12 +123,13 @@ public class DifficultMode {
     }
 
     void close_select_page() {
+        isMoving = true;
         girdFade = new Timeline(
                 new KeyFrame(Duration.ZERO, new javafx.animation.KeyValue(girdPane.opacityProperty(), 1)),
                 new KeyFrame(Duration.millis(200), new javafx.animation.KeyValue(girdPane.opacityProperty(), 0))
-        );
+        ); girdFade.play();
         girdFade.setOnFinished(event -> {
-            root.getChildren().remove(girdPane);
+            stack.getChildren().remove(girdPane);
         });
 
         Timeline smaller_rect = new Timeline();
@@ -132,6 +144,7 @@ public class DifficultMode {
                                 rect.setHeight((rect.getHeight() - 15));
                             } else {
                                 smaller_rect.stop();
+                                isMoving = false;
                             }
                         }
                 )
