@@ -38,9 +38,9 @@ public class NormalLevel extends Level {
         config.this_is_hint = true;
 //        if(super.stepLimit == -1)
             super.stepLimit = solve_moves(new MapMatrix(mapdata.maps[id])).length() + 15;
-        if(DifficultMode.lower_step_limit1.chosen) super.stepLimit -= 5;
-        if(DifficultMode.lower_step_limit2.chosen) super.stepLimit -= 10;
-        if(DifficultMode.lower_step_limit3.chosen) super.stepLimit -= 15;
+        if(DifficultMode.lower_step_limit1 != null && DifficultMode.lower_step_limit1.chosen) super.stepLimit -= 5;
+        if(DifficultMode.lower_step_limit2 != null && DifficultMode.lower_step_limit2.chosen) super.stepLimit -= 10;
+        if(DifficultMode.lower_step_limit3 != null && DifficultMode.lower_step_limit3.chosen) super.stepLimit -= 15;
         config.this_is_hint = false;
 
         LevelManager.groupNumber = id / 5 + 1;
@@ -56,7 +56,7 @@ public class NormalLevel extends Level {
             alert.show();
         }
 
-        if(DifficultMode.thunder.chosen) {
+        if(DifficultMode.thunder != null && DifficultMode.thunder.chosen) {
             thunder = new thunder(root);
             thunder.draw();
         }

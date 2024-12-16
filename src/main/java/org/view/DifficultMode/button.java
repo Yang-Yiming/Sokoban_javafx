@@ -92,9 +92,9 @@ public class button {
                 }
             }
         }
-        if(LevelManager.item_plus != null) LevelManager.item_plus.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
-        if(LevelManager.item_hint != null) LevelManager.item_hint.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
-        if(LevelManager.item_withdraw != null) LevelManager.item_withdraw.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
+        if(LevelManager.item_plus != null && DifficultMode.no_items != null) LevelManager.item_plus.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
+        if(LevelManager.item_hint != null && DifficultMode.no_items != null) LevelManager.item_hint.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
+        if(LevelManager.item_withdraw != null && DifficultMode.no_items != null) LevelManager.item_withdraw.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
         for(button btn: all_buttons) {
             btn.setOpacity();
         }

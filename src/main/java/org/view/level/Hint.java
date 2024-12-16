@@ -44,7 +44,7 @@ public class Hint {
 
     public void Move(char move) {
         KeyCode code;
-        if(DifficultMode.mushrooms.chosen){
+        if(DifficultMode.mushrooms != null && DifficultMode.mushrooms.chosen){
             if (move == 'w') code = KeyCode.S;
             else if (move == 'a') code = KeyCode.D;
             else if (move == 's') code = KeyCode.W;
