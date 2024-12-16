@@ -36,17 +36,27 @@ public class DifficultMode {
     public DifficultMode(Pane root) {
         this.root = root;
         rect = new Rectangle(0, 0, 80, 34);
-        rect.setFill(Color.rgb(112,40,30));
-        rect.setOpacity(0.8);
+//        rect.setFill(Color.rgb(112,40,30));
+        rect.setFill(Color.BLACK);
+        rect.setOpacity(0.3);
         // 圆角
         rect.setArcWidth(10);
         rect.setArcHeight(10);
-        rect.setStroke(Color.rgb(112,20,1));
+        rect.setStroke(Color.web("#55371d"));
+        rect.setStrokeWidth(3);
 
         label = new Label(difficulty + "");
         label.setFont(pixelFont);
         label.setTextFill(Color.WHITE);
         stack = new StackPane(rect, label);
+// 将 label 放在 rect 的右下角，并能随着 rect 的大小变化而变化
+        rect.widthProperty().addListener((obs, oldVal, newVal) -> {
+//            System.out.println(newVal.doubleValue());
+            label.setTranslateX((newVal.doubleValue() - 76) / 2);
+        });
+        rect.heightProperty().addListener((obs, oldVal, newVal) -> {
+            label.setTranslateY((newVal.doubleValue() - 34) / 2);
+        });
         opened = false;
         isMoving = false;
 
@@ -73,6 +83,8 @@ public class DifficultMode {
         if(mushrooms == null) mushrooms = new button("/images/item/mushroom.png", 3, "吃菌子了", "mushrooms");
 
         girdPane = new GridPane();
+        girdPane.setTranslateX(30);
+        girdPane.setTranslateY(30);
         girdPane.setVgap(20);
         girdPane.setHgap(30);
         girdPane.add(lower_step_limit1.stack, 0, 0);
@@ -97,10 +109,10 @@ public class DifficultMode {
                 new KeyFrame(
                         Duration.millis(20),
                         event -> {
-                            if(rect.getWidth() < 550) {
+                            if(rect.getWidth() < 340) {
                                 rect.setWidth((rect.getWidth() + 35));
                             }
-                            if(rect.getHeight() < 400) {
+                            if(rect.getHeight() < 340) {
                                 rect.setHeight((rect.getHeight() + 15));
                             } else {
                                 bigger_rect.stop();
