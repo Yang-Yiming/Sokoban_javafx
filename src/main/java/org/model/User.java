@@ -11,6 +11,7 @@ public class User {
     private int LevelAt = 0;
     private int LevelAtStep;
     private int MaxLevel = 0;
+    private int MaxDifficultyLevel = 0;
     private int MaxTreasure = 0;
     private int MinTime = -1;
     private int Item_hintNumber = 3;
@@ -55,6 +56,9 @@ public class User {
     public int getItem_withdrawNumber() {
         return Item_withdrawNumber;
     }
+    public int getMaxDifficultyLevel() {
+        return MaxDifficultyLevel;
+    }
     public void setLevelAt(int levelAt) {
         LevelAt = levelAt;
     }
@@ -63,6 +67,9 @@ public class User {
     }
     public void setMaxLevel(int maxLevel) {
         MaxLevel = maxLevel;
+    }
+    public void setMaxDifficultyLevel(int maxDifficultyLevel) {
+        MaxDifficultyLevel = maxDifficultyLevel;
     }
     public void setMaxTreasure(int maxTreasure) {
         MaxTreasure = maxTreasure;
@@ -121,6 +128,7 @@ public class User {
                 ", LevelAt=" + LevelAt +
                 ", LevelAtStep=" + LevelAtStep +
                 ", MaxLevel=" + MaxLevel +
+                ", MaxDifficultyLevel=" + MaxDifficultyLevel +
                 ", MaxTreasure=" + MaxTreasure +
                 ", MinTime=" + MinTime +
                 ", Item_hintNumber=" + Item_hintNumber +
@@ -140,6 +148,7 @@ public class User {
         json.append("\"LevelAt\":").append(LevelAt).append(",");
         json.append("\"LevelAtStep\":").append(LevelAtStep).append(",");
         json.append("\"MaxLevel\":").append(MaxLevel).append(",");
+        json.append("\"MaxDifficultyLevel\":").append(MaxDifficultyLevel).append(",");
         json.append("\"MaxTreasure\":").append(MaxTreasure).append(",");
         json.append("\"MinTime\":").append(MinTime).append(",");
         json.append("\"Item_hintNumber\":").append(Item_hintNumber).append(",");
@@ -202,6 +211,7 @@ public class User {
         int levelAt = Integer.parseInt(jsonMap.get("LevelAt"));
         int levelAtStep = Integer.parseInt(jsonMap.get("LevelAtStep"));
         int MaxLevel = Integer.parseInt(jsonMap.get("MaxLevel"));
+        int MaxDifficultyLevel = Integer.parseInt(jsonMap.get("MaxDifficultyLevel"));
         int MaxTreasure = Integer.parseInt(jsonMap.get("MaxTreasure"));
         int MinTime = Integer.parseInt(jsonMap.get("MinTime"));
         int Item_hintNumber = Integer.parseInt(jsonMap.get("Item_hintNumber"));
@@ -231,6 +241,7 @@ public class User {
         user.LevelAt = levelAt;
         user.LevelAtStep = levelAtStep;
         user.MaxLevel = MaxLevel;
+        user.MaxDifficultyLevel = MaxDifficultyLevel;
         user.MaxTreasure = MaxTreasure;
         user.MinTime = MinTime;
         user.Item_hintNumber = Item_hintNumber;
