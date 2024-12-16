@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import org.model.config;
+import org.view.DifficultMode.DifficultMode;
 import org.view.game.player;
 
 import java.sql.Time;
@@ -43,11 +44,19 @@ public class Hint {
 
     public void Move(char move) {
         KeyCode code;
-        if (move == 'w') code = KeyCode.W;
-        else if (move == 'a') code = KeyCode.A;
-        else if (move == 's') code = KeyCode.S;
-        else if (move == 'd') code = KeyCode.D;
-        else return;
+        if(DifficultMode.mushrooms.chosen){
+            if (move == 'w') code = KeyCode.S;
+            else if (move == 'a') code = KeyCode.D;
+            else if (move == 's') code = KeyCode.W;
+            else if (move == 'd') code = KeyCode.A;
+            else return;
+        }else{
+            if (move == 'w') code = KeyCode.W;
+            else if (move == 'a') code = KeyCode.A;
+            else if (move == 's') code = KeyCode.S;
+            else if (move == 'd') code = KeyCode.D;
+            else return;
+        }
 
         KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, false, false, false, false);
         level.getRoot().fireEvent(keyEvent);
