@@ -39,8 +39,10 @@ public class InfiniteMap extends GameMap {
     public void add_data(int begin_x, int begin_y, int[][] data) {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
-                if(data[i][j] != DEFAULT_VALUE && data[i][j] != 4) { // 防止出现好几个player
+                if(data[i][j] != DEFAULT_VALUE && ((data[i][j] >> 2) & 1) != 1) { // 防止出现好几个player
                     set(begin_x + j, begin_y + i, data[i][j]);
+                }else if(data[i][j] != DEFAULT_VALUE){
+                    set(begin_x + j, begin_y + i, data[i][j] - (1 << 2));
                 }
             }
         }

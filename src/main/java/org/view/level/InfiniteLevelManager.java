@@ -196,7 +196,7 @@ public class InfiniteLevelManager {
     }
 
     public void win_update() {
-        int new_map_id = (int) (mapdata.maps.length * Math.random());
+        int new_map_id = (int) ((mapdata.maps.length - 1) * Math.random());
         Direction direction = new Direction[]{Direction.RIGHT, Direction.DOWN}[(int)(2 * Math.random())];
         int[][] next_map = mapdata.maps[new_map_id];
         change_level(direction, next_map);
@@ -222,11 +222,43 @@ public class InfiniteLevelManager {
     private void open_door(Direction direction) {
         switch (direction) {
             case RIGHT -> {
-                level.getMap().set(last_right - 1, (last_up + last_down)/2, 0);
+                int xx = last_right - 1, yy = (last_up + last_down) / 2;
+                while(level.getMap().get(xx, yy) == 0) --xx;
+                while(level.getMap().get(xx, yy) == 1){
+                    level.getMap().set(xx, yy, 0);
+                    --xx;
+                }
+                xx = last_right - 1; yy = (last_up + last_down) / 2 - 2;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    --xx;
+                }
+                xx = last_right - 1; yy = (last_up + last_down) / 2 + 2;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    --xx;
+                }
+//                level.getMap().set(last_right - 1, (last_up + last_down)/2, 0);
             } case UP -> {
                 level.getMap().set((last_right + last_left)/2, last_up, 0);
             } case DOWN -> {
-                level.getMap().set((last_right +last_left)/2, last_down - 1,0);
+                int xx = (last_right + last_left) / 2, yy = last_down - 1;
+                while(level.getMap().get(xx, yy) == 0) --yy;
+                while(level.getMap().get(xx, yy) == 1){
+                    level.getMap().set(xx, yy, 0);
+                    --yy;
+                }
+                xx = (last_right + last_left) / 2 - 3; yy = last_down - 1;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    --yy;
+                }
+                xx = (last_right + last_left) / 2 + 1; yy = last_down - 1;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    --yy;
+                }
+//                level.getMap().set((last_right +last_left)/2, last_down - 1,0);
             } case LEFT -> {
 
             }
@@ -238,7 +270,24 @@ public class InfiniteLevelManager {
                 int x = last_right + RoadLength;
                 int y = (last_up + last_down - data.length) / 2;
                 add_level(x, y, data);
-                level.getMap().set(x, (last_up + last_down) / 2, 0); // 关卡入口 根据上一关
+//                level.getMap().set(x, (last_up + last_down) / 2, 0); // 关卡入口 根据上一关
+                int xx, yy;
+                xx = x; yy = y + data.length / 2;
+                while(level.getMap().get(xx, yy) == 0) ++xx;
+                while(level.getMap().get(xx, yy) == 1){
+                    level.getMap().set(xx, yy, 0);
+                    ++xx;
+                }
+                xx = x; yy = y + data.length / 2 - 2;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    ++xx;
+                }
+                xx = x; yy = y + data.length / 2 + 2;
+                while(level.getMap().get(xx, yy) == 0){
+                    level.getMap().set(xx, yy, 1);
+                    ++xx;
+                }
             } case LEFT -> {
 
             } case DOWN -> {
