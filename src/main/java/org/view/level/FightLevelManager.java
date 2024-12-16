@@ -402,8 +402,8 @@ public class FightLevelManager {
         }
         root.getChildren().add(label);
 
-        //一秒钟后消失
-        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        //根据 label 的长度调整显示时间
+        PauseTransition pause = new PauseTransition(Duration.millis((label.getText().length() + 4) * 100));
         pause.setOnFinished(event -> {
             root.getChildren().remove(label);
         });
