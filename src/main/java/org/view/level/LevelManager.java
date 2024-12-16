@@ -242,6 +242,7 @@ public class LevelManager {
         leftArrow.setLayoutX(30);
         leftArrow.setLayoutY(primaryStage.getHeight() / 2 - 25);
         leftArrow.setOnMouseClicked(event -> {
+            event.consume();
             --groupNumber;
             level.stopTimelines();
             showLevelMenu();
@@ -254,6 +255,7 @@ public class LevelManager {
         rightArrow.setLayoutX(primaryStage.getWidth() - 80);
         rightArrow.setLayoutY(primaryStage.getHeight() / 2 - 25);
         rightArrow.setOnMouseClicked(event -> {
+            event.consume();
             ++groupNumber;
             level.stopTimelines();
             showLevelMenu();
