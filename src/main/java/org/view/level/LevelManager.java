@@ -106,13 +106,13 @@ public class LevelManager {
         item_hint.setLayoutX(45);
         item_hint.setLayoutY(primaryStage.getHeight() - 135);
         item_hint.setOnMouseDragged(event -> {
-            if(IAmInLevel && !DifficultMode.no_items) {
+            if(IAmInLevel && !DifficultMode.no_items.chosen) {
                 item_hint.setX(event.getX() - 20);
                 item_hint.setY(event.getY() - 20);
             }
         });
         item_hint.setOnMousePressed(event -> {
-            if(IAmInLevel && !DifficultMode.no_items)
+            if(IAmInLevel && !DifficultMode.no_items.chosen)
                 isDraggingItem = true;
         });
         item_hint.setOnMouseReleased(event -> {
@@ -141,7 +141,7 @@ public class LevelManager {
             item_hint.setX(0);
             item_hint.setY(0);
         });
-        item_hint.setOpacity(DifficultMode.no_items? 0.3 : 1);
+        item_hint.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
         if(config.item_hintNumber > 0) root.getChildren().add(item_hint);
     }
 
@@ -157,13 +157,13 @@ public class LevelManager {
         item_plus.setLayoutX(105);
         item_plus.setLayoutY(primaryStage.getHeight() - 135);
         item_plus.setOnMouseDragged(event -> {
-            if(IAmInLevel && !DifficultMode.no_items) {
+            if(IAmInLevel && !DifficultMode.no_items.chosen) {
                 item_plus.setX(event.getX() - 20);
                 item_plus.setY(event.getY() - 20);
             }
         });
         item_plus.setOnMousePressed(event -> {
-            if(IAmInLevel && !DifficultMode.no_items)
+            if(IAmInLevel && !DifficultMode.no_items.chosen)
                 isDraggingItem = true;
         });
         item_plus.setOnMouseReleased(event -> {
@@ -184,7 +184,7 @@ public class LevelManager {
             item_plus.setX(0);
             item_plus.setY(0);
         });
-        item_plus.setOpacity(DifficultMode.no_items? 0.3 : 1);
+        item_plus.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
         if(config.item_plusNumber > 0) root.getChildren().add(item_plus);
     }
 
@@ -200,13 +200,13 @@ public class LevelManager {
         item_withdraw.setLayoutX(165);
         item_withdraw.setLayoutY(primaryStage.getHeight() - 135);
         item_withdraw.setOnMouseDragged(event -> {
-            if(IAmInLevel && !DifficultMode.no_items) {
+            if(IAmInLevel && !DifficultMode.no_items.chosen) {
                 item_withdraw.setX(event.getX() - 20);
                 item_withdraw.setY(event.getY() - 20);
             }
         });
         item_withdraw.setOnMousePressed(event -> {
-            if(IAmInLevel && !DifficultMode.no_items)
+            if(IAmInLevel && !DifficultMode.no_items.chosen)
                  isDraggingItem = true;
         });
         item_withdraw.setOnMouseReleased(event -> {
@@ -230,7 +230,7 @@ public class LevelManager {
             item_withdraw.setX(0);
             item_withdraw.setY(0);
         });
-        item_withdraw.setOpacity(DifficultMode.no_items? 0.3 : 1);
+        item_withdraw.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
         if(config.item_withdrawNumber > 0) root.getChildren().add(item_withdraw);
     }
     ImageView leftArrow, rightArrow;
@@ -376,7 +376,7 @@ public class LevelManager {
             }
             else return;
 
-            if(DifficultMode.mushrooms){
+            if(DifficultMode.mushrooms.chosen){
                 dx = -dx; dy = -dy;
             }
 

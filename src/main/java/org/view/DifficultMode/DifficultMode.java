@@ -27,13 +27,12 @@ public class DifficultMode {
     Timeline girdFade;
 
     public static int difficulty = 0;
-    public static boolean lower_step_limit1 = false;
-    public static boolean lower_step_limit2 = false;
-    public static boolean lower_step_limit3 = false;
-    public static boolean no_items = false;
-    public static boolean thunder = false;
-    public static boolean mushrooms = false;
-
+    public static button lower_step_limit1;
+    public static button lower_step_limit2;
+    public static button lower_step_limit3;
+    public static button no_items;
+    public static button thunder;
+    public static button mushrooms;
     public DifficultMode(Pane root) {
         this.root = root;
         rect = new Rectangle(0, 0, 80, 34);
@@ -66,12 +65,12 @@ public class DifficultMode {
 
 
         // 按钮
-        button lower_step_limit1 = new button("/images/item/down.png", 1, "步数限制-", "step1");
-        button lower_step_limit2 = new button("/images/item/down2.png", 2, "步数限制--", "step2");
-        button lower_step_limit3 = new button("/images/item/down3.png", 3, "步数限制---", "step3");
-        button no_items = new button("/images/item/X.png", 2, "无道具", "no_items");
-        button thunder = new button("/images/item/cloud.png", 3, "雷雨天", "thunder");
-        button mushrooms = new button("/images/item/mushroom.png", 3, "吃菌子了", "mushrooms");
+        lower_step_limit1 = new button("/images/item/down.png", 1, "步数限制-", "step1");
+        lower_step_limit2 = new button("/images/item/down2.png", 2, "步数限制--", "step2");
+        lower_step_limit3 = new button("/images/item/down3.png", 3, "步数限制---", "step3");
+        no_items = new button("/images/item/X.png", 2, "无道具", "no_items");
+        thunder = new button("/images/item/cloud.png", 3, "雷雨天", "thunder");
+        mushrooms = new button("/images/item/mushroom.png", 3, "吃菌子了", "mushrooms");
 
         girdPane = new GridPane();
         girdPane.setVgap(20);

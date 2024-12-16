@@ -19,7 +19,7 @@ public class button {
     ImageView imageView;
     Rectangle background;
     StackPane stack;
-    boolean chosen = false;
+    public boolean chosen = false;
 
     int points;
     String text;
@@ -53,10 +53,13 @@ public class button {
 
         stack.setOnMouseClicked(event -> {
             chosen = !chosen;
-            imageView.setOpacity(chosen? 1 : 0.2);
-            DifficultMode.difficulty += chosen? points : -points;
-            DifficultMode.label.setText(DifficultMode.difficulty + "");
+            setOpacity();
             set();
+            DifficultMode.difficulty = 0;
+            for(button btn: all_buttons) {
+                if(btn.chosen) DifficultMode.difficulty += btn.points;
+            }
+            DifficultMode.label.setText(DifficultMode.difficulty + "");
         });
 
         stack.setOnMouseEntered(event -> {
@@ -70,61 +73,31 @@ public class button {
     public void set() {
         switch (id) {
             case "step1" -> {
-                DifficultMode.lower_step_limit1 = chosen;
                 if(chosen){
-                    if(DifficultMode.lower_step_limit2) {
-                        DifficultMode.difficulty -= 2;
-                        DifficultMode.lower_step_limit2 = false;
-                    }
-                    if(DifficultMode.lower_step_limit3) {
-                        DifficultMode.difficulty -= 3;
-                        DifficultMode.lower_step_limit3 = false;
-                    }
+                    DifficultMode.lower_step_limit2.chosen = false;
+                    DifficultMode.lower_step_limit3.chosen = false;
                 }
             }
             case "step2" -> {
-                DifficultMode.lower_step_limit2 = chosen;
                 if(chosen){
-                    if(DifficultMode.lower_step_limit1) {
-                        DifficultMode.difficulty -= 1;
-                        DifficultMode.lower_step_limit1 = false;
-                    }
-                    if(DifficultMode.lower_step_limit3) {
-                        DifficultMode.difficulty -= 3;
-                        DifficultMode.lower_step_limit3 = false;
-                    }
+                    DifficultMode.lower_step_limit1.chosen = false;
+                    DifficultMode.lower_step_limit3.chosen = false;
                 }
             }
             case "step3" -> {
-                DifficultMode.lower_step_limit3 = chosen;
                 if(chosen){
-                    if(DifficultMode.lower_step_limit1) {
-                        DifficultMode.difficulty -= 1;
-                        DifficultMode.lower_step_limit1 = false;
-                    }
-                    if(DifficultMode.lower_step_limit2) {
-                        DifficultMode.difficulty -= 2;
-                        DifficultMode.lower_step_limit2 = false;
-                    }
+                    DifficultMode.lower_step_limit1.chosen = false;
+                    DifficultMode.lower_step_limit2.chosen = false;
                 }
             }
-            case "no_items" -> DifficultMode.no_items = chosen;
-            case "thunder" -> DifficultMode.thunder = chosen;
-            case "mushrooms" -> DifficultMode.mushrooms = chosen;
         }
         for(button btn: all_buttons) {
             btn.setOpacity();
         }
     }
 
+
     public void setOpacity() {
-        switch(id) {
-            case "step1" -> imageView.setOpacity(DifficultMode.lower_step_limit1? 1 : 0.2);
-            case "step2" -> imageView.setOpacity(DifficultMode.lower_step_limit2? 1 : 0.2);
-            case "step3" -> imageView.setOpacity(DifficultMode.lower_step_limit3? 1 : 0.2);
-            case "no_items" -> imageView.setOpacity(DifficultMode.no_items? 1 : 0.2);
-            case "thunder" -> imageView.setOpacity(DifficultMode.thunder? 1 : 0.2);
-            case "mushrooms" -> imageView.setOpacity(DifficultMode.mushrooms? 1 : 0.2);
-        }
+        imageView.setOpacity(chosen? 1 : 0.2);
     }
 }
