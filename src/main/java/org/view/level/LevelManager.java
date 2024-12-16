@@ -366,10 +366,10 @@ public class LevelManager {
                 }
             }
             else if(code == KeyCode.U) { // 别忘删了
-                config.this_is_hint = true;
-                Hint hint = new Hint(level);
-                hint.autoMove();
-                config.this_is_hint = false;
+//                config.this_is_hint = true;
+//                Hint hint = new Hint(level);
+//                hint.autoMove();
+//                config.this_is_hint = false;
             } else if(code == KeyCode.J) {
 //                Hint hint = new Hint(level);
 //                hint.autoMoveOnce();
