@@ -1,8 +1,8 @@
 package org.view.DifficultMode;
 
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import java.sql.Time;
+import java.util.Stack;
 
 public class DifficultMode {
     Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
@@ -23,8 +23,8 @@ public class DifficultMode {
     public static Label label;
     public static boolean opened;
     boolean isMoving;
-    GridPane girdPane;
-    Timeline girdFade;
+    GridPane gridPane;
+    Timeline gridFade;
 
     public static int difficulty = 0;
     public static button lower_step_limit1;
@@ -49,14 +49,18 @@ public class DifficultMode {
         label.setFont(pixelFont);
         label.setTextFill(Color.WHITE);
         stack = new StackPane(rect, label);
-// 将 label 放在 rect 的右下角，并能随着 rect 的大小变化而变化
-        rect.widthProperty().addListener((obs, oldVal, newVal) -> {
-//            System.out.println(newVal.doubleValue());
-            label.setTranslateX((newVal.doubleValue() - 76) / 2);
-        });
-        rect.heightProperty().addListener((obs, oldVal, newVal) -> {
-            label.setTranslateY((newVal.doubleValue() - 34) / 2);
-        });
+
+        StackPane.setAlignment(rect, Pos.TOP_LEFT);
+        StackPane.setAlignment(label, Pos.BOTTOM_LEFT);
+        StackPane.setMargin(label, new javafx.geometry.Insets(2, 0, 14, 37));
+//// 将 label 放在 rect 的右下角，并能随着 rect 的大小变化而变化
+//        rect.widthProperty().addListener((obs, oldVal, newVal) -> {
+////            System.out.println(newVal.doubleValue());
+//            label.setTranslateX((newVal.doubleValue() - 76) / 2);
+//        });
+//        rect.heightProperty().addListener((obs, oldVal, newVal) -> {
+//            label.setTranslateY((newVal.doubleValue() - 34) / 2);
+//        });
         opened = false;
         isMoving = false;
 
@@ -82,17 +86,17 @@ public class DifficultMode {
         if(thunder == null) thunder = new button("/images/item/cloud.png", 3, "雷雨天", "thunder");
         if(mushrooms == null) mushrooms = new button("/images/item/mushroom.png", 3, "吃菌子了", "mushrooms");
 
-        girdPane = new GridPane();
-        girdPane.setTranslateX(30);
-        girdPane.setTranslateY(30);
-        girdPane.setVgap(20);
-        girdPane.setHgap(30);
-        girdPane.add(lower_step_limit1.stack, 0, 0);
-        girdPane.add(lower_step_limit2.stack, 1, 0);
-        girdPane.add(lower_step_limit3.stack, 2, 0);
-        girdPane.add(no_items.stack, 1, 1);
-        girdPane.add(thunder.stack, 2, 1);
-        girdPane.add(mushrooms.stack, 2, 2);
+        gridPane = new GridPane();
+        gridPane.setTranslateX(30);
+        gridPane.setTranslateY(30);
+        gridPane.setVgap(20);
+        gridPane.setHgap(30);
+        gridPane.add(lower_step_limit1.stack, 0, 0);
+        gridPane.add(lower_step_limit2.stack, 1, 0);
+        gridPane.add(lower_step_limit3.stack, 2, 0);
+        gridPane.add(no_items.stack, 1, 1);
+        gridPane.add(thunder.stack, 2, 1);
+        gridPane.add(mushrooms.stack, 2, 2);
     }
 
     public static final int beginX = 10, beginY = 30;
@@ -104,6 +108,12 @@ public class DifficultMode {
 
     void show_select_page() {
         isMoving = true;
+
+        gridFade = new Timeline(
+                new KeyFrame(Duration.ZERO, new javafx.animation.KeyValue(gridPane.opacityProperty(), 0)),
+                new KeyFrame(Duration.millis(100), new javafx.animation.KeyValue(gridPane.opacityProperty(), 1))
+        );
+
         Timeline bigger_rect = new Timeline();
         bigger_rect.getKeyFrames().add(
                 new KeyFrame(
@@ -117,31 +127,23 @@ public class DifficultMode {
                             } else {
                                 bigger_rect.stop();
                                 isMoving = false;
+                                gridPane.setOpacity(0);
+                                stack.getChildren().add(gridPane);
+                                gridFade.play();
                             }
                         }
                 )
         );
         bigger_rect.setCycleCount(Timeline.INDEFINITE);
         bigger_rect.play();
-
-        girdFade = new Timeline(
-                new KeyFrame(Duration.ZERO, new javafx.animation.KeyValue(girdPane.opacityProperty(), 0)),
-                new KeyFrame(Duration.millis(500), new javafx.animation.KeyValue(girdPane.opacityProperty(), 0)),
-                new KeyFrame(Duration.millis(1000), new javafx.animation.KeyValue(girdPane.opacityProperty(), 1))
-        );
-        stack.getChildren().add(girdPane);
-        girdFade.play();
     }
 
     void close_select_page() {
         isMoving = true;
-        girdFade = new Timeline(
-                new KeyFrame(Duration.ZERO, new javafx.animation.KeyValue(girdPane.opacityProperty(), 1)),
-                new KeyFrame(Duration.millis(200), new javafx.animation.KeyValue(girdPane.opacityProperty(), 0))
-        ); girdFade.play();
-        girdFade.setOnFinished(event -> {
-            stack.getChildren().remove(girdPane);
-        });
+        gridFade = new Timeline(
+                new KeyFrame(Duration.ZERO, new javafx.animation.KeyValue(gridPane.opacityProperty(), 1)),
+                new KeyFrame(Duration.millis(100), new javafx.animation.KeyValue(gridPane.opacityProperty(), 0))
+        ); gridFade.play();
 
         Timeline smaller_rect = new Timeline();
         smaller_rect.getKeyFrames().add(
@@ -157,10 +159,15 @@ public class DifficultMode {
                                 smaller_rect.stop();
                                 isMoving = false;
                             }
+
                         }
                 )
         );
         smaller_rect.setCycleCount(Timeline.INDEFINITE);
-        smaller_rect.play();
+
+        gridFade.setOnFinished(event -> {
+            stack.getChildren().remove(gridPane);
+            smaller_rect.play();
+        });
     }
 }

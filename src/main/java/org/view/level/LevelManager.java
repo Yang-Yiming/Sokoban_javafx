@@ -279,10 +279,8 @@ public class LevelManager {
         createRightArrow();
         addArrows();
 
-        if(user.getMaxLevel() >= 5 || true) {
-            DifficultMode difficultMode = new DifficultMode(root);
-            difficultMode.draw();
-        }
+        DifficultMode difficultMode = new DifficultMode(root);
+        difficultMode.draw();
 
         // 监听大小改变
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
