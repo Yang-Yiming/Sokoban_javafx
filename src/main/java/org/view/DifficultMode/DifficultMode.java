@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -11,11 +12,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import org.data.mapdata;
+import org.model.User;
 
 import java.util.Stack;
 
 public class DifficultMode {
-    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
+    public static Font pixelFont(int size) {
+        return Font.loadFont(DifficultMode.class.getResource("/font/pixel.ttf").toExternalForm(), size);
+    }
 
     Pane root;
     StackPane stack;
@@ -26,6 +31,8 @@ public class DifficultMode {
     GridPane gridPane;
     Timeline gridFade;
 
+    User user;
+
     public static int difficulty = 0;
     public static button lower_step_limit1;
     public static button lower_step_limit2;
@@ -35,6 +42,7 @@ public class DifficultMode {
     public static button mushrooms;
     public DifficultMode(Pane root) {
         this.root = root;
+
         rect = new Rectangle(0, 0, 80, 34);
 //        rect.setFill(Color.rgb(112,40,30));
         rect.setFill(Color.BLACK);
@@ -46,21 +54,13 @@ public class DifficultMode {
         rect.setStrokeWidth(3);
 
         label = new Label(difficulty + "");
-        label.setFont(pixelFont);
+        label.setFont(pixelFont(30));
         label.setTextFill(Color.WHITE);
         stack = new StackPane(rect, label);
 
         StackPane.setAlignment(rect, Pos.TOP_LEFT);
         StackPane.setAlignment(label, Pos.BOTTOM_LEFT);
         StackPane.setMargin(label, new javafx.geometry.Insets(2, 0, 14, 37));
-//// 将 label 放在 rect 的右下角，并能随着 rect 的大小变化而变化
-//        rect.widthProperty().addListener((obs, oldVal, newVal) -> {
-////            System.out.println(newVal.doubleValue());
-//            label.setTranslateX((newVal.doubleValue() - 76) / 2);
-//        });
-//        rect.heightProperty().addListener((obs, oldVal, newVal) -> {
-//            label.setTranslateY((newVal.doubleValue() - 34) / 2);
-//        });
         opened = false;
         isMoving = false;
 
