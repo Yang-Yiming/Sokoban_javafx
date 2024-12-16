@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -23,6 +24,7 @@ import org.data.mapdata;
 import org.model.MapMatrix;
 import org.model.Solve.Solve;
 import org.model.config;
+import org.view.game.player;
 import org.view.menu.*;
 import org.view.net.Client;
 import org.view.net.LocalIPAddress;
@@ -109,40 +111,6 @@ public class FightLevelManager {
         backHomeButton.setOnAction(event -> {
             Home home = new Home();
             home.homeAction(root, controller, primaryStage, new MenuView(controller));
-//            //停止所有 timeline
-//            for(Timeline timeline : config.timelines){
-//                if(timeline != null) timeline.stop();
-//            }
-//            //停止所有 server
-//            if(FightLevelManager.server != null){
-//                //如果 server 正在运行
-//                if(FightLevelManager.server.socket != null && !FightLevelManager.server.socket.isClosed()) {
-//                    FightLevelManager.server.send(FightLevelManager.server.socket, "B");
-//                    try {
-//                        FightLevelManager.server.serverSocket.close();
-//                        FightLevelManager.server.socket.close();
-//                    } catch (IOException e) {
-////                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//            //停止所有 client
-//            if(FightLevelManager.client != null){
-//                //如果 client 正在运行
-//                if(!FightLevelManager.client.socket.isClosed()) {
-//                    FightLevelManager.client.send(FightLevelManager.client.socket, "B");
-//                    try {
-//                        FightLevelManager.client.socket.close();
-//                    } catch (IOException e) {
-////                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//            mediaPlayer.stop();
-//            root.getChildren().clear();
-//            Pane menuView = new MenuView(controller);
-//            primaryStage.setScene(new Scene(menuView));
-//            primaryStage.show();
         });
 
         //取消 startButton 对上下左右键的监听
@@ -345,6 +313,102 @@ public class FightLevelManager {
         root.getChildren().add(levelRoot);
         inLevel3(level, socket);
     }
+    public TextField textField;
+    public Button sendButton;
+    public void createChattingBox(){
+        //创建一个可以输入的文本框
+        textField = new javafx.scene.control.TextField();
+        textField.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px;");
+        textField.setLayoutX(50);
+        textField.setLayoutY(50);
+        textField.setPrefWidth(200);
+        textField.setPrefHeight(30);
+        textField.setFocusTraversable(false);
+        root.getChildren().add(textField);
+        textField.setOnKeyPressed(event1 -> {
+            if (event1.getCode() == KeyCode.ENTER) {
+                String message = textField.getText();
+                textField.clear();
+                if(type == 2){
+                    server.send(server.socket, "C" + message);
+                    showMessages(1, message);
+                }
+                if(type == 3){
+                    client.send(client.socket, "C" + message);
+                    showMessages(2, message);
+                }
+            }
+        });
+        //取消 textField 对上下左右键的监听
+        //鼠标点击聊天框之外就取消聚焦
+        root.setOnMouseClicked(event -> {
+            if (event.getTarget() instanceof TextField) {
+                textField.setFocusTraversable(true);
+                textField.requestFocus(); // 请求焦点
+                //点击 enter 就发送消息
+            } else {
+                textField.setFocusTraversable(false);
+                //将焦点移开
+                root.requestFocus();
+            }
+        });
+        //创建一个发送按钮
+        sendButton = new Button("发送");
+        sendButton.setFont(new Font(pixelFont.getName(), 15));
+        sendButton.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
+        sendButton.setLayoutX(265);
+        sendButton.setLayoutY(50);
+        sendButton.setFocusTraversable(false);
+        //点击发送就发送消息
+        sendButton.setOnAction(event -> {
+            String message = textField.getText();
+            if(message.equals("")) return;
+            textField.clear();
+            if(type == 2){
+                server.send(server.socket, "C" + message);
+                showMessages(1, message);
+            }
+            if(type == 3){
+                client.send(client.socket, "C" + message);
+                showMessages(2, message);
+            }
+        });
+        root.getChildren().add(sendButton);
+        //取消 sendButton 对上下左右键的监听
+    }
+
+    public void showMessages(int playerNumber, String message){
+        //在相应的 player 上方显示消息，保持一秒钟后消失
+        Label label;
+        label = new Label(message);
+        label.setFont(new Font(pixelFont.getName(), 20));
+        label.setStyle(
+                "-fx-background-color: white; " +
+                        "-fx-background-radius: 10; " + // 设置圆角大小
+                        "-fx-border-color: #55371d; " +
+                        "-fx-border-width: 2px; " +
+                        "-fx-border-radius: 5; " + // 设置圆角大小
+                        "-fx-text-fill: #55371d; " +
+                        "-fx-padding: 2 5 2 5;" // 设置页边距，格式为上右下左
+        );
+        if (playerNumber == 1) {
+            //显示在 player1 上方并且根据 label 的长度调整位置
+            label.setLayoutX(level.player1.getImageView().getX() - label.getText().length() * 5 + 25);
+            label.setLayoutY(level.player1.getImageView().getY() - 30);
+        } else {
+            //显示在 player2 上方并且根据 label 的长度调整位置
+            label.setLayoutX(level.player2.getImageView().getX() - label.getText().length() * 5 + 25);
+            label.setLayoutY(level.player2.getImageView().getY() - 30);
+        }
+        root.getChildren().add(label);
+
+        //一秒钟后消失
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event -> {
+            root.getChildren().remove(label);
+        });
+        pause.play();
+    }
 
     public Button themeButton;
     public void createThemeButton(){
@@ -363,6 +427,7 @@ public class FightLevelManager {
     }
     public int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
     private void inLevel2(FightLevel level, Socket socket) {
+        createChattingBox();
         createThemeButton();
         createSettingsButton();
         createHomeButton();
@@ -399,6 +464,7 @@ public class FightLevelManager {
         checkSize();
     }
     public void inLevel3(FightLevel level, Socket socket) {
+        createChattingBox();
         createSettingsButton();
         createHomeButton();
         createThemeButton();
@@ -557,6 +623,8 @@ public class FightLevelManager {
                     root.getChildren().remove(settingsButton);
                     root.getChildren().remove(themeButton);
                     root.getChildren().remove(homeButton);
+                    root.getChildren().remove(sendButton);
+                    root.getChildren().remove(textField);
                     level.root.getChildren().clear();
                     if(type == 2){
                         server.send(server.socket, "B");
@@ -578,6 +646,8 @@ public class FightLevelManager {
                     root.getChildren().remove(settingsButton);
                     root.getChildren().remove(themeButton);
                     root.getChildren().remove(homeButton);
+                    root.getChildren().remove(sendButton);
+                    root.getChildren().remove(textField);
                     if(type == 2) inLevel2(level, server.socket);
                     if(type == 1) inLevel(level);
                     level.setId((int) (Math.random() * mapdata.maps.length));

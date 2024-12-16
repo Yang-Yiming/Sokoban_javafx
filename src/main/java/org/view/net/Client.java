@@ -81,6 +81,11 @@ public class Client {
                             Platform.runLater(() -> {
                                 fightLevelManager.keyCodeEvent(KeyCode.D);
                             });
+                        }else if(s.startsWith("C")){
+                            Platform.runLater(() -> {
+                                String message = s.substring(1);
+                                fightLevelManager.showMessages(1, message);
+                            });
                         }else if(s.startsWith("B")){
                             Platform.runLater(() -> {
                                 //结束 client
@@ -99,6 +104,8 @@ public class Client {
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.themeButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.sendButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.textField);
                                 fightLevelManager.level.root.getChildren().clear();
                                 fightLevelManager.start();
                             });
@@ -109,6 +116,8 @@ public class Client {
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.settingsButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.themeButton);
                                 fightLevelManager.root.getChildren().remove(fightLevelManager.homeButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.sendButton);
+                                fightLevelManager.root.getChildren().remove(fightLevelManager.textField);
                                 fightLevelManager.inLevel3(fightLevelManager.level, socket);
                                 fightLevelManager.FightLevelID = fightLevelID;
                                 fightLevelManager.level.setId(fightLevelID);
