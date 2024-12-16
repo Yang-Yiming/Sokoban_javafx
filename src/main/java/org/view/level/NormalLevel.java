@@ -36,7 +36,8 @@ public class NormalLevel extends Level {
 
         //用 a* 跑出步数限制
         config.this_is_hint = true;
-        if(super.stepLimit == -1) super.stepLimit = solve_moves(new MapMatrix(mapdata.maps[id])).length() + 15;
+//        if(super.stepLimit == -1)
+            super.stepLimit = solve_moves(new MapMatrix(mapdata.maps[id])).length() + 15;
         if(DifficultMode.lower_step_limit1.chosen) super.stepLimit -= 5;
         if(DifficultMode.lower_step_limit2.chosen) super.stepLimit -= 10;
         if(DifficultMode.lower_step_limit3.chosen) super.stepLimit -= 15;

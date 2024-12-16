@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import org.view.level.LevelManager;
 
 import java.util.ArrayList;
 
@@ -91,6 +92,9 @@ public class button {
                 }
             }
         }
+        if(LevelManager.item_plus != null) LevelManager.item_plus.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
+        if(LevelManager.item_hint != null) LevelManager.item_hint.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
+        if(LevelManager.item_withdraw != null) LevelManager.item_withdraw.setOpacity(DifficultMode.no_items.chosen? 0.3 : 1);
         for(button btn: all_buttons) {
             btn.setOpacity();
         }

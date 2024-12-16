@@ -65,12 +65,12 @@ public class DifficultMode {
 
 
         // 按钮
-        lower_step_limit1 = new button("/images/item/down.png", 1, "步数限制-", "step1");
-        lower_step_limit2 = new button("/images/item/down2.png", 2, "步数限制--", "step2");
-        lower_step_limit3 = new button("/images/item/down3.png", 3, "步数限制---", "step3");
-        no_items = new button("/images/item/X.png", 2, "无道具", "no_items");
-        thunder = new button("/images/item/cloud.png", 3, "雷雨天", "thunder");
-        mushrooms = new button("/images/item/mushroom.png", 3, "吃菌子了", "mushrooms");
+        if(lower_step_limit1 == null) lower_step_limit1 = new button("/images/item/down.png", 1, "步数限制-", "step1");
+        if(lower_step_limit2 == null) lower_step_limit2 = new button("/images/item/down2.png", 2, "步数限制--", "step2");
+        if(lower_step_limit3 == null) lower_step_limit3 = new button("/images/item/down3.png", 3, "步数限制---", "step3");
+        if(no_items == null) no_items = new button("/images/item/X.png", 2, "无道具", "no_items");
+        if(thunder == null) thunder = new button("/images/item/cloud.png", 3, "雷雨天", "thunder");
+        if(mushrooms == null) mushrooms = new button("/images/item/mushroom.png", 3, "吃菌子了", "mushrooms");
 
         girdPane = new GridPane();
         girdPane.setVgap(20);
