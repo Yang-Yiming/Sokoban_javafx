@@ -2,6 +2,7 @@ package org.model;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
 
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
@@ -94,12 +95,15 @@ public class SavingManager {
             alert.setTitle("错误");
             alert.setHeaderText("读取文件失败");
             alert.setContentText("请检查文件是否损坏或缺失");
+            alert.initModality(Modality.APPLICATION_MODAL); // 设置提示窗口为模态窗口
             alert.showAndWait();
+
 
             alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("错误");
             alert.setHeaderText("是否重置存档？");
             alert.setContentText("选择\"是\"将会将存档文件清空");
+            alert.initModality(Modality.APPLICATION_MODAL); // 设置提示窗口为模态窗口
             ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
             if (result == ButtonType.OK) {
                 try {
@@ -109,6 +113,7 @@ public class SavingManager {
                     alert.setTitle("错误");
                     alert.setHeaderText("读取文件失败");
                     alert.setContentText("请检查文件是否损坏或缺失");
+                    alert.initModality(Modality.APPLICATION_MODAL); // 设置提示窗口为模态窗口
                     alert.showAndWait();
                 }
             }

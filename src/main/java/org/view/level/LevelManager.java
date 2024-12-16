@@ -468,16 +468,15 @@ public class LevelManager {
             Win_anim.sequentialTransition.setOnFinished(ev -> {
                 level.stopTimelines();
                 user.setLevelAt(++currentLevel);
-                user.setLevelAtStep(level.getStep());
                 user.setMaxLevel(Math.max(currentLevel, user.getMaxLevel()));
                 user.setMoveCount(0);
+                user.setLevelAtStep(-1);
                 if(currentLevel == maps.length) currentLevel = 0;
-
                 //loadLevel(id + 1, mapdata.maps);
                 showLevelMenu(); InLevelMenu();
-
                 try {
-                    save("自动保存成功");
+                    SavingManager.save();
+                    save_text("自动保存成功");
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }

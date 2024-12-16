@@ -160,31 +160,31 @@ public class Settings {
         VolumeHbox.getChildren().add(VolumeSlider);
 
         // 创建是否垂直HBox
-        IsVerticalHbox = new HBox();
-        IsVerticalHbox.setAlignment(Pos.CENTER_LEFT);
-        IsVerticalHbox.setPrefHeight(70.0);
-        IsVerticalHbox.setPrefWidth(200.0);
-        IsVerticalHbox.setSpacing(30.0);
-        SettingVbox.getChildren().add(IsVerticalHbox);
+//        IsVerticalHbox = new HBox();
+//        IsVerticalHbox.setAlignment(Pos.CENTER_LEFT);
+//        IsVerticalHbox.setPrefHeight(70.0);
+//        IsVerticalHbox.setPrefWidth(200.0);
+//        IsVerticalHbox.setSpacing(30.0);
+//        SettingVbox.getChildren().add(IsVerticalHbox);
 
         // 创建是否垂直文本Text
-        IsVerticalText = new Text("显示地图的方向");
-        IsVerticalText.setFill(javafx.scene.paint.Color.web("#55371d"));
-        IsVerticalText.setFont(new Font(pixelFont.getName(), 20));
-        IsVerticalText.setStrokeType(StrokeType.OUTSIDE);
-        IsVerticalText.setStrokeWidth(0.0);
-        IsVerticalHbox.getChildren().add(IsVerticalText);
+//        IsVerticalText = new Text("显示地图的方向");
+//        IsVerticalText.setFill(javafx.scene.paint.Color.web("#55371d"));
+//        IsVerticalText.setFont(new Font(pixelFont.getName(), 20));
+//        IsVerticalText.setStrokeType(StrokeType.OUTSIDE);
+//        IsVerticalText.setStrokeWidth(0.0);
+//        IsVerticalHbox.getChildren().add(IsVerticalText);
 
         // 创建是否垂直CheckBox
-        if (VerticalCheckBox == null) {
-            VerticalCheckBox = new CheckBox("Vertical");
-            //将文本改为棕色
-            VerticalCheckBox.setTextFill(javafx.scene.paint.Color.web("#55371d"));
-            VerticalCheckBox.setStyle("-fx-mark-color: #55371d; -fx-box-border: transparent; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
-            VerticalCheckBox.setFont(new Font(pixelFont.getName(), 20));
-            VerticalCheckBox.setMnemonicParsing(false);
-        }
-        IsVerticalHbox.getChildren().add(VerticalCheckBox);
+//        if (VerticalCheckBox == null) {
+//            VerticalCheckBox = new CheckBox("Vertical");
+//            //将文本改为棕色
+//            VerticalCheckBox.setTextFill(javafx.scene.paint.Color.web("#55371d"));
+//            VerticalCheckBox.setStyle("-fx-mark-color: #55371d; -fx-box-border: transparent; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+//            VerticalCheckBox.setFont(new Font(pixelFont.getName(), 20));
+//            VerticalCheckBox.setMnemonicParsing(false);
+//        }
+//        IsVerticalHbox.getChildren().add(VerticalCheckBox);
         // onMouseClicked="#Clicked" 需要在控制器中处理
 
         // 创建是否启用astarCheckBox

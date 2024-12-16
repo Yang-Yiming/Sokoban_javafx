@@ -18,7 +18,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.model.config;
+import org.view.DifficultMode.DifficultMode;
 import org.view.level.FightLevelManager;
+import org.view.level.NormalLevel;
 
 import java.io.IOException;
 import java.sql.Time;
@@ -162,7 +164,13 @@ public class Home {
         });
     }
     public void homeAction(Pane root, MenuController controller, Stage primaryStage, MenuView menuView) {
-
+        if(DifficultMode.lower_step_limit1 != null) DifficultMode.lower_step_limit1.chosen = false;
+        if(DifficultMode.lower_step_limit2 != null) DifficultMode.lower_step_limit2.chosen = false;
+        if(DifficultMode.lower_step_limit3 != null) DifficultMode.lower_step_limit3.chosen = false;
+        if(DifficultMode.thunder != null) DifficultMode.thunder.chosen = false;
+        if(DifficultMode.mushrooms != null) DifficultMode.mushrooms.chosen = false;
+        if(DifficultMode.no_items != null) DifficultMode.no_items.chosen = false;
+        DifficultMode.difficulty = 0;
         //音乐停止
         mediaPlayer.stop();
         root.getChildren().clear();
