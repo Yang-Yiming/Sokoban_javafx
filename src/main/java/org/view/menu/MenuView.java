@@ -409,7 +409,7 @@ public class MenuView extends AnchorPane {
     HBox usernameHbox, passwordHbox, confirmPasswordHbox, reminderHbox, buttonsHbox;
     TextField usernameInput;
     PasswordField passwordInput, confirmPasswordInput;
-    Text reminderText, loginText;
+    Text reminderText, loginText, maxLevel, maxDifficulty;
     Button close;
     private void loginButtonClicked() {
         // Handle login button click
@@ -429,6 +429,18 @@ public class MenuView extends AnchorPane {
             loginText.setFill(javafx.scene.paint.Color.web("#55371d"));
             getChildren().add(loginText);
 
+            //最大关卡数
+            maxLevel = new Text(300 - (menuController.get_user().getMaxLevel() + "").length() * 11, 200.0, "最高关卡数: " + menuController.get_user().getMaxLevel());
+            maxLevel.setFont(new Font(pixelFont.getName(), 20));
+            maxLevel.setFill(javafx.scene.paint.Color.web("#55371d"));
+            getChildren().add(maxLevel);
+
+            //最高难度+关卡
+            maxDifficulty = new Text(300 - (menuController.get_user().getMaxDifficultyLevel() + "").length() * 11, 250.0, "最高得分（难度+关卡数） " + menuController.get_user().getMaxDifficultyLevel());
+            maxDifficulty.setFont(new Font(pixelFont.getName(), 20));
+            maxDifficulty.setFill(javafx.scene.paint.Color.web("#55371d"));
+            getChildren().add(maxDifficulty);
+
             //退出登录
             Button logout = new Button("Logout");
             logout.setFont(new Font(pixelFont.getName(), 20));
@@ -442,6 +454,8 @@ public class MenuView extends AnchorPane {
                 getChildren().remove(loginText);
                 getChildren().remove(close);
                 getChildren().remove(logout);
+                getChildren().remove(maxLevel);
+                getChildren().remove(maxDifficulty);
                 loginButtonClicked();
             });
             getChildren().add(logout);
@@ -462,6 +476,8 @@ public class MenuView extends AnchorPane {
                 getChildren().remove(loginText);
                 getChildren().remove(close);
                 getChildren().remove(logout);
+                getChildren().remove(maxLevel);
+                getChildren().remove(maxDifficulty);
             });
             return;
         }
@@ -597,13 +613,13 @@ public class MenuView extends AnchorPane {
         int userid = SavingManager.getUser(UserName, Password);
 
         if (userid == -1) {
-            reminderText.setText("User not found");
+            reminderText.setText("用户不存在");
         } else if (userid == -2) {
-            reminderText.setText("Wrong password");
+            reminderText.setText("密码错误");
         } else {
             menuController.set_user(User.UserInfo.get(userid));
             loginVbox.getChildren().removeAll();
-            reminderText.setText("Login Successfully, Welcome " + UserName);
+            reminderText.setText("登陆成功, 欢迎" + UserName);
             loginVbox.getChildren().add(reminderText);
             //等待1秒后关闭
             PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
@@ -636,16 +652,16 @@ public class MenuView extends AnchorPane {
         loginVbox.getChildren().add(3, reminderHbox);
 
         if (SavingManager.NotValidString(UserName)) {
-            reminderText.setText("Invalid username,\nshould only contain letters, numbers and _");
+            reminderText.setText("不合法用户名,用户名只应包含字母、数字和_");
         } else if (SavingManager.getUser(UserName, Password) != -1) {
-            reminderText.setText("User already exists");
+            reminderText.setText("用户已存在");
         } else if (SavingManager.NotValidString(Password)) {
-            reminderText.setText("Invalid password, should only contain letters, numbers and _");
+            reminderText.setText("不合法密码,密码只应包含字母、数字和_");
         } else if (!Password.equals(ConfirmPassword)) {
-            reminderText.setText("Password not match");
+            reminderText.setText("两次输入不一致");
         } else {
             SavingManager.addUser(UserName, Password);
-            reminderText.setText("Register successfully");
+            reminderText.setText("注册成功");
             loginVbox.getChildren().remove(confirmPasswordHbox);
         }
     }
