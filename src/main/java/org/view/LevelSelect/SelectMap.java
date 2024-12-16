@@ -49,7 +49,7 @@ public class SelectMap {
 //        root.getChildren().add(background);
 
         cat = new Cat(user);
-        setSeed(LevelManager.groupNumber);
+        setSeed(LevelManager.groupNumber + config.static_seed);
 //        AnchorX = scene.getWidth() / 2 - 100;
 //        AnchorY = (scene.getHeight() - config.Map_Node_Width) / 2;
         AnchorX = 800 / 2 - 100;

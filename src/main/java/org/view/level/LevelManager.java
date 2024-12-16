@@ -244,7 +244,7 @@ public class LevelManager {
         leftArrow.setOnMouseClicked(event -> {
             event.consume();
             --groupNumber;
-            level.stopTimelines();
+            Level.stopTimelines();
             showLevelMenu();
             InLevelMenu();
         });
@@ -257,7 +257,7 @@ public class LevelManager {
         rightArrow.setOnMouseClicked(event -> {
             event.consume();
             ++groupNumber;
-            level.stopTimelines();
+            Level.stopTimelines();
             showLevelMenu();
             InLevelMenu();
         });

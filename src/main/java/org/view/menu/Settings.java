@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -62,9 +63,9 @@ public class Settings {
     public Slider MovingAnimTimeSlider;
     public Text VolumeText;
     public Slider VolumeSlider;
-    public HBox IsVerticalHbox;
-    public Text IsVerticalText;
-    public CheckBox VerticalCheckBox;
+    public HBox SeedHbox;
+    public Text SeedText;
+    public TextField SeedTextField;
     public HBox AutoCheckFailHbox;
     public Text AutoCheckFailText;
     public CheckBox AutoCheckFailCheckBox;
@@ -159,34 +160,6 @@ public class Settings {
         }
         VolumeHbox.getChildren().add(VolumeSlider);
 
-        // 创建是否垂直HBox
-//        IsVerticalHbox = new HBox();
-//        IsVerticalHbox.setAlignment(Pos.CENTER_LEFT);
-//        IsVerticalHbox.setPrefHeight(70.0);
-//        IsVerticalHbox.setPrefWidth(200.0);
-//        IsVerticalHbox.setSpacing(30.0);
-//        SettingVbox.getChildren().add(IsVerticalHbox);
-
-        // 创建是否垂直文本Text
-//        IsVerticalText = new Text("显示地图的方向");
-//        IsVerticalText.setFill(javafx.scene.paint.Color.web("#55371d"));
-//        IsVerticalText.setFont(new Font(pixelFont.getName(), 20));
-//        IsVerticalText.setStrokeType(StrokeType.OUTSIDE);
-//        IsVerticalText.setStrokeWidth(0.0);
-//        IsVerticalHbox.getChildren().add(IsVerticalText);
-
-        // 创建是否垂直CheckBox
-//        if (VerticalCheckBox == null) {
-//            VerticalCheckBox = new CheckBox("Vertical");
-//            //将文本改为棕色
-//            VerticalCheckBox.setTextFill(javafx.scene.paint.Color.web("#55371d"));
-//            VerticalCheckBox.setStyle("-fx-mark-color: #55371d; -fx-box-border: transparent; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
-//            VerticalCheckBox.setFont(new Font(pixelFont.getName(), 20));
-//            VerticalCheckBox.setMnemonicParsing(false);
-//        }
-//        IsVerticalHbox.getChildren().add(VerticalCheckBox);
-        // onMouseClicked="#Clicked" 需要在控制器中处理
-
         // 创建是否启用astarCheckBox
         AutoCheckFailHbox = new HBox();
         AutoCheckFailHbox.setAlignment(Pos.CENTER_LEFT);
@@ -216,7 +189,34 @@ public class Settings {
         AutoCheckFailHbox.getChildren().add(AutoCheckFailCheckBox);
         AutoCheckFailCheckBox.setOnAction(event -> config.auto_check_fail = AutoCheckFailCheckBox.isSelected());
 
+        // 创建地图种子Hbox
+        SeedHbox = new HBox();
+        SeedHbox.setAlignment(Pos.CENTER_LEFT);
+        SeedHbox.setPrefHeight(70.0);
+        SeedHbox.setPrefWidth(200.0);
+        SeedHbox.setSpacing(30.0);
+        SettingVbox.getChildren().add(SeedHbox);
+        // 创建地图种子文本Text
+        SeedText = new Text("设定地图生成种子");
+        SeedText.setFill(javafx.scene.paint.Color.web("#55371d"));
+        SeedText.setFont(new Font(pixelFont.getName(), 20));
+        SeedText.setStrokeType(StrokeType.OUTSIDE);
+        SeedText.setStrokeWidth(0.0);
+        SeedHbox.getChildren().add(SeedText);
 
+        // 创建地图种子TextField
+        SeedTextField = new TextField();
+        SeedTextField.setPromptText("输入种子");
+        SeedTextField.setStyle("-fx-background-color: #55371d; -fx-text-fill: white; -fx-border-color: transparent; -fx-border-width: 0px;");
+        SeedTextField.setFont(new Font(pixelFont.getName(), 20));
+        SeedHbox.getChildren().add(SeedTextField);
+        SeedTextField.setOnAction(event -> {
+            try {
+                config.static_seed = Integer.parseInt(SeedTextField.getText()) / config.MAX_SEED;
+            } catch (NumberFormatException e) {
+                SeedTextField.setText("Invalid Seed");
+            }
+        });
 
         //关闭按钮
         Button close = new Button();
