@@ -184,7 +184,7 @@ public class Solve {
         return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
     }
 
-    int heuristic(HashSet<Coordinate> Boxes) {
+    int heuristic2(HashSet<Coordinate> Boxes) {
         int distance = 0;
         HashSet<Coordinate> completes = setIntersect(Boxes, Goals);
         Object[] leftBoxes = setSub(Boxes, completes).toArray();
@@ -192,6 +192,20 @@ public class Solve {
 
         for(int i = 0; i < leftBoxes.length; i++) {
             distance += manhattan((Coordinate)leftBoxes[i], (Coordinate)leftGoals[i]);
+        }
+        return distance;
+    }
+
+    int heuristic(HashSet<Coordinate> Boxes) {
+        int distance = 0;
+        HashSet<Coordinate> completes = setIntersect(Boxes, Goals);
+        Object[] leftBoxes = setSub(Boxes, completes).toArray();
+        Object[] leftGoals = setSub(Goals, completes).toArray();
+
+        for (Object leftBox : leftBoxes) {
+            for (Object leftGoal : leftGoals) {
+                distance += manhattan((Coordinate) leftBox, (Coordinate) leftGoal);
+            }
         }
         return distance;
     }

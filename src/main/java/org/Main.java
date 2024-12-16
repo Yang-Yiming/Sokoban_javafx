@@ -18,6 +18,7 @@ import static javafx.application.Application.launch;
 public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws IOException {
+        config.static_seed = (int)(Math.random() * config.MAX_SEED);
         MenuController controller = null;
         try {
             controller = new MenuController();

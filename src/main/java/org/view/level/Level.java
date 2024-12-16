@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.model.*;
 import org.model.Solve.Solve;
+import org.view.DifficultMode.DifficultMode;
 import org.view.game.box;
 import org.view.game.player;
 import org.view.VisualEffects.GlowRectangle;
@@ -181,7 +182,7 @@ public abstract class Level {
     protected void load_gui(User user) {
 
 
-        idText = new Text("关卡 " + (id + 1));
+        idText = new Text("关卡 " + (id + 1) + (DifficultMode.difficulty > 0 ? " (难度" + DifficultMode.difficulty + ")":""));
         idText.setX(40);
         idText.setY(60);
         //棕色

@@ -20,6 +20,7 @@ public class config {
     public static final double font_size_1 = 30;
     public static final double font_size_2 = 35;
     public static final int font_size_change_millis = 100;
+    public static final int MAX_SEED = 2000;
 
     // 可以用设置改变的常量
     public static int tile_size = 55;
@@ -40,6 +41,7 @@ public class config {
     public static int item_hintNumber = 3;
     public static int item_plusNumber = 3;
     public static int item_withdrawNumber = 3;
+    public static int static_seed = 0;
 
     //Methods
     public static double EaseInOutCubic(double begin, double end, double t) { // t是占总时间的比例

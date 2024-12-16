@@ -244,7 +244,7 @@ public class LevelManager {
         leftArrow.setOnMouseClicked(event -> {
             event.consume();
             --groupNumber;
-            level.stopTimelines();
+            Level.stopTimelines();
             showLevelMenu();
             InLevelMenu();
         });
@@ -257,7 +257,7 @@ public class LevelManager {
         rightArrow.setOnMouseClicked(event -> {
             event.consume();
             ++groupNumber;
-            level.stopTimelines();
+            Level.stopTimelines();
             showLevelMenu();
             InLevelMenu();
         });
@@ -471,6 +471,7 @@ public class LevelManager {
                 level.stopTimelines();
                 user.setLevelAt(++currentLevel);
                 user.setMaxLevel(Math.max(currentLevel, user.getMaxLevel()));
+                user.setMaxDifficultyLevel(Math.max(user.getMaxDifficultyLevel(), currentLevel + DifficultMode.difficulty));
                 user.setMoveCount(0);
                 user.setLevelAtStep(-1);
                 if(currentLevel == maps.length) currentLevel = 0;
