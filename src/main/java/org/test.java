@@ -26,8 +26,8 @@ public class test {
 
 
     public static void main(String[] args) {
-//        for(int i = 0; i < mapdata.maps2.length; i++) {
-//            Test(mapdata.maps2[i], "map " + i, 10);
-//        }
+        for(int i = 0; i < mapdata.hard_maps.length; i++) {
+            Test(mapdata.hard_maps[i], "map " + i, 1);
+        }
     }
 }
