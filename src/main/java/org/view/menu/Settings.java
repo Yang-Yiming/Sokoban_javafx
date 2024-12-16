@@ -7,6 +7,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -209,10 +210,11 @@ public class Settings {
         SeedTextField.setPromptText("输入种子");
         SeedTextField.setStyle("-fx-background-color: #55371d; -fx-text-fill: white; -fx-border-color: transparent; -fx-border-width: 0px;");
         SeedTextField.setFont(new Font(pixelFont.getName(), 20));
+        SeedTextField.setText(""+config.static_seed);
         SeedHbox.getChildren().add(SeedTextField);
         SeedTextField.setOnAction(event -> {
             try {
-                config.static_seed = Integer.parseInt(SeedTextField.getText()) / config.MAX_SEED;
+                config.static_seed = Integer.parseInt(SeedTextField.getText()) % config.MAX_SEED;
             } catch (NumberFormatException e) {
                 SeedTextField.setText("Invalid Seed");
             }
