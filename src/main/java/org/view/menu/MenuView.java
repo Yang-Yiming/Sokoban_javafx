@@ -409,7 +409,7 @@ public class MenuView extends AnchorPane {
     HBox usernameHbox, passwordHbox, confirmPasswordHbox, reminderHbox, buttonsHbox;
     TextField usernameInput;
     PasswordField passwordInput, confirmPasswordInput;
-    Text reminderText, loginText, maxLevel, maxDifficulty;
+    Text reminderText, loginText, maxLevel, maxDifficulty, minTime;
     Button close;
     private void loginButtonClicked() {
         // Handle login button click
@@ -441,12 +441,18 @@ public class MenuView extends AnchorPane {
             maxDifficulty.setFill(javafx.scene.paint.Color.web("#55371d"));
             getChildren().add(maxDifficulty);
 
+            //最短平均用时
+            minTime = new Text(300 - (menuController.get_user().getMinTime() + "").length() * 11, 300.0, "最短平均用时：" + (menuController.get_user().getMinTime() > 0 ? menuController.get_user().getMinTime(): "无"));
+            minTime.setFont(new Font(pixelFont.getName(),20));
+            minTime.setFill(javafx.scene.paint.Color.web("#55371d"));
+            getChildren().add(minTime);
+
             //退出登录
             Button logout = new Button("Logout");
             logout.setFont(new Font(pixelFont.getName(), 20));
             logout.setStyle("-fx-background-color: transparent; -fx-border-color: #55371d; -fx-border-width: 2px; -fx-text-fill: #55371d;");
             logout.setLayoutX(350);
-            logout.setLayoutY(300);
+            logout.setLayoutY(350);
             logout.setOnMouseClicked(event -> {
                 menuController.set_user(new User("", ""));
                 getChildren().remove(shade);
@@ -456,6 +462,7 @@ public class MenuView extends AnchorPane {
                 getChildren().remove(logout);
                 getChildren().remove(maxLevel);
                 getChildren().remove(maxDifficulty);
+                getChildren().remove(minTime);
                 loginButtonClicked();
             });
             getChildren().add(logout);
@@ -478,6 +485,7 @@ public class MenuView extends AnchorPane {
                 getChildren().remove(logout);
                 getChildren().remove(maxLevel);
                 getChildren().remove(maxDifficulty);
+                getChildren().remove(minTime);
             });
             return;
         }

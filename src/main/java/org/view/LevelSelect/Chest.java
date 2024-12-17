@@ -52,7 +52,7 @@ public class Chest {
                 new KeyFrame(Duration.millis(400), e-> imageView.setImage(chest_open_anim)),
                 new KeyFrame(Duration.millis(500), e-> imageView.setImage(chest_open)));
         open_counter.setCycleCount(1);
-        contain = new int[]{1, 1, 1};
+        contain = new int[]{3, 3, 3};
     }
 
     public void open(Pane root) {
