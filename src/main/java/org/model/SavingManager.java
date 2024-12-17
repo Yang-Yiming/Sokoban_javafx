@@ -64,8 +64,10 @@ public class SavingManager {
         return hexString.toString();
     }
 
-    private static URL dir = SavingManager.class.getResource("/savings/Userinfo.json");
-    private static File file = new File(dir.getPath());
+//    private static URL dir = SavingManager.class.getResource("/savings/Userinfo.json");
+//    private static File file = new File(dir.getPath());
+    private static String dir = "src/main/resources/savings/UserInfo.json";
+    private static File file = new File(dir);
 
     public static void save() throws FileNotFoundException {
         String str = User.UserInfotoJSON();
