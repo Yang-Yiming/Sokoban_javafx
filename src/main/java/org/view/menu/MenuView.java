@@ -436,13 +436,13 @@ public class MenuView extends AnchorPane {
             getChildren().add(maxLevel);
 
             //最高难度+关卡
-            maxDifficulty = new Text(300 - (menuController.get_user().getMaxDifficultyLevel() + "").length() * 11, 250.0, "最高得分（难度+关卡数） " + menuController.get_user().getMaxDifficultyLevel());
+            maxDifficulty = new Text(300 - (menuController.get_user().getMaxDifficultyLevel() + "").length() * 11, 250.0, "最高得分(难度+关卡数): " + menuController.get_user().getMaxDifficultyLevel());
             maxDifficulty.setFont(new Font(pixelFont.getName(), 20));
             maxDifficulty.setFill(javafx.scene.paint.Color.web("#55371d"));
             getChildren().add(maxDifficulty);
 
             //最短平均用时
-            minTime = new Text(300 - (menuController.get_user().getMinTime() + "").length() * 11, 300.0, "最短平均用时：" + (menuController.get_user().getMinTime() > 0 ? menuController.get_user().getMinTime(): "无"));
+            minTime = new Text(311 - (menuController.get_user().getMinTime() + "").length() * 11, 300.0, "最短平均用时: " + (menuController.get_user().getMinTime() > 0 ? menuController.get_user().getMinTime(): "无"));
             minTime.setFont(new Font(pixelFont.getName(),20));
             minTime.setFill(javafx.scene.paint.Color.web("#55371d"));
             getChildren().add(minTime);
