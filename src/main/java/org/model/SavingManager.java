@@ -5,6 +5,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 
 import java.io.*;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.MessageDigest;
 
@@ -63,8 +64,8 @@ public class SavingManager {
         return hexString.toString();
     }
 
-    private static String dir = "src/main/resources/savings/UserInfo.json";
-    private static File file = new File(dir);
+    private static URL dir = SavingManager.class.getResource("/savings/Userinfo.json");
+    private static File file = new File(dir.getPath());
 
     public static void save() throws FileNotFoundException {
         String str = User.UserInfotoJSON();
