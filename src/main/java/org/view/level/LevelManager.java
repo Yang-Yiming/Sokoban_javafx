@@ -573,19 +573,39 @@ public class LevelManager {
         leftButton.setFocusTraversable(false);
         rightButton.setFocusTraversable(false);
 
-        upButton.setOnAction(event -> simulateKeyPress(KeyCode.UP));
+        upButton.setOnAction(event -> {
+            if(DifficultMode.mushrooms!=null && DifficultMode.mushrooms.chosen)
+                simulateKeyPress(KeyCode.DOWN);
+            else
+                simulateKeyPress(KeyCode.UP);
+        });
         upButton.setOnMouseEntered(event -> upButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/up_clicked.png"), config.button_size, config.button_size, false, false))));
         upButton.setOnMouseExited(event -> upButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/up.png"), config.button_size, config.button_size, false, false))));
 
-        downButton.setOnAction(event -> simulateKeyPress(KeyCode.DOWN));
+        downButton.setOnAction(event -> {
+            if(DifficultMode.mushrooms!=null && DifficultMode.mushrooms.chosen)
+                simulateKeyPress(KeyCode.UP);
+            else
+                simulateKeyPress(KeyCode.DOWN);
+        });
         downButton.setOnMouseEntered(event -> downButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/down_clicked.png"), config.button_size, config.button_size, false, false))));
         downButton.setOnMouseExited(event -> downButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/down.png"), config.button_size, config.button_size, false, false))));
 
-        leftButton.setOnAction(event -> simulateKeyPress(KeyCode.LEFT));
+        leftButton.setOnAction(event -> {
+            if(DifficultMode.mushrooms!=null && DifficultMode.mushrooms.chosen)
+                simulateKeyPress(KeyCode.RIGHT);
+            else
+                simulateKeyPress(KeyCode.LEFT);
+        });
         leftButton.setOnMouseEntered(event -> leftButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/left_clicked.png"), config.button_size, config.button_size, false, false))));
         leftButton.setOnMouseExited(event -> leftButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/left.png"), config.button_size, config.button_size, false, false))));
 
-        rightButton.setOnAction(event -> simulateKeyPress(KeyCode.RIGHT));
+        rightButton.setOnAction(event -> {
+            if(DifficultMode.mushrooms!=null && DifficultMode.mushrooms.chosen)
+                simulateKeyPress(KeyCode.LEFT);
+            else
+                simulateKeyPress(KeyCode.RIGHT);
+        });
         rightButton.setOnMouseEntered(event -> rightButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/right_clicked.png"), config.button_size, config.button_size, false, false))));
         rightButton.setOnMouseExited(event -> rightButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/images/direction/right.png"), config.button_size, config.button_size, false, false))));
 

@@ -196,7 +196,7 @@ public class InfiniteLevelManager {
     }
 
     public void win_update() {
-        int new_map_id = (int) ((mapdata.maps.length - 1) * Math.random());
+        int new_map_id = (int) (5 * Math.random());
         Direction direction = new Direction[]{Direction.RIGHT, Direction.DOWN}[(int)(2 * Math.random())];
         int[][] next_map = mapdata.maps[new_map_id];
         change_level(direction, next_map);
