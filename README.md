@@ -32,10 +32,8 @@
 
 #####
 
-- <img src="https://github.com/user-attachments/assets/db74023b-92aa-4ee6-bdc2-67011ef6762d" alt="image" width="50%" height="50%">
-
-  （还是这个星期）
-
+- <img src="https://github.com/user-attachments/assets/db74023b-92aa-4ee6-bdc2-67011ef6762d" alt="image" width="50%" height="50%">  <br>
+  （还是这个星期）  <br>
   <img src="https://github.com/user-attachments/assets/5e3cc981-cacb-4a06-8443-5ada942dd343" alt="image" width="50%" height="50%">
 
 #####
@@ -48,42 +46,32 @@
 
 #####
 
-- <img src="https://github.com/user-attachments/assets/6ef62d66-068a-4c59-846d-3acc371587e8" alt="image" width="50%" height="50%">
-
-  （还是这周）
-
+- <img src="https://github.com/user-attachments/assets/6ef62d66-068a-4c59-846d-3acc371587e8" alt="image" width="50%" height="50%">  <br>
+  （还是这周）  <br>
   <img src="https://github.com/user-attachments/assets/013cc10e-6d78-4ae4-8360-2704f8dce997" alt="image" width="50%" height="50%">
 
 #####
 
-- <img src="https://github.com/user-attachments/assets/96388fad-1acf-4f59-9f4f-f92ee2af01fa" alt="image" width="50%" height="50%">
-
-  （星期天之前）
-
+- <img src="https://github.com/user-attachments/assets/96388fad-1acf-4f59-9f4f-f92ee2af01fa" alt="image" width="50%" height="50%">  <br>
+  （星期天之前）  <br>
   <img src="https://github.com/user-attachments/assets/0264eeaf-0e34-4372-9097-1ab0c04b832f" alt="image" width="50%" height="50%">
 
 #####
 
-- <img src="https://github.com/user-attachments/assets/b13ee142-62c3-4cd6-a331-17ff64861321" alt="image" width="50%" height="50%">
-
-  （还是这节大物）
-
+- <img src="https://github.com/user-attachments/assets/b13ee142-62c3-4cd6-a331-17ff64861321" alt="image" width="50%" height="50%">  <br>
+  （还是这节大物）  <br>
   <img src="https://github.com/user-attachments/assets/4cc1ae82-a599-455e-9c6e-5a35685d3da1" alt="image" width="50%" height="50%">
 
 #####
 
-- <img src="https://github.com/user-attachments/assets/be4f5177-6f22-425c-a541-6347f8179f9b" alt="image" width="50%" height="50%">
-
-  （当天）
-
+- <img src="https://github.com/user-attachments/assets/be4f5177-6f22-425c-a541-6347f8179f9b" alt="image" width="50%" height="50%">  <br>
+  （当天）  <br>
   <img src="https://github.com/user-attachments/assets/23453f4a-6fc1-45aa-995d-8ab6498c67cc" alt="image" width="50%" height="50%">
 
 #####
 
-- <img src="https://github.com/user-attachments/assets/6734e2e8-f219-49dd-a0c0-6537ef85af66" alt="image" width="50%" height="50%">
-
-  （第二天）
-
+- <img src="https://github.com/user-attachments/assets/6734e2e8-f219-49dd-a0c0-6537ef85af66" alt="image" width="50%" height="50%">  <br>
+  （第二天）  <br>
   <img src="https://github.com/user-attachments/assets/925804b1-00f2-4dd7-a189-4e29b7ed5d24" alt="image" width="50%" height="50%">
 
 #####
