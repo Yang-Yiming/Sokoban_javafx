@@ -1,5 +1,7 @@
 # README
 
+$\rm\Large{\color{#C6FFDD}{SUSTech}}^{\large{\color{#D5FFD4}{2024}}}\_{~~~~\color{#FBD786}{大一}}\color{#FBD08D}{秋}\large{\color{#FBC994}{~java}}^{\color{#FBC29B}{期}_{\color{#FBAC9E}{末}}}\_{\scriptsize{\color{#FBA5A5}{project}}}\tiny{\color{#f7797d}{（队友带飞版）}}$
+
 - <img src="https://github.com/user-attachments/assets/42a77797-6dd8-4289-bea5-667eb3d48bc0" alt="image" width="50%" height="50%">
 
 #####
