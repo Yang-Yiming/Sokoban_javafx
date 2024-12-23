@@ -110,13 +110,13 @@ $\rm\Large{\color{#C6FFDD}{SUSTech}}^{\large{\color{#D5FFD4}{2024}}}\_{~~~~\colo
 
 
 #####
-这位更是卷完了
+这位更是卷完了<br>
 <img width="131" alt="image" src="https://github.com/user-attachments/assets/55dd1930-48ed-4ba1-ad3a-26be9bcdfb20" /><br>
 <img width="432" alt="image" src="https://github.com/user-attachments/assets/542c61e4-358c-42b6-a1f2-44199bda5ab4" />
 
 
 #####
-真正的佬
+真正的佬<br>
 <img width="149" alt="image" src="https://github.com/user-attachments/assets/d81bc59c-d7bf-4dab-bf0a-5f8ba7be2825" /><br>
 <img width="163" alt="image" src="https://github.com/user-attachments/assets/a3003d46-e2e3-4116-9349-95bf9480af81" /><br>
 <img width="167" alt="image" src="https://github.com/user-attachments/assets/26ce788d-cf02-4688-abbb-d906bcb996bb" /><br>
@@ -127,7 +127,7 @@ $\rm\Large{\color{#C6FFDD}{SUSTech}}^{\large{\color{#D5FFD4}{2024}}}\_{~~~~\colo
 <img width="347" alt="image" src="https://github.com/user-attachments/assets/b8a0e45d-411e-470c-8e83-ebadb42eb035" /><br>
 <img width="208" alt="image" src="https://github.com/user-attachments/assets/4ebb9ec0-0d7f-4024-842c-afa85a5292e4" />
 
-最提升体验的功能往往不会被注意到，伟大
+最提升体验的功能往往不会被注意到，伟大<br>
 
 #####
 
@@ -145,7 +145,7 @@ $\rm\Large{\color{#C6FFDD}{SUSTech}}^{\large{\color{#D5FFD4}{2024}}}\_{~~~~\colo
 <img width="305" alt="image" src="https://github.com/user-attachments/assets/814ad941-0228-43d0-a111-fe84ab61f513" />
 
 
-debug大师
+debug大师<br>
 <img width="329" alt="image" src="https://github.com/user-attachments/assets/c3b4d502-0665-4791-9eb9-976e1f472ecb" />
 
 
@@ -153,7 +153,7 @@ debug大师
 <img width="371" alt="image" src="https://github.com/user-attachments/assets/96dfa441-7982-4c52-832b-b807f6089da1" /><br>
 <img width="240" alt="image" src="https://github.com/user-attachments/assets/9b0b3430-8260-4667-9884-b611f0405307" />
 
-自律姐
+自律姐<br>
 #####
 
 <img width="310" alt="image" src="https://github.com/user-attachments/assets/a12055b4-a3aa-4aed-bf90-7cba45e8d0da" /><br>
@@ -162,11 +162,11 @@ debug大师
 <img width="263" alt="image" src="https://github.com/user-attachments/assets/74e01488-f9ae-48cb-b941-38dceb05cd25" />
 
 
-（整个游戏所有肉眼可见之处都是佬手绘
+（整个游戏所有肉眼可见之处都是佬手绘<br>
 
 #####
-<img width="510" alt="image" src="https://github.com/user-attachments/assets/7c9dd9f0-7da0-4e14-9a6d-bc5a9dc5e7d6" /><br>（此时已经展示过了，真正的佬还在卷）
+<img width="510" alt="image" src="https://github.com/user-attachments/assets/7c9dd9f0-7da0-4e14-9a6d-bc5a9dc5e7d6" /><br>（此时已经展示过了，真正的佬还在卷）<br>
 
-（以后再找图，佬的证明太多了我的qq装不下了（）
+（以后再找图，佬的证明太多了我的qq装不下了（）<br>
 
 
