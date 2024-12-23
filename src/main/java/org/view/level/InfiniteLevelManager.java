@@ -295,7 +295,7 @@ public class InfiniteLevelManager {
                 int y = last_down + RoadLength;
                 add_level(x, y, data);
                 int xx, yy;
-                xx = x + data[0].length / 2; yy = y;
+                xx = x + data[0].length / 2 - 1; yy = y;
                 while(level.getMap().get(xx, yy) == 0) ++yy;
                 while(level.getMap().get(xx, yy) == 1){
                     level.getMap().set(xx, yy, 0);
