@@ -1,4 +1,4 @@
-## 重要的花絮
+## 不重要的花絮
 
 - <img src="https://github.com/user-attachments/assets/42a77797-6dd8-4289-bea5-667eb3d48bc0" alt="image" width="50%" height="50%">
 
@@ -100,9 +100,8 @@
 
 #####
 
-![image](https://github.com/user-attachments/assets/ad2152ba-e9ed-44d9-a395-15324cfcb710)
 
-## 不重要的花絮
+## 重要的花絮
 
 #####
 这位更是卷完了<br>
