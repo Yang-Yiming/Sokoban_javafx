@@ -75,7 +75,7 @@ public class MenuView extends AnchorPane {
 
     }
 
-    Font pixelFont = Font.loadFont(getClass().getResource("/font/pixel.ttf").toExternalForm(), 30);
+    Font pixelFont = Font.loadFont(getClass().getResourceAsStream("/font/pixel.ttf"), 30);
 
     private void createButtons(){
 
