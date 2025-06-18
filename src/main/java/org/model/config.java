@@ -22,6 +22,12 @@ public class config {
     public static final int font_size_change_millis = 100;
     public static final int MAX_SEED = 2000;
 
+    // 算法类型常量
+    public static final int ALGORITHM_OFF = 0;
+    public static final int ALGORITHM_ASTAR = 1;
+    public static final int ALGORITHM_SIMULATED_ANNEALING = 2;
+    public static final int ALGORITHM_GENETIC = 3;
+
     // 可以用设置改变的常量
     public static int tile_size = 55;
     public static boolean is_vertical = false;
@@ -35,6 +41,7 @@ public class config {
     public static int mode = 0;
     public static double volume = 0.5;
     public static boolean auto_check_fail = true; // 自动检查失败 如果性能太低可以关掉）
+    public static int algorithm_type = ALGORITHM_ASTAR; // 默认使用A*算法
     public static boolean this_is_hint = false; // 懒了
     public static ArrayList<Timeline> timelines = new ArrayList<>();
     public static Color themeColor = Color.rgb(124, 153, 32);
